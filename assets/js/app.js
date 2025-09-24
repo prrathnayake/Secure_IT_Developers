@@ -2,6 +2,7 @@
 const root = document.documentElement;
 const themeToggle = document.getElementById("themeToggle");
 const savedTheme = localStorage.getItem("theme");
+const ENV = window.ENV || {};
 if (savedTheme) {
   root.setAttribute("data-theme", savedTheme);
   if (themeToggle)
@@ -59,6 +60,7 @@ function hydrateSite(data) {
   applyFooter(data);
   updateHeadMeta(data, pageKey);
   injectOrganizationSchema(data);
+  injectServiceSchema(data, pageKey);
   renderPage(pageKey, data);
 }
 
@@ -135,6 +137,8 @@ function updateHeadMeta(data, pageKey) {
   document.title = title;
   const description = meta.description || data.org?.description || "";
   setMeta("name", "description", description);
+  const keywords = meta.keywords || data.seo?.defaultKeywords || "";
+  setMeta("name", "keywords", keywords);
   setMeta("property", "og:title", title);
   setMeta("property", "og:description", description);
   setMeta("name", "twitter:title", title);
@@ -144,6 +148,9 @@ function updateHeadMeta(data, pageKey) {
   const url = buildUrl(meta.path || pageKey, data.org?.url);
   if (canonical && url) canonical.setAttribute("href", url);
   setMeta("property", "og:url", url);
+  const image = buildUrl(meta.image || data.seo?.ogImage, data.org?.url);
+  setMeta("property", "og:image", image);
+  setMeta("name", "twitter:image", image);
 }
 
 function setMeta(attr, name, content) {
@@ -199,6 +206,72 @@ function injectOrganizationSchema(data) {
     };
   }
   script.textContent = JSON.stringify(payload);
+  if (!script.parentElement) document.head.appendChild(script);
+}
+
+function injectServiceSchema(data, pageKey) {
+  const graph = [];
+  const org = data.org || {};
+  const services = [];
+  const home = data.pages?.home || {};
+  (home.services?.cards || []).forEach((card) => {
+    services.push({
+      name: card.title,
+      description: card.description,
+      category: "Core engagements",
+    });
+  });
+  (home.addOns?.cards || []).forEach((card) => {
+    services.push({
+      name: card.title,
+      description: card.description,
+      category: "Managed services",
+    });
+  });
+  if (services.length) {
+    graph.push({
+      "@type": "ItemList",
+      name: "Secure IT Developers service catalog",
+      itemListElement: services.map((service, idx) => ({
+        "@type": "ListItem",
+        position: idx + 1,
+        item: {
+          "@type": "Service",
+          name: service.name,
+          description: service.description,
+          category: service.category,
+          provider: {
+            "@type": "Organization",
+            name: org.name,
+            url: org.url,
+          },
+        },
+      })),
+    });
+  }
+  const faqs = data.faqs || [];
+  if (faqs.length) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: faqs.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    });
+  }
+  const script =
+    document.getElementById("servicesJsonLd") || document.createElement("script");
+  if (!graph.length) {
+    if (script.parentElement) script.parentElement.removeChild(script);
+    return;
+  }
+  script.type = "application/ld+json";
+  script.id = "servicesJsonLd";
+  script.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": graph,
+  });
   if (!script.parentElement) document.head.appendChild(script);
 }
 
@@ -261,6 +334,38 @@ function renderHomePage(data) {
     });
   }
 
+  const addOns = page.addOns || {};
+  const addOnsEyebrow = document.getElementById("addOnsEyebrow");
+  if (addOnsEyebrow) addOnsEyebrow.textContent = addOns.eyebrow || "";
+  const addOnsHeading = document.getElementById("addOnsHeading");
+  if (addOnsHeading) addOnsHeading.textContent = addOns.heading || "";
+  const addOnsCopy = document.getElementById("addOnsCopy");
+  if (addOnsCopy) addOnsCopy.textContent = addOns.copy || "";
+  const addOnsCards = document.getElementById("addOnsCards");
+  if (addOnsCards) {
+    addOnsCards.innerHTML = "";
+    (addOns.cards || []).forEach((card) => {
+      const article = document.createElement("article");
+      article.className = "add-on-card js-reveal";
+      const highlights = (card.highlights || [])
+        .map((item) => `<li>${item}</li>`)
+        .join("");
+      const image = card.image
+        ? `<figure class="add-on-figure"><img src="${card.image}" alt="${card.title}" /></figure>`
+        : "";
+      article.innerHTML = `
+        ${image}
+        <div class="add-on-body">
+          <h3>${card.title}</h3>
+          <p class="price">${card.price || ""}</p>
+          <p>${card.description || ""}</p>
+          <ul>${highlights}</ul>
+        </div>
+      `;
+      addOnsCards.appendChild(article);
+    });
+  }
+
   const highlightsHeading = document.getElementById("highlightsHeading");
   if (highlightsHeading) highlightsHeading.textContent = page.highlights?.heading || "";
   const highlightsGrid = document.getElementById("highlightsGrid");
@@ -277,6 +382,27 @@ function renderHomePage(data) {
         </figcaption>
       `;
       highlightsGrid.appendChild(fig);
+    });
+  }
+
+  const galleryHeading = document.getElementById("galleryHeading");
+  if (galleryHeading) galleryHeading.textContent = page.gallery?.heading || "";
+  const galleryCopy = document.getElementById("galleryCopy");
+  if (galleryCopy) galleryCopy.textContent = page.gallery?.copy || "";
+  const galleryGrid = document.getElementById("galleryGrid");
+  if (galleryGrid) {
+    galleryGrid.innerHTML = "";
+    (page.gallery?.items || []).forEach((item) => {
+      const figure = document.createElement("figure");
+      figure.className = "gallery-card js-reveal";
+      figure.innerHTML = `
+        <img src="${item.img}" alt="${item.alt}" />
+        <figcaption>
+          <strong>${item.title}</strong>
+          <span>${item.caption || ""}</span>
+        </figcaption>
+      `;
+      galleryGrid.appendChild(figure);
     });
   }
 
@@ -354,6 +480,30 @@ function renderAboutPage(data) {
   if (!page) return;
   const intro = document.getElementById("aboutIntro");
   if (intro) intro.textContent = page.intro || "";
+  const story = page.story || {};
+  const storyCopy = document.getElementById("aboutStory");
+  if (storyCopy) storyCopy.textContent = story.copy || "";
+  const milestones = document.getElementById("aboutMilestones");
+  if (milestones) {
+    milestones.innerHTML = "";
+    (story.milestones || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${item.year}</strong><span>${item.detail}</span>`;
+      milestones.appendChild(li);
+    });
+  }
+  const storyFigure = document.getElementById("aboutStoryFigure");
+  if (storyFigure) {
+    const media = story.media;
+    if (media?.img) {
+      storyFigure.innerHTML = `
+        <img src="${media.img}" alt="${media.alt || "Studio placeholder"}" />
+        <figcaption>${media.caption || ""}</figcaption>
+      `;
+    } else {
+      storyFigure.innerHTML = "";
+    }
+  }
   const mission = document.getElementById("aboutMission");
   if (mission) mission.textContent = page.mission || "";
 
@@ -384,6 +534,70 @@ function renderAboutPage(data) {
       const li = document.createElement("li");
       li.textContent = value;
       valuesList.appendChild(li);
+    });
+  }
+
+  const certList = document.getElementById("aboutCertifications");
+  if (certList) {
+    certList.innerHTML = "";
+    (page.certifications || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      certList.appendChild(li);
+    });
+  }
+
+  const impactGrid = document.getElementById("aboutImpact");
+  if (impactGrid) {
+    impactGrid.innerHTML = "";
+    (page.impact || []).forEach((item) => {
+      const div = document.createElement("article");
+      div.className = "impact-card";
+      div.innerHTML = `
+        <strong>${item.metric}</strong>
+        <span>${item.label}</span>
+        <p>${item.detail || ""}</p>
+      `;
+      impactGrid.appendChild(div);
+    });
+  }
+
+  const communityList = document.getElementById("aboutCommunity");
+  if (communityList) {
+    communityList.innerHTML = "";
+    (page.community || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      communityList.appendChild(li);
+    });
+  }
+
+  const partnersList = document.getElementById("aboutPartners");
+  if (partnersList) {
+    partnersList.innerHTML = "";
+    (page.partners || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      partnersList.appendChild(li);
+    });
+  }
+
+  const galleryCopy = document.getElementById("aboutGalleryCopy");
+  if (galleryCopy) galleryCopy.textContent = page.gallery?.copy || "";
+  const aboutGallery = document.getElementById("aboutGallery");
+  if (aboutGallery) {
+    aboutGallery.innerHTML = "";
+    (page.gallery?.items || []).forEach((item) => {
+      const figure = document.createElement("figure");
+      figure.className = "gallery-card js-reveal";
+      figure.innerHTML = `
+        <img src="${item.img}" alt="${item.alt}" />
+        <figcaption>
+          <strong>${item.title}</strong>
+          <span>${item.caption || ""}</span>
+        </figcaption>
+      `;
+      aboutGallery.appendChild(figure);
     });
   }
 
@@ -423,6 +637,110 @@ function renderAboutPage(data) {
 function renderPricingPage(data) {
   const intro = document.getElementById("pricingIntro");
   if (intro) intro.textContent = data.pages?.pricing?.intro || "";
+  const addOns = data.pages?.pricing?.addOns || {};
+  const addOnsEyebrow = document.getElementById("pricingAddOnsEyebrow");
+  if (addOnsEyebrow) addOnsEyebrow.textContent = addOns.eyebrow || "";
+  const addOnsHeading = document.getElementById("pricingAddOnsHeading");
+  if (addOnsHeading) addOnsHeading.textContent = addOns.heading || "";
+  const addOnsCopy = document.getElementById("pricingAddOnsCopy");
+  if (addOnsCopy) addOnsCopy.textContent = addOns.copy || "";
+  const addOnsCards = document.getElementById("pricingAddOnsCards");
+  if (addOnsCards) {
+    addOnsCards.innerHTML = "";
+    (addOns.cards || []).forEach((card) => {
+      const article = document.createElement("article");
+      article.className = "add-on-card js-reveal";
+      const highlights = (card.highlights || [])
+        .map((item) => `<li>${item}</li>`)
+        .join("");
+      article.innerHTML = `
+        <div class="add-on-body">
+          <h3>${card.title}</h3>
+          <p class="price">${card.price || ""}</p>
+          <p>${card.description || ""}</p>
+          <ul>${highlights}</ul>
+        </div>
+      `;
+      addOnsCards.appendChild(article);
+    });
+  }
+
+  renderPricingCompare(data);
+}
+
+function renderPricingCompare(data) {
+  const compare = data.pages?.pricing?.compare;
+  const heading = document.getElementById("compareHeading");
+  if (heading) heading.textContent = compare?.heading || "";
+  const copy = document.getElementById("compareCopy");
+  if (copy) copy.textContent = compare?.copy || "";
+  const nav = document.getElementById("compareNav");
+  const table = document.getElementById("compareTable");
+  if (!nav || !table) return;
+  nav.innerHTML = "";
+  table.innerHTML = "";
+  const categories = compare?.categories || [];
+  if (!categories.length) {
+    table.innerHTML = "<p class=\"muted\">Compare data will appear here once configured.</p>";
+    return;
+  }
+  let activeId = ENV.compareDefaultCategory || categories[0]?.id;
+  const setActive = (id) => {
+    activeId = id;
+    Array.from(nav.children).forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-id") === id);
+      btn.setAttribute("aria-selected", btn.getAttribute("data-id") === id);
+    });
+    const category = categories.find((item) => item.id === id) || categories[0];
+    if (!category) return;
+    table.innerHTML = "";
+    const summary = document.createElement("p");
+    summary.className = "compare-summary";
+    summary.textContent = category.summary || "";
+    table.appendChild(summary);
+    const grid = document.createElement("div");
+    grid.className = "compare-grid";
+    const header = document.createElement("div");
+    header.className = "compare-row compare-row--header";
+    header.innerHTML =
+      '<span class="compare-label">Criteria</span>' +
+      (category.columns || [])
+        .map((column) => {
+          const plan = findPlanDetails(data, column.planId);
+          const price = plan ? formatCurrency(plan.price, plan.currency) : "";
+          return `<span><strong>${column.label}</strong><em>${price}</em></span>`;
+        })
+        .join("");
+    grid.appendChild(header);
+    (category.rows || []).forEach((row) => {
+      const div = document.createElement("div");
+      div.className = "compare-row";
+      const label = document.createElement("span");
+      label.className = "compare-label";
+      label.textContent = row.label;
+      div.appendChild(label);
+      (row.values || []).forEach((value) => {
+        const span = document.createElement("span");
+        span.textContent = value;
+        div.appendChild(span);
+      });
+      grid.appendChild(div);
+    });
+    table.appendChild(grid);
+  };
+  categories.forEach((category, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "compare-tab" + (category.id === activeId ? " active" : "");
+    btn.textContent = category.label;
+    btn.setAttribute("type", "button");
+    btn.setAttribute("role", "tab");
+    btn.setAttribute("data-id", category.id);
+    btn.setAttribute("aria-selected", category.id === activeId);
+    btn.addEventListener("click", () => setActive(category.id));
+    nav.appendChild(btn);
+    if (idx === 0 && !activeId) activeId = category.id;
+  });
+  setActive(activeId);
 }
 
 function renderContactPage(data) {
@@ -557,26 +875,46 @@ function initHeaderScrollEffect() {
 }
 
 /* Contact forms demo */
-function bindContact(formId, statusId) {
-  const form = document.getElementById(formId),
-    status = document.getElementById(statusId);
+function bindContact(formId, statusId, configKey = "contact") {
+  const form = document.getElementById(formId);
+  const status = document.getElementById(statusId);
   if (!form) return;
-  form.addEventListener("submit", (e) => {
+  const config = (window.DATA?.forms || {})[configKey] || {};
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (typeof form.reportValidity === "function" && !form.reportValidity()) {
+      return;
+    }
     if (status) status.textContent = "Sending…";
-    setTimeout(() => {
+    const endpoint = resolveEndpoint(config);
+    const payload = serializeForm(form);
+    payload._subject = config.subject || "New enquiry";
+    payload.subject = config.subject || "New enquiry";
+    if (payload.email && !payload._replyto) payload._replyto = payload.email;
+    payload.formId = formId;
+    payload.sourcePage = window.location.href;
+    payload.timestamp = new Date().toISOString();
+    const result = await submitFormData(endpoint, payload);
+    if (result.ok) {
       if (status)
-        status.textContent = "Thanks! We will get back to you soon.";
+        status.textContent =
+          config.success || "Thanks! We will get back to you soon.";
       form.reset();
-    }, 700);
+    } else {
+      if (status)
+        status.textContent =
+          config.error ||
+          "We couldn't submit your request. Please email hello@secureitdevelopers.com.";
+    }
   });
 }
-bindContact("contactForm", "contactStatus");
-bindContact("contactForm2", "contactStatus2");
+bindContact("contactForm", "contactStatus", "contact");
+bindContact("contactForm2", "contactStatus2", "contact");
 
 function initQuoteGenerator(data) {
   const form = document.getElementById("quoteForm");
   const result = document.getElementById("quoteResult");
+  const statusEl = document.getElementById("quoteStatus");
   if (!form || !result || !data) return;
 
   const render = (event) => {
@@ -590,6 +928,8 @@ function initQuoteGenerator(data) {
       size,
       compliance: document.getElementById("quoteCompliance")?.value,
       support: document.getElementById("quoteSupport")?.value,
+      contactEmail: document.getElementById("quoteEmail")?.value,
+      company: document.getElementById("quoteCompany")?.value,
     };
     const recommendation = buildQuoteRecommendation(data, input);
     if (!recommendation) {
@@ -637,6 +977,33 @@ function initQuoteGenerator(data) {
         window.location.href = "checkout.html";
       });
     }
+    const config = (data.forms || {}).quote || {};
+    const endpoint = resolveEndpoint(config);
+    const payload = {
+      ...input,
+      _subject: config.subject || "Quote request",
+      subject: config.subject || "Quote request",
+      recommendation: {
+        plan: recommendation.plan.label,
+        group: recommendation.groupLabel,
+        estimate: formatCurrency(
+          recommendation.estimated,
+          recommendation.plan.currency
+        ),
+        adjustments: recommendation.adjustments,
+      },
+      formId: "quoteForm",
+      sourcePage: window.location.href,
+      timestamp: new Date().toISOString(),
+    };
+    if (payload.contactEmail) payload._replyto = payload.contactEmail;
+    if (statusEl) statusEl.textContent = "Emailing your quote…";
+    submitFormData(endpoint, payload).then((res) => {
+      if (!statusEl) return;
+      statusEl.textContent = res.ok
+        ? config.success || "Quote sent to your inbox."
+        : config.error || "We couldn't email the quote. Please try again.";
+    });
   };
 
   form.addEventListener("submit", render);
@@ -721,11 +1088,65 @@ function getSelectedPlan() {
   }
 }
 
+function findPlanDetails(data, compositeId) {
+  if (!compositeId) return null;
+  const [groupId, planId] = compositeId.split("-");
+  if (!groupId || !planId) return null;
+  const group = (data.pricingGroups || []).find((item) => item.id === groupId);
+  if (!group) return null;
+  const plan = (group.plans || []).find((item) => item.id === planId);
+  if (!plan) return null;
+  return {
+    id: plan.id,
+    label: plan.label,
+    price: plan.price,
+    currency: plan.currency,
+    groupLabel: group.label,
+  };
+}
+
 function getLastOrder() {
   try {
     return JSON.parse(localStorage.getItem("lastOrder") || "null");
   } catch (e) {
     return null;
+  }
+}
+
+function resolveEndpoint(config = {}) {
+  if (!config) return "";
+  const envValue = config.endpointKey ? ENV[config.endpointKey] : null;
+  return envValue || config.endpoint || config.defaultEndpoint || "";
+}
+
+function serializeForm(form) {
+  const formData = new FormData(form);
+  const payload = {};
+  formData.forEach((value, key) => {
+    payload[key] = value;
+  });
+  return payload;
+}
+
+async function submitFormData(endpoint, payload) {
+  if (!endpoint) {
+    console.warn("No endpoint configured for form submission", payload);
+    return { ok: true, skipped: true };
+  }
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+    return { ok: true };
+  } catch (error) {
+    console.error("Form submission failed", error);
+    return { ok: false, error };
   }
 }
 
