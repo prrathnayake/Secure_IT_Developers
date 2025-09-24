@@ -1,137 +1,218 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Web Development Team — Modern, Fast, Reliable</title>
-  <meta name="description" content="We craft modern websites and apps with clear pricing and fast delivery.">
-  <link rel="canonical" href="https://example.com/">
-  <meta property="og:title" content="Web Development Team — Modern, Fast, Reliable">
-  <meta property="og:description" content="We craft modern websites and apps with clear pricing and fast delivery.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://example.com/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Web Development Team — Modern, Fast, Reliable">
-  <meta name="twitter:description" content="We craft modern websites and apps with clear pricing and fast delivery.">
-  <link rel="icon" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <script defer src="assets/js/data.js"></script>
-  <script defer src="assets/js/app.js"></script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Your Web Dev Team", "url": "https://example.com/", "logo": "https://example.com/logo.png", "sameAs": ["https://www.linkedin.com/", "https://github.com/"]}</script>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Development Team — Modern, Fast, Reliable</title>
+    <meta
+      name="description"
+      content="We craft modern websites and apps with clear pricing and fast delivery."
+    />
+    <link rel="canonical" href="https://example.com/" />
+    <meta
+      property="og:title"
+      content="Web Development Team — Modern, Fast, Reliable"
+    />
+    <meta
+      property="og:description"
+      content="We craft modern websites and apps with clear pricing and fast delivery."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Web Development Team — Modern, Fast, Reliable"
+    />
+    <meta
+      name="twitter:description"
+      content="We craft modern websites and apps with clear pricing and fast delivery."
+    />
+    <link rel="icon" href="assets/img/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script defer src="assets/js/data.js"></script>
+    <script defer src="assets/js/app.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Your Web Dev Team",
+        "url": "https://example.com/",
+        "logo": "https://example.com/logo.png",
+        "sameAs": ["https://www.linkedin.com/", "https://github.com/"]
+      }
+    </script>
+  </head>
 
-<body>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html" aria-label="Go to home">
+          <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" fill="currentColor" />
+          </svg>
+          <span>Your Web Dev Team</span>
+        </a>
+        <nav class="primary-nav" role="navigation" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <button
+          id="themeToggle"
+          class="btn btn-ghost"
+          aria-pressed="false"
+          aria-label="Toggle dark mode"
+        >
+          🌓
+        </button>
+      </div>
+    </header>
 
-<header class="site-header" role="banner">
-  <div class="container nav-wrap">
-    <a class="brand" href="index.html" aria-label="Go to home">
-      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" fill="currentColor"/></svg>
-      <span>Your Web Dev Team</span>
-    </a>
-    <nav class="primary-nav" role="navigation" aria-label="Primary">
-      <a href="index.html">Home</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-    <button id="themeToggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌓</button>
-  </div>
-</header>
+    <main id="main">
+      <section class="hero container">
+        <div class="hero-text">
+          <h1>Build better. Ship faster.</h1>
+          <p>
+            Websites & apps engineered for speed, SEO, and conversion.
+            Transparent, tiered pricing.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href="pricing.html">See Pricing</a>
+            <a class="btn btn-ghost" href="contact.html">Talk to us</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="blob"></div>
+        </div>
+      </section>
 
-<main id="main">
-  <section class="hero container">
-    <div class="hero-text">
-      <h1>Build better. Ship faster.</h1>
-      <p>Websites & apps engineered for speed, SEO, and conversion. Transparent, tiered pricing.</p>
-      <div class="cta-row">
-        <a class="btn" href="pricing.html">See Pricing</a>
-        <a class="btn btn-ghost" href="contact.html">Talk to us</a>
+      <section class="container services">
+        <h2>What we do</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Websites</h3>
+            <p>From landing pages to content-rich sites.</p>
+          </article>
+          <article class="card">
+            <h3>eCommerce</h3>
+            <p>WooCommerce & Shopify builds that convert.</p>
+          </article>
+          <article class="card">
+            <h3>Custom Web/App</h3>
+            <p>APIs, dashboards, and mobile-ready frontends.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="container portfolio">
+        <h2>Highlights</h2>
+        <div class="grid-3">
+          <figure class="shot">
+            <img src="assets/img/placeholder1.svg" alt="Project screenshot 1" />
+            <figcaption>Speed-focused landing</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="assets/img/placeholder2.svg" alt="Project screenshot 2" />
+            <figcaption>Shopify store</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="assets/img/placeholder3.svg" alt="Project screenshot 3" />
+            <figcaption>Admin dashboard</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="container testimonials">
+        <h2>What clients say</h2>
+        <div class="quotes">
+          <blockquote>
+            “They delivered fast and nailed the brief.”
+            <cite>— Sarah, Retail</cite>
+          </blockquote>
+          <blockquote>
+            “Clean code, clear handover, great results.”
+            <cite>— Mark, SaaS</cite>
+          </blockquote>
+        </div>
+      </section>
+
+      <section class="container faqs">
+        <h2>FAQs</h2>
+        <details>
+          <summary>How long does a typical website take?</summary>
+          <p>Most sites launch in 2–4 weeks depending on scope.</p>
+        </details>
+        <details>
+          <summary>Do you handle hosting & domains?</summary>
+          <p>Yes—use our recommended stack or bring your own.</p>
+        </details>
+      </section>
+
+      <section id="contact" class="container contact">
+        <h2>Contact us</h2>
+        <form id="contactForm" class="form" novalidate>
+          <div class="form-row">
+            <label for="name">Name</label><input id="name" required />
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label
+            ><input id="email" type="email" required />
+          </div>
+          <div class="form-row">
+            <label for="msg">Message</label
+            ><textarea id="msg" rows="4" required></textarea>
+          </div>
+          <button class="btn" type="submit">Send</button>
+          <p id="contactStatus" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="foot-grid">
+          <div>
+            <h4>About</h4>
+            <p>We design and build fast, modern websites and apps.</p>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+              <li><a href="tel:+61123456789">+61 123 456 789</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Follow</h4>
+            <ul class="social">
+              <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+              <li><a href="#" aria-label="GitHub">GitHub</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot-bottom">
+          <span>© 2025 Your Web Dev Team</span>
+          <a href="#" id="openCookie" class="link">Cookie preferences</a>
+        </div>
+      </div>
+    </footer>
+    <div
+      id="cookieBanner"
+      class="cookie-banner"
+      role="dialog"
+      aria-live="polite"
+      aria-label="Cookie notice"
+    >
+      <p>
+        We use cookies to improve your experience and for analytics.
+        <a href="#" class="link">Learn more</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="btn btn-ghost" data-cookie="reject">Reject</button>
+        <button class="btn" data-cookie="accept">Accept</button>
       </div>
     </div>
-    <div class="hero-art" aria-hidden="true">
-      <div class="blob"></div>
-    </div>
-  </section>
-
-  <section class="container services">
-    <h2>What we do</h2>
-    <div class="cards">
-      <article class="card"><h3>Websites</h3><p>From landing pages to content-rich sites.</p></article>
-      <article class="card"><h3>eCommerce</h3><p>WooCommerce & Shopify builds that convert.</p></article>
-      <article class="card"><h3>Custom Web/App</h3><p>APIs, dashboards, and mobile-ready frontends.</p></article>
-    </div>
-  </section>
-
-  <section class="container portfolio">
-    <h2>Highlights</h2>
-    <div class="grid-3">
-      <figure class="shot"><img src="assets/img/placeholder1.svg" alt="Project screenshot 1"><figcaption>Speed-focused landing</figcaption></figure>
-      <figure class="shot"><img src="assets/img/placeholder2.svg" alt="Project screenshot 2"><figcaption>Shopify store</figcaption></figure>
-      <figure class="shot"><img src="assets/img/placeholder3.svg" alt="Project screenshot 3"><figcaption>Admin dashboard</figcaption></figure>
-    </div>
-  </section>
-
-  <section class="container testimonials">
-    <h2>What clients say</h2>
-    <div class="quotes">
-      <blockquote>“They delivered fast and nailed the brief.” <cite>— Sarah, Retail</cite></blockquote>
-      <blockquote>“Clean code, clear handover, great results.” <cite>— Mark, SaaS</cite></blockquote>
-    </div>
-  </section>
-
-  <section class="container faqs">
-    <h2>FAQs</h2>
-    <details><summary>How long does a typical website take?</summary><p>Most sites launch in 2–4 weeks depending on scope.</p></details>
-    <details><summary>Do you handle hosting & domains?</summary><p>Yes—use our recommended stack or bring your own.</p></details>
-  </section>
-
-  <section id="contact" class="container contact">
-    <h2>Contact us</h2>
-    <form id="contactForm" class="form" novalidate>
-      <div class="form-row"><label for="name">Name</label><input id="name" required></div>
-      <div class="form-row"><label for="email">Email</label><input id="email" type="email" required></div>
-      <div class="form-row"><label for="msg">Message</label><textarea id="msg" rows="4" required></textarea></div>
-      <button class="btn" type="submit">Send</button>
-      <p id="contactStatus" role="status" aria-live="polite"></p>
-    </form>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="foot-grid">
-      <div>
-        <h4>About</h4>
-        <p>We design and build fast, modern websites and apps.</p>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
-          <li><a href="tel:+61123456789">+61 123 456 789</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Follow</h4>
-        <ul class="social">
-          <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
-          <li><a href="#" aria-label="GitHub">GitHub</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>© 2025 Your Web Dev Team</span>
-      <a href="#" id="openCookie" class="link">Cookie preferences</a>
-    </div>
-  </div>
-</footer>
-<div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie notice">
-  <p>We use cookies to improve your experience and for analytics. <a href="#" class="link">Learn more</a>.</p>
-  <div class="cookie-actions">
-    <button class="btn btn-ghost" data-cookie="reject">Reject</button>
-    <button class="btn" data-cookie="accept">Accept</button>
-  </div>
-</div>
-
-</body>
+  </body>
 </html>
