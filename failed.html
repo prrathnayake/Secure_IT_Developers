@@ -3,56 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Payment Failed</title>
-    <meta
-      name="description"
-      content="There was an issue processing your payment."
-    />
-    <link rel="canonical" href="https://example.com/" />
-    <meta property="og:title" content="Payment Failed" />
-    <meta
-      property="og:description"
-      content="There was an issue processing your payment."
-    />
+    <title>Secure IT Developers</title>
+    <meta name="description" content="" />
+    <link rel="canonical" href="#" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:url" content="" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Payment Failed" />
-    <meta
-      name="twitter:description"
-      content="There was an issue processing your payment."
-    />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:description" content="" />
     <link rel="icon" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
     <script defer src="assets/js/data.js"></script>
     <script defer src="assets/js/app.js"></script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Your Web Dev Team",
-        "url": "https://example.com/",
-        "logo": "https://example.com/logo.png",
-        "sameAs": ["https://www.linkedin.com/", "https://github.com/"]
-      }
-    </script>
+    <script id="orgJsonLd" type="application/ld+json"></script>
   </head>
 
-  <body>
+  <body data-page="failed">
     <header class="site-header" role="banner">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Go to home">
           <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" fill="currentColor" />
           </svg>
-          <span>Your Web Dev Team</span>
+          <span data-bind="brandName"></span>
         </a>
-        <nav class="primary-nav" role="navigation" aria-label="Primary">
-          <a href="index.html">Home</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+        <nav id="primaryNav" class="primary-nav" role="navigation" aria-label="Primary"></nav>
         <button
           id="themeToggle"
           class="btn btn-ghost"
@@ -64,13 +41,10 @@
       </div>
     </header>
 
-    <main class="container">
-      <h1>Payment failed</h1>
-      <p>Something went wrong. Please try again or contact support.</p>
-      <div class="actions">
-        <a class="btn" href="payment.html">Try again</a>
-        <a class="btn btn-ghost" href="contact.html">Contact support</a>
-      </div>
+    <main class="container message-page">
+      <h1 id="messageHeading"></h1>
+      <p id="messageBody"></p>
+      <div class="actions" id="messageActions"></div>
     </main>
 
     <footer class="site-footer">
@@ -78,25 +52,19 @@
         <div class="foot-grid">
           <div>
             <h4>About</h4>
-            <p>We design and build fast, modern websites and apps.</p>
+            <p id="footerAbout"></p>
           </div>
           <div>
             <h4>Contact</h4>
-            <ul>
-              <li><a href="mailto:hello@example.com">hello@example.com</a></li>
-              <li><a href="tel:+61123456789">+61 123 456 789</a></li>
-            </ul>
+            <ul id="footerContact"></ul>
           </div>
           <div>
             <h4>Follow</h4>
-            <ul class="social">
-              <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
-              <li><a href="#" aria-label="GitHub">GitHub</a></li>
-            </ul>
+            <ul class="social" id="footerSocial"></ul>
           </div>
         </div>
         <div class="foot-bottom">
-          <span>© 2025 Your Web Dev Team</span>
+          <span id="footerLegal"></span>
           <a href="#" id="openCookie" class="link">Cookie preferences</a>
         </div>
       </div>
