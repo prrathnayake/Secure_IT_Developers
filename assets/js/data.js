@@ -60,11 +60,15 @@ window.DATA = {
   },
   team: [
     {
+      id: "avery-patel",
       name: "Avery Patel",
       role: "Founder & Lead Full-Stack Engineer",
       location: "Sydney, Australia",
       bio:
         "Avery is a security-conscious engineer with 8+ years delivering web platforms, eCommerce stacks, and cloud-native applications for regulated industries.",
+      testimonial:
+        "“I believe every build should launch with security, performance, and business impact measured from day one.”",
+      portfolio: "https://secureitdevelopers.com/portfolio",
       focus: [
         "Application security reviews & OWASP hardening",
         "TypeScript, React, and modern frontend architectures",
@@ -72,6 +76,7 @@ window.DATA = {
         "DevOps automation across AWS, Azure, and GCP",
       ],
       links: [
+        { label: "Portfolio", href: "https://secureitdevelopers.com/portfolio" },
         { label: "Website", href: "https://secureitdevelopers.com" },
         {
           label: "LinkedIn",
@@ -158,6 +163,12 @@ window.DATA = {
             author: "Leon Carter, CTO — Venture Supply Co.",
           },
         ],
+      },
+      spotlight: {
+        heading: "Meet the team",
+        copy:
+          "A single founder-led squad means you collaborate directly with the person building, auditing, and optimising your product.",
+        memberId: "avery-patel",
       },
       contact: {
         heading: "Ready to scope your project?",

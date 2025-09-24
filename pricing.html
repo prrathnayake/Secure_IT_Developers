@@ -46,6 +46,76 @@
         <h1>Pricing</h1>
         <p id="pricingIntro"></p>
       </section>
+      <section class="container quote-generator js-reveal">
+        <div class="quote-card-panel">
+          <div class="quote-card__header">
+            <h2>Need a quick quote?</h2>
+            <p>
+              Answer a few questions and we’ll suggest a plan with an estimated
+              investment.
+            </p>
+          </div>
+          <form id="quoteForm" class="quote-form" novalidate>
+            <div class="grid-2">
+              <label>
+                Project focus
+                <select id="quoteProject" required>
+                  <option value="" disabled selected>Select one</option>
+                  <option value="starter">Website or marketing site</option>
+                  <option value="ecom">eCommerce</option>
+                  <option value="custom">Custom web/app build</option>
+                </select>
+              </label>
+              <label>
+                Expected launch timeline
+                <select id="quoteTimeline" required>
+                  <option value="" disabled selected>Select a timeline</option>
+                  <option value="standard">6–10 weeks</option>
+                  <option value="accelerated">3–5 weeks</option>
+                  <option value="rush">Under 3 weeks</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="quote-radio">
+              <legend>Build complexity</legend>
+              <label>
+                <input type="radio" name="projectSize" value="small" required />
+                Launch essentials
+              </label>
+              <label>
+                <input type="radio" name="projectSize" value="medium" />
+                Growth-ready
+              </label>
+              <label>
+                <input type="radio" name="projectSize" value="large" />
+                Enterprise scale
+              </label>
+            </fieldset>
+            <div class="grid-2">
+              <label>
+                Compliance requirements
+                <select id="quoteCompliance" required>
+                  <option value="" disabled selected>Select an option</option>
+                  <option value="standard">General best practice</option>
+                  <option value="regulated">Regulated industry (finance, health)</option>
+                  <option value="critical">Mission critical / audited</option>
+                </select>
+              </label>
+              <label>
+                Ongoing optimisation support
+                <select id="quoteSupport" required>
+                  <option value="" disabled selected>Select a support level</option>
+                  <option value="0">None right now</option>
+                  <option value="0.12">Monthly performance & CRO</option>
+                  <option value="0.2">Embedded optimisation squad</option>
+                </select>
+              </label>
+            </div>
+            <button type="submit" class="btn">Generate my quote</button>
+          </form>
+          <div id="quoteResult" class="quote-result" role="status" aria-live="polite"></div>
+        </div>
+      </section>
       <div
         class="subnav container"
         role="navigation"
