@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Secure IT Developers</title>
     <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <link rel="canonical" href="#" />
     <meta property="og:title" content="" />
     <meta property="og:description" content="" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="" />
     <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="" />
     <link rel="icon" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
     <script defer src="assets/js/app.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
@@ -45,19 +49,41 @@
       <h1>Contact</h1>
       <p id="contactIntro"></p>
       <div class="grid-2">
-        <form id="contactForm2" class="form" novalidate>
+        <form
+          id="contactForm2"
+          class="form"
+          novalidate
+          data-form-key="contact"
+        >
           <div class="form-row">
-            <label for="name2">Name</label><input id="name2" required />
+            <label for="name2">Name</label
+            ><input id="name2" name="name" autocomplete="name" required />
           </div>
           <div class="form-row">
-            <label for="email2">Email</label><input id="email2" type="email" required />
+            <label for="email2">Email</label
+            ><input
+              id="email2"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+            />
           </div>
           <div class="form-row">
-            <label for="budget">Budget (A$)</label><input id="budget" type="number" min="0" step="1000" />
+            <label for="budget">Budget (A$)</label
+            ><input
+              id="budget"
+              name="budget"
+              type="number"
+              min="0"
+              step="1000"
+            />
           </div>
           <div class="form-row">
-            <label for="message2">Message</label><textarea id="message2" rows="5" required></textarea>
+            <label for="message2">Message</label
+            ><textarea id="message2" name="message" rows="5" required></textarea>
           </div>
+          <input type="hidden" name="form" value="Contact page" />
           <button class="btn" type="submit">Send</button>
           <p id="contactStatus2" role="status" aria-live="polite"></p>
         </form>

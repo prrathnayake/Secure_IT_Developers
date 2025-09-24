@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Secure IT Developers</title>
     <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <link rel="canonical" href="#" />
     <meta property="og:title" content="" />
     <meta property="og:description" content="" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="" />
     <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="" />
     <link rel="icon" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
     <script defer src="assets/js/app.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
@@ -62,9 +66,26 @@
         <div class="cards" id="servicesCards"></div>
       </section>
 
+      <section class="container add-ons js-reveal">
+        <div class="section-header">
+          <p class="eyebrow" id="addOnsEyebrow"></p>
+          <h2 id="addOnsHeading"></h2>
+          <p id="addOnsCopy"></p>
+        </div>
+        <div class="grid-3" id="addOnsCards"></div>
+      </section>
+
       <section class="container portfolio js-reveal">
         <h2 id="highlightsHeading"></h2>
         <div class="grid-3" id="highlightsGrid"></div>
+      </section>
+
+      <section class="container media-gallery js-reveal">
+        <div class="section-header">
+          <h2 id="galleryHeading"></h2>
+          <p id="galleryCopy"></p>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
       </section>
 
       <section class="container testimonials js-reveal">
@@ -93,16 +114,31 @@
         <h2 id="homeContactHeading"></h2>
         <p id="contactCopy"></p>
         <ul id="homeContactPoints"></ul>
-        <form id="contactForm" class="form" novalidate>
+        <form
+          id="contactForm"
+          class="form"
+          novalidate
+          data-form-key="contact"
+        >
           <div class="form-row">
-            <label for="name">Name</label><input id="name" required />
+            <label for="name">Name</label
+            ><input id="name" name="name" autocomplete="name" required />
           </div>
           <div class="form-row">
-            <label for="email">Email</label><input id="email" type="email" required />
+            <label for="email">Email</label
+            ><input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+            />
           </div>
           <div class="form-row">
-            <label for="msg">Message</label><textarea id="msg" rows="4" required></textarea>
+            <label for="msg">Message</label
+            ><textarea id="msg" name="message" rows="4" required></textarea>
           </div>
+          <input type="hidden" name="form" value="Home contact" />
           <button class="btn" type="submit">Send</button>
           <p id="contactStatus" role="status" aria-live="polite"></p>
         </form>

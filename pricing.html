@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Secure IT Developers</title>
     <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <link rel="canonical" href="#" />
     <meta property="og:title" content="" />
     <meta property="og:description" content="" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="" />
     <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="" />
     <link rel="icon" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
     <script defer src="assets/js/app.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
@@ -55,11 +59,16 @@
               investment.
             </p>
           </div>
-          <form id="quoteForm" class="quote-form" novalidate>
+          <form
+            id="quoteForm"
+            class="quote-form"
+            novalidate
+            data-form-key="quote"
+          >
             <div class="grid-2">
               <label>
                 Project focus
-                <select id="quoteProject" required>
+                <select id="quoteProject" name="project" required>
                   <option value="" disabled selected>Select one</option>
                   <option value="starter">Website or marketing site</option>
                   <option value="ecom">eCommerce</option>
@@ -68,7 +77,7 @@
               </label>
               <label>
                 Expected launch timeline
-                <select id="quoteTimeline" required>
+                <select id="quoteTimeline" name="timeline" required>
                   <option value="" disabled selected>Select a timeline</option>
                   <option value="standard">6–10 weeks</option>
                   <option value="accelerated">3–5 weeks</option>
@@ -94,7 +103,7 @@
             <div class="grid-2">
               <label>
                 Compliance requirements
-                <select id="quoteCompliance" required>
+                <select id="quoteCompliance" name="compliance" required>
                   <option value="" disabled selected>Select an option</option>
                   <option value="standard">General best practice</option>
                   <option value="regulated">Regulated industry (finance, health)</option>
@@ -103,7 +112,7 @@
               </label>
               <label>
                 Ongoing optimisation support
-                <select id="quoteSupport" required>
+                <select id="quoteSupport" name="support" required>
                   <option value="" disabled selected>Select a support level</option>
                   <option value="0">None right now</option>
                   <option value="0.12">Monthly performance & CRO</option>
@@ -111,10 +120,49 @@
                 </select>
               </label>
             </div>
+            <div class="grid-2">
+              <label>
+                Contact email
+                <input
+                  id="quoteEmail"
+                  name="contactEmail"
+                  type="email"
+                  placeholder="name@company.com"
+                  required
+                />
+              </label>
+              <label>
+                Company or site URL
+                <input
+                  id="quoteCompany"
+                  name="company"
+                  type="text"
+                  placeholder="Acme Security"
+                />
+              </label>
+            </div>
             <button type="submit" class="btn">Generate my quote</button>
+            <input type="hidden" name="form" value="Pricing quote" />
           </form>
           <div id="quoteResult" class="quote-result" role="status" aria-live="polite"></div>
+          <p id="quoteStatus" class="quote-status" role="status" aria-live="polite"></p>
         </div>
+      </section>
+      <section class="container add-ons js-reveal" id="pricingAddOns">
+        <div class="section-header">
+          <p class="eyebrow" id="pricingAddOnsEyebrow"></p>
+          <h2 id="pricingAddOnsHeading"></h2>
+          <p id="pricingAddOnsCopy"></p>
+        </div>
+        <div class="grid-3" id="pricingAddOnsCards"></div>
+      </section>
+      <section class="container compare js-reveal" id="pricingCompare">
+        <div class="section-header">
+          <h2 id="compareHeading"></h2>
+          <p id="compareCopy"></p>
+        </div>
+        <div class="compare-nav" id="compareNav" role="tablist"></div>
+        <div class="compare-table" id="compareTable" aria-live="polite"></div>
       </section>
       <div
         class="subnav container"

@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Secure IT Developers</title>
     <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <link rel="canonical" href="#" />
     <meta property="og:title" content="" />
     <meta property="og:description" content="" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="" />
     <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="" />
     <link rel="icon" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
     <script defer src="assets/js/app.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
@@ -41,11 +45,24 @@
       </div>
     </header>
 
-    <main class="container">
-      <h1>About</h1>
-      <p id="aboutIntro"></p>
+    <main class="container about-page">
+      <header class="about-header js-reveal">
+        <h1>About</h1>
+        <p id="aboutIntro"></p>
+      </header>
 
-      <section class="about-mission">
+      <section class="about-story js-reveal">
+        <div class="grid-2">
+          <article>
+            <h2>Our story</h2>
+            <p id="aboutStory"></p>
+            <ul class="milestones" id="aboutMilestones"></ul>
+          </article>
+          <figure class="about-figure" id="aboutStoryFigure"></figure>
+        </div>
+      </section>
+
+      <section class="about-mission js-reveal">
         <div class="grid-2">
           <article>
             <h2>Mission</h2>
@@ -56,16 +73,44 @@
           <article>
             <h2>Tech we rely on</h2>
             <ul id="techList"></ul>
+            <div class="certifications">
+              <h3>Certifications & security credentials</h3>
+              <ul id="aboutCertifications"></ul>
+            </div>
           </article>
         </div>
       </section>
 
-      <section class="about-approach">
+      <section class="about-impact js-reveal">
+        <h2>Impact in numbers</h2>
+        <div class="impact-grid" id="aboutImpact"></div>
+      </section>
+
+      <section class="about-approach js-reveal">
         <h2>How we work</h2>
         <div class="grid-2" id="aboutApproach"></div>
       </section>
 
-      <section class="about-team">
+      <section class="about-community js-reveal">
+        <h2>Community & knowledge sharing</h2>
+        <div class="grid-2">
+          <article>
+            <ul id="aboutCommunity"></ul>
+          </article>
+          <article>
+            <h3>Partner ecosystem</h3>
+            <ul id="aboutPartners"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="about-gallery js-reveal">
+        <h2>Inside the studio</h2>
+        <p id="aboutGalleryCopy"></p>
+        <div class="gallery-grid" id="aboutGallery"></div>
+      </section>
+
+      <section class="about-team js-reveal">
         <h2>Team</h2>
         <p id="teamIntro"></p>
         <div class="grid-1" id="teamGrid"></div>
