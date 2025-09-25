@@ -14,8 +14,10 @@ import {
 import { logCustomerEvent } from "../core/audit.js";
 import { requireAuth } from "../core/auth.js";
 import { PaymentGateway } from "../core/gateway.js";
+import { enforceSecurePaymentContext } from "../core/security.js";
 
 export function renderPaymentPage(data) {
+  enforceSecurePaymentContext();
   const customer = requireAuth("payment.html");
   if (!customer) return;
   const servicesCatalog = data?.serviceCatalog || [];
