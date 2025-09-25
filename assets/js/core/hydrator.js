@@ -32,12 +32,21 @@ function applyBranding(data) {
 function applyNavigation(data, pageKey) {
   const nav = document.getElementById("primaryNav");
   const mobileNav = document.getElementById("mobileNav");
+  let mobileLinks;
   if (!nav) return;
   nav.innerHTML = "";
   if (mobileNav) {
     mobileNav.innerHTML = "";
     mobileNav.setAttribute("hidden", "hidden");
     mobileNav.classList.remove("is-open");
+    mobileLinks = document.createElement("div");
+    mobileLinks.className = "mobile-nav__links";
+    mobileLinks.setAttribute("data-mobile-links", "");
+    mobileNav.appendChild(mobileLinks);
+    const mobileActions = document.createElement("div");
+    mobileActions.className = "mobile-nav__actions";
+    mobileActions.setAttribute("data-mobile-actions", "");
+    mobileNav.appendChild(mobileActions);
   }
   (data.navigation || []).forEach((item) => {
     const link = document.createElement("a");
@@ -50,7 +59,7 @@ function applyNavigation(data, pageKey) {
     nav.appendChild(link);
     if (mobileNav) {
       const mobileLink = link.cloneNode(true);
-      mobileNav.appendChild(mobileLink);
+      (mobileLinks || mobileNav).appendChild(mobileLink);
     }
   });
 }

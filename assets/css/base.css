@@ -193,7 +193,8 @@ img {
 
 .mobile-auth__greeting {
   margin: 0;
-  color: var(--muted);
+  color: var(--text);
+  font-weight: 600;
 }
 
 .nav-toggle {
@@ -256,6 +257,39 @@ body.nav-open .nav-toggle__bar:nth-child(3) {
   display: flex;
 }
 
+.mobile-nav__links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-nav__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+.mobile-nav__actions .btn,
+.mobile-nav__actions .cart-toggle {
+  width: 100%;
+}
+
+.mobile-nav__actions .cart-toggle {
+  justify-content: space-between;
+}
+
+.mobile-nav__actions .mobile-auth {
+  padding-top: 4px;
+}
+
+.mobile-nav__actions .nav-user {
+  display: block;
+  margin-bottom: 4px;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -316,8 +350,6 @@ body.nav-open .nav-toggle__bar:nth-child(3) {
     justify-content: center;
   }
   .nav-actions {
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 8px;
+    display: none;
   }
 }

@@ -312,24 +312,49 @@ function ensureSlots() {
   return { actions, cartSlot, authSlot };
 }
 
-function renderMobileAuth(customer) {
+function ensureMobileActionsContainer() {
   const mobileNav = document.getElementById("mobileNav");
-  if (!mobileNav) return;
-  mobileNav.querySelectorAll("[data-auth-nav]").forEach((item) => item.remove());
-  const item = document.createElement(customer ? "div" : "a");
-  item.setAttribute("data-auth-nav", "");
-  item.className = "mobile-auth";
-  if (customer) {
-    item.innerHTML = `
-      <p class="mobile-auth__greeting">Signed in as ${customer.name}</p>
-      <button type="button" class="btn btn-ghost" data-auth-action="logout">Log out</button>
-    `;
-  } else {
-    item.href = "login.html";
-    item.classList.add("btn");
-    item.textContent = "Customer login";
+  if (!mobileNav) return null;
+  let actions = mobileNav.querySelector("[data-mobile-actions]");
+  if (!actions) {
+    actions = document.createElement("div");
+    actions.className = "mobile-nav__actions";
+    actions.setAttribute("data-mobile-actions", "");
+    mobileNav.appendChild(actions);
   }
-  mobileNav.appendChild(item);
+  return actions;
+}
+
+function renderMobileAuth(customer) {
+  const actions = ensureMobileActionsContainer();
+  if (!actions) return;
+  actions.querySelectorAll("[data-auth-nav]").forEach((item) => item.remove());
+  const wrapper = document.createElement("div");
+  wrapper.setAttribute("data-auth-nav", "");
+  wrapper.className = "mobile-auth";
+  if (customer) {
+    const firstName = (customer.name || "Customer").split(" ")[0];
+    const greeting = document.createElement("p");
+    greeting.className = "mobile-auth__greeting nav-user";
+    greeting.textContent = `Hi, ${firstName}`;
+    const logout = document.createElement("button");
+    logout.type = "button";
+    logout.className = "btn btn-ghost";
+    logout.setAttribute("data-auth-action", "logout");
+    logout.textContent = "Log out";
+    wrapper.append(greeting, logout);
+  } else {
+    const login = document.createElement("a");
+    login.className = "btn btn-ghost";
+    login.href = "login.html";
+    login.textContent = "Log in";
+    const signup = document.createElement("a");
+    signup.className = "btn";
+    signup.href = "signup.html";
+    signup.textContent = "Create account";
+    wrapper.append(login, signup);
+  }
+  actions.appendChild(wrapper);
 }
 
 function ensureAuthStatus() {
@@ -477,6 +502,16 @@ function handleLogoutClicks() {
     if (!trigger) return;
     event.preventDefault();
     logoutCustomer();
+    const mobileNav = document.getElementById("mobileNav");
+    const mobileToggle = document.getElementById("mobileNavToggle");
+    if (mobileNav?.classList.contains("is-open")) {
+      mobileNav.classList.remove("is-open");
+      mobileNav.setAttribute("hidden", "hidden");
+      document.body.classList.remove("nav-open");
+      if (mobileToggle) {
+        mobileToggle.setAttribute("aria-expanded", "false");
+      }
+    }
     showAuthStatus("You have been signed out.");
     if (/checkout|payment/.test(window.location.pathname)) {
       window.location.href = "login.html?redirect=checkout.html";
