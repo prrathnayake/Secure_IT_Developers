@@ -7,6 +7,7 @@ import { renderContactPage } from "../renderers/contact.js";
 import { renderMessagePage } from "../renderers/message.js";
 import { renderCheckoutPage } from "../renderers/checkout.js";
 import { renderPaymentPage } from "../renderers/payment.js";
+import { renderDetailPage } from "../renderers/detail.js";
 
 export function hydrateSite(data) {
   const pageKey = document.body?.dataset?.page || "home";
@@ -111,6 +112,9 @@ function renderPage(pageKey, data) {
       break;
     case "payment":
       renderPaymentPage();
+      break;
+    case "detail":
+      renderDetailPage(data);
       break;
     case "success":
     case "failed":

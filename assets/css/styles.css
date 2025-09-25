@@ -627,14 +627,48 @@ img {
   display: flex;
   justify-content: center;
 }
+.spotlight-card .spotlight-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.spotlight-card .spotlight-socials {
+  margin-top: 18px;
+}
+
 .quote-card-panel {
-  background: var(--card);
-  border: 1px solid var(--border);
+  position: relative;
+  background: color-mix(in srgb, var(--card) 92%, var(--bg) 8%);
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
   border-radius: 20px;
   padding: 32px;
   box-shadow: var(--shadow);
   max-width: 860px;
   width: 100%;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+
+.quote-card-panel::before {
+  content: "";
+  position: absolute;
+  inset: -20% -30% auto auto;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(
+    circle at top right,
+    color-mix(in srgb, var(--brand) 28%, transparent) 0%,
+    transparent 70%
+  );
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.quote-card-panel > * {
+  position: relative;
+  z-index: 1;
 }
 .quote-card-panel .quote-card__header p {
   color: var(--muted);
@@ -657,12 +691,23 @@ img {
 .quote-card-panel .quote-form input[type="radio"] {
   accent-color: var(--brand);
 }
-.quote-card-panel .quote-form select {
-  background: var(--bg);
-  border: 1px solid var(--border);
+.quote-card-panel .quote-form select,
+.quote-card-panel .quote-form input[type="email"],
+.quote-card-panel .quote-form input[type="text"] {
+  background: color-mix(in srgb, var(--card) 90%, var(--bg) 10%);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
   border-radius: 10px;
   padding: 10px;
   color: var(--text);
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quote-card-panel .quote-form select:focus,
+.quote-card-panel .quote-form input[type="email"]:focus,
+.quote-card-panel .quote-form input[type="text"]:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 30%, transparent);
+  outline: none;
 }
 .quote-card-panel .quote-radio {
   border: 1px dashed var(--border);
@@ -722,13 +767,20 @@ img {
 .form input,
 .form textarea,
 .form select {
-  background: #fff;
-  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 92%, var(--bg) 8%);
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
   border-radius: 10px;
   padding: 12px 14px;
   color: var(--text);
   transition: border 0.2s ease, box-shadow 0.2s ease;
   font: inherit;
+  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="dark"] .form input,
+[data-theme="dark"] .form textarea,
+[data-theme="dark"] .form select {
+  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.4);
 }
 
 .form input:focus,
@@ -737,6 +789,12 @@ img {
   border-color: var(--brand);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 30%, transparent);
   outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 80%, var(--text) 20%);
+  opacity: 1;
 }
 
 .service-chip,
@@ -762,6 +820,11 @@ img {
 .service-chip__price {
   font-weight: 600;
   color: var(--brand);
+}
+
+.service-chip .btn {
+  width: fit-content;
+  margin-top: 12px;
 }
 
 .service-option {
@@ -938,6 +1001,12 @@ img {
 .social .icon {
   font-size: 1.1rem;
 }
+
+.social .icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
 .foot-bottom {
   display: flex;
   align-items: center;
@@ -966,6 +1035,7 @@ img {
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .chip {
   padding: 8px 12px;
@@ -976,6 +1046,162 @@ img {
 }
 .chip.active {
   border-color: var(--brand);
+}
+
+.package-deep-dive {
+  margin-top: 32px;
+}
+
+.package-deep-dive .section-header p {
+  max-width: 640px;
+}
+
+.tab-details {
+  margin-top: 20px;
+}
+
+.detail-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.detail-card {
+  background: color-mix(in srgb, var(--card) 95%, var(--bg) 5%);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 12px;
+}
+
+.detail-card header .eyebrow {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.detail-card header h3 {
+  margin: 4px 0;
+}
+
+.detail-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.detail-card h4 {
+  margin: 12px 0 6px;
+  font-size: 18px;
+}
+
+.detail-card ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.detail-price {
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.detail-link {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-link::after {
+  content: "→";
+  transition: transform 0.2s ease;
+}
+
+.detail-link:hover::after,
+.detail-link:focus::after {
+  transform: translateX(4px);
+}
+
+.detail-actions {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.detail-hero {
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+}
+
+.detail-hero p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.detail-body {
+  display: grid;
+  gap: 24px;
+  max-width: 960px;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--muted);
+}
+
+.detail-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-body .focus {
+  padding-left: 20px;
+  margin: 12px 0;
+  display: grid;
+  gap: 8px;
+}
+
+.detail-body .focus a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.detail-body .focus a:hover,
+.detail-body .focus a:focus {
+  text-decoration: underline;
+}
+
+.price-card .card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+.price-card .plan-link {
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: none;
+}
+
+.price-card .plan-link:hover,
+.price-card .plan-link:focus {
+  text-decoration: underline;
 }
 .price-card {
   background: var(--card);

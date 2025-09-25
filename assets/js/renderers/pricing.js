@@ -39,12 +39,24 @@ export function renderPricingPage(data) {
   const compareCopy = byId("compareCopy");
   if (compareCopy) compareCopy.textContent = page.compare?.copy || "";
 
+  const deepDive = page.deepDive || {};
+  const deepDiveEyebrow = byId("pricingDeepDiveEyebrow");
+  if (deepDiveEyebrow) deepDiveEyebrow.textContent = deepDive.eyebrow || "";
+  const deepDiveHeading = byId("pricingDeepDiveHeading");
+  if (deepDiveHeading) deepDiveHeading.textContent = deepDive.heading || "";
+  const deepDiveCopy = byId("pricingDeepDiveCopy");
+  if (deepDiveCopy) deepDiveCopy.textContent = deepDive.copy || "";
+  const deepDivePanels = byId("pricingDeepDivePanels");
+  const deepDiveLinkLabel = deepDive.linkLabel || "View service details";
+
   const subnav = byId("pricingSubnav");
   const tabs = byId("pricingTabs");
   if (!subnav || !tabs) return;
   subnav.innerHTML = "";
   tabs.innerHTML = "";
+  if (deepDivePanels) deepDivePanels.innerHTML = "";
 
+  const serviceCatalog = data.serviceCatalog || [];
   (data.pricingGroups || []).forEach((group, index) => {
     const chip = document.createElement("button");
     chip.className = "chip" + (index === 0 ? " active" : "");
@@ -75,7 +87,10 @@ export function renderPricingPage(data) {
         </header>
         ${summary}
         <ul class="features">${features}</ul>
-        <button class="btn select-plan" data-plan="${group.id}-${plan.id}">${ctaLabel}</button>
+        <div class="card-actions">
+          <button class="btn select-plan" data-plan="${group.id}-${plan.id}">${ctaLabel}</button>
+          <a class="plan-link" href="detail.html?type=plan&id=${group.id}-${plan.id}">Plan details</a>
+        </div>
       `;
       card.querySelector(".select-plan").addEventListener("click", () => {
         savePlanSelection({
@@ -92,11 +107,61 @@ export function renderPricingPage(data) {
     });
 
     tabs.appendChild(section);
+
+    if (deepDivePanels) {
+      const panel = document.createElement("section");
+      panel.className = "tab-detail";
+      panel.id = `detail-${group.id}`;
+      if (index !== 0) panel.hidden = true;
+      const recommendedIds = new Set();
+      (group.plans || []).forEach((plan) => {
+        (plan.recommendedServices || []).forEach((serviceId) =>
+          recommendedIds.add(serviceId)
+        );
+      });
+      if (!recommendedIds.size) {
+        panel.innerHTML = `<p class="muted">${
+          deepDive.empty || "Service recommendations coming soon."
+        }</p>`;
+      } else {
+        const grid = document.createElement("div");
+        grid.className = "detail-grid";
+        recommendedIds.forEach((serviceId) => {
+          const service = serviceCatalog.find((item) => item.id === serviceId);
+          if (!service) return;
+          const card = document.createElement("article");
+          card.className = "detail-card";
+          const benefits = (service.benefits || [])
+            .map((benefit) => `<li>${benefit}</li>`)
+            .join("");
+          card.innerHTML = `
+            <header>
+              <p class="eyebrow">${service.category || ""}</p>
+              <h3>${service.title}</h3>
+              ${
+                service.priceLabel
+                  ? `<span class="detail-price">${service.priceLabel}</span>`
+                  : ""
+              }
+            </header>
+            <p>${service.description || ""}</p>
+            ${benefits ? `<ul>${benefits}</ul>` : ""}
+            <a class="detail-link" href="detail.html?type=service&id=${service.id}">${deepDiveLinkLabel}</a>
+          `;
+          grid.appendChild(card);
+        });
+        panel.appendChild(grid);
+      }
+      deepDivePanels.appendChild(panel);
+    }
   });
 
   const additional = byId("additionalServices");
   if (additional) {
-    renderOtherServices(additional, data.serviceCatalog || []);
+    renderOtherServices(additional, data.serviceCatalog || [], {
+      showCtas: true,
+      linkLabel: deepDiveLinkLabel,
+    });
   }
 
   const standalone = page.standalone || {};
@@ -126,6 +191,13 @@ export function renderPricingPage(data) {
     document.querySelectorAll("#pricingTabs > .tab").forEach((section) => {
       section.hidden = section.id !== `tab-${id}`;
     });
+    if (deepDivePanels) {
+      document
+        .querySelectorAll("#pricingDeepDivePanels > .tab-detail")
+        .forEach((panel) => {
+          panel.hidden = panel.id !== `detail-${id}`;
+        });
+    }
     localStorage.setItem("pricingTab", id);
   }
 }
