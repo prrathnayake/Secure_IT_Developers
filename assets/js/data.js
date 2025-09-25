@@ -162,11 +162,11 @@
   const contact = {
     heading: "Let's build your next secure product",
     copy:
-      "Share where you are on the roadmap—brand-new landing page, mobile MVP, or API overhaul. Pasan replies personally with next steps inside one business day.",
+      "Tell us where your roadmap sits—new launch, MVP, or platform refresh. Pasan replies personally with next steps within one business day.",
     emailLabel: "rans.rath@gmail.com",
     phoneLabel: "+61 434 438 494",
-    locationLabel: "Melbourne, Australia (remote-first)",
-    responseTime: "Replies in under 24 hours",
+    locationLabel: "Melbourne, Australia",
+    responseTime: "Replies within one business day",
   };
   const forms = {
     contact: {
@@ -1241,7 +1241,7 @@
   const contactPage = {
     meta: seoContent.contact,
     intro:
-      "Share a few details and we'll send over a tailored proposal with security recommendations and delivery milestones.",
+      "Give us the essentials and we'll return a tailored proposal with security guidance and delivery milestones.",
   };
 
   const checkoutPage = {
