@@ -144,7 +144,7 @@ export function renderHomePage(data) {
     });
   }
 
-  renderTeamSpotlight(page.spotlight, data.team);
+  renderTeamSpotlight(page.spotlight, data.team, data.socials);
   renderFaqs(byId("faqsContainer"), data.faqs);
 
   const contactHeading = byId("homeContactHeading");

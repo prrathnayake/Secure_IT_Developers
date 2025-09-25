@@ -121,6 +121,29 @@ window.DATA = {
         { label: "X (Twitter)", href: "https://twitter.com/pasanbuilds" },
       ],
     },
+    {
+      id: "sunera-ranasooriya",
+      name: "Sunera Ranasooriya",
+      role: "Cyber Security Specialist",
+      location: "Colombo, Sri Lanka",
+      bio:
+        "Sunera leads threat modelling and incident readiness for regulated teams, drawing on 8+ years across telecom and fintech SOC leadership.",
+      testimonial:
+        "“Security isn't a checkbox—it’s a culture. I love partnering with founders to build that muscle early.”",
+      portfolio: "https://secureitdevelopers.com/security",
+      focus: [
+        "Threat modelling and purple-team simulations",
+        "Zero Trust network and identity strategy delivery",
+        "Security awareness, runbooks, and incident response coaching",
+      ],
+      links: [
+        {
+          label: "LinkedIn",
+          href: "https://www.linkedin.com/in/sunera-ranasooriya",
+        },
+        { label: "Website", href: "https://secureitdevelopers.com" },
+      ],
+    },
   ],
   pages: {
     home: {
@@ -517,6 +540,14 @@ window.DATA = {
           },
         ],
       },
+      deepDive: {
+        eyebrow: "Smart support pairings",
+        heading: "Recommended services by focus area",
+        copy:
+          "Toggle between product types to explore the specialist services that keep each engagement secure, optimised, and compliant after launch.",
+        empty: "Service recommendations are being finalised. Check back shortly.",
+        linkLabel: "Explore service details",
+      },
       standalone: {
         eyebrow: "Need help without a package?",
         heading: "Book standalone services",
@@ -742,6 +773,15 @@ window.DATA = {
             ],
           },
         ],
+      },
+    },
+    detail: {
+      meta: {
+        title: "Engagement details — Secure IT Developers",
+        description:
+          "Dive deeper into our engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
+        path: "detail.html",
+        image: "assets/img/placeholder-team.svg",
       },
     },
     contact: {
@@ -1049,6 +1089,11 @@ window.DATA = {
         "Deep-dive review of your web, mobile, or API stack with actionable remediation steps mapped to OWASP and ISO controls.",
       priceLabel: "From $3,600",
       category: "Security",
+      benefits: [
+        "Identify configuration drift and insecure defaults across cloud, CI/CD, and application layers",
+        "Deliver remediation tickets prioritised by risk with owner-ready descriptions",
+        "Provide executive-ready summaries for stakeholders and compliance auditors",
+      ],
     },
     {
       id: "seo-technical",
@@ -1057,6 +1102,11 @@ window.DATA = {
         "Optimise Core Web Vitals, schema, and editorial workflows to lift organic visibility and conversions.",
       priceLabel: "From $2,950",
       category: "Growth",
+      benefits: [
+        "Boost organic performance with Core Web Vitals tuning and structured data coverage",
+        "Equip content teams with workflows for continuous optimisation",
+        "Surface growth opportunities with keyword gap and SERP analysis",
+      ],
     },
     {
       id: "performance-hardening",
@@ -1065,6 +1115,11 @@ window.DATA = {
         "Stress-test and tune critical journeys with profiling, caching strategies, and infrastructure optimisation.",
       priceLabel: "From $2,400",
       category: "Engineering",
+      benefits: [
+        "Profile front-end and backend bottlenecks with actionable benchmarks",
+        "Implement caching, CDNs, and workload tuning to sustain peak demand",
+        "Document performance budgets and alerting thresholds for engineering teams",
+      ],
     },
     {
       id: "api-integration",
@@ -1073,6 +1128,11 @@ window.DATA = {
         "Design and ship robust REST or GraphQL endpoints with documentation, auth, and monitoring.",
       priceLabel: "From $4,200",
       category: "Engineering",
+      benefits: [
+        "Design resilient APIs with schema governance and automated documentation",
+        "Implement secure authentication, rate limiting, and monitoring from day one",
+        "Reduce integration risk with contract testing and rollback playbooks",
+      ],
     },
     {
       id: "mobile-polish",
@@ -1081,6 +1141,11 @@ window.DATA = {
         "Stabilise and improve existing Flutter or React Native apps with performance tuning and UX refinements.",
       priceLabel: "From $3,300",
       category: "Mobile",
+      benefits: [
+        "Stabilise crash-prone journeys with automated device lab coverage",
+        "Elevate UX with platform-specific motion, accessibility, and offline-first flows",
+        "Ship updates faster through optimised CI/CD and release management",
+      ],
     },
     {
       id: "ux-accessibility",
@@ -1089,6 +1154,11 @@ window.DATA = {
         "Audit flows against WCAG 2.2 AA, deliver remediation tickets, and coach teams on inclusive design.",
       priceLabel: "From $1,750",
       category: "Experience",
+      benefits: [
+        "Audit against WCAG 2.2 AA with annotated remediation recommendations",
+        "Coach teams on inclusive design patterns and QA rituals",
+        "Improve conversion through UX heuristics and journey refinements",
+      ],
     },
   ],
   quoteCalculator: {

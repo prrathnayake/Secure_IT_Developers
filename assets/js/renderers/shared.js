@@ -1,7 +1,7 @@
 import { formatCurrency, telHref } from "../core/utils.js";
 import { byId } from "../core/utils.js";
 
-export function renderTeamSpotlight(config = {}, team = []) {
+export function renderTeamSpotlight(config = {}, team = [], socials = []) {
   const heading = byId("teamSpotlightHeading");
   const copy = byId("teamSpotlightCopy");
   const card = byId("teamSpotlightCard");
@@ -32,8 +32,28 @@ export function renderTeamSpotlight(config = {}, team = []) {
     <blockquote class="founder-quote">${testimonial}</blockquote>
     <h4>Common engagements</h4>
     <ul class="focus">${focus}</ul>
-    <a class="btn" href="${portfolio}" target="_blank" rel="noopener">View portfolio</a>
+    <div class="spotlight-actions">
+      <a class="btn" href="${portfolio}" target="_blank" rel="noopener">View portfolio</a>
+    </div>
+    <div class="spotlight-socials" aria-label="Follow Secure IT Developers"></div>
   `;
+
+  const socialWrap = card.querySelector(".spotlight-socials");
+  if (socialWrap && (socials || []).length) {
+    const list = document.createElement("ul");
+    list.className = "social";
+    (socials || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
+          <span class="icon">${item.icon || ""}</span>
+          <span class="sr-only">${item.label}</span>
+        </a>
+      `;
+      list.appendChild(li);
+    });
+    socialWrap.appendChild(list);
+  }
 }
 
 export function renderFaqs(container, faqs = []) {
@@ -88,7 +108,8 @@ export function populateContactDetails(data) {
     });
 }
 
-export function renderOtherServices(target, services = []) {
+export function renderOtherServices(target, services = [], options = {}) {
+  const { showCtas = false, linkLabel = "View details" } = options;
   if (!target) return;
   target.innerHTML = "";
   services.forEach((service) => {
@@ -101,6 +122,11 @@ export function renderOtherServices(target, services = []) {
       <h4>${service.title}</h4>
       <p>${service.description}</p>
       ${price}
+      ${
+        showCtas
+          ? `<a class="btn btn-ghost" href="detail.html?type=service&id=${service.id}">${linkLabel}</a>`
+          : ""
+      }
     `;
     target.appendChild(card);
   });
