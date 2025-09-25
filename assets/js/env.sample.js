@@ -1,3 +1,4 @@
+// Copy this file to assets/js/env.local.js and update the values privately.
 window.ENV = Object.assign(window.ENV || {}, {
   contactEndpoint: "https://formsubmit.co/ajax/rans.rath@gmail.com",
   quoteEndpoint: "https://formsubmit.co/ajax/rans.rath@gmail.com",
@@ -14,5 +15,16 @@ window.ENV = Object.assign(window.ENV || {}, {
   auth: {
     storageNamespace: "secure_it",
     sessionTtlHours: 72,
+  },
+  paymentGateway: {
+    mode: "test",
+    provider: "Stripe",
+    publishableKey: "pk_test_replace_with_publishable_key",
+    endpoint: "",
+    timeoutMs: 15000,
+  },
+  googleAuth: {
+    clientId: "replace-with-your-google-client-id.apps.googleusercontent.com",
+    autoSelect: false,
   },
 });

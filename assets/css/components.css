@@ -783,17 +783,18 @@ textarea::placeholder {
 }
 
 .service-chip-list {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(260px, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
   gap: 16px;
   overflow-x: auto;
   padding: 0 4px 12px;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
+  align-items: stretch;
 }
 
 .service-chip-list .service-chip {
+  flex: 0 0 min(320px, 80vw);
   min-width: 260px;
   scroll-snap-align: start;
 }
@@ -1801,24 +1802,79 @@ textarea::placeholder {
 }
 
 .auth-db {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.callout {
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  color: var(--text);
+}
+
+.callout--info {
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+  background: color-mix(in srgb, var(--brand) 12%, var(--card));
+}
+
+.callout--warning {
+  border-color: color-mix(in srgb, #f97316 55%, var(--border));
+  background: color-mix(in srgb, #f97316 12%, var(--card));
+}
+
+.callout--error {
+  border-color: color-mix(in srgb, #ef4444 65%, var(--border));
+  background: color-mix(in srgb, #ef4444 10%, var(--card));
+}
+
+.auth-provider {
+  display: grid;
+  gap: 12px;
+}
+
+.oauth-button-slot {
+  display: flex;
+  justify-content: center;
+}
+
+.oauth-status {
   font-size: 0.85rem;
   color: var(--muted);
-  background: color-mix(in srgb, var(--card) 75%, transparent);
-  border: 1px dashed var(--border);
-  border-radius: 12px;
-  padding: 12px 16px;
+  min-height: 20px;
 }
 
-.auth-db__list {
-  list-style: none;
+.oauth-divider {
+  position: relative;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
   margin: 8px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 4px;
 }
 
-.auth-db__list strong {
-  color: var(--text);
+.oauth-divider::before,
+.oauth-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: var(--border);
+}
+
+.oauth-divider::before {
+  left: 0;
+}
+
+.oauth-divider::after {
+  right: 0;
+}
+
+.oauth-divider span {
+  display: inline-block;
+  padding: 0 8px;
+  background: var(--bg);
 }
 
 @media (max-width: 640px) {

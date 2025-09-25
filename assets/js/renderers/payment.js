@@ -13,6 +13,7 @@ import {
 } from "../core/storage.js";
 import { logCustomerEvent } from "../core/audit.js";
 import { requireAuth } from "../core/auth.js";
+import { PaymentGateway } from "../core/gateway.js";
 
 export function renderPaymentPage(data) {
   const customer = requireAuth("payment.html");
@@ -32,6 +33,27 @@ export function renderPaymentPage(data) {
   const account = byId("paymentAccount");
   if (account) {
     account.textContent = `Logged in as ${customer.email}`;
+  }
+
+  const gateway = PaymentGateway.fromEnv(window.ENV?.paymentGateway || {});
+  const gatewayNotice = byId("gatewayStatus");
+  if (gatewayNotice) {
+    gatewayNotice.textContent = "";
+    gatewayNotice.className = "callout";
+    if (!gateway.isConfigured) {
+      gatewayNotice.classList.add("callout--error");
+      gatewayNotice.textContent =
+        "Payment gateway is not configured. Update assets/js/env.local.js with your provider keys before accepting payments.";
+    } else if (!gateway.endpoint && !gateway.isLive()) {
+      gatewayNotice.classList.add("callout--warning");
+      gatewayNotice.textContent =
+        `Test mode active — payments are simulated locally using ${gateway.provider}. Configure an endpoint before going live.`;
+    } else {
+      gatewayNotice.classList.add("callout--info");
+      gatewayNotice.textContent = `Payments are processed securely by ${gateway.provider} (${String(
+        gateway.mode || "test"
+      ).toUpperCase()} mode).`;
+    }
   }
 
   const selectedServices = () =>
@@ -99,6 +121,11 @@ export function renderPaymentPage(data) {
 
   const form = byId("paymentForm");
   if (!form) return;
+  const submitButton = form.querySelector("button[type='submit']");
+  if (submitButton && !gateway.isConfigured) {
+    submitButton.disabled = true;
+    submitButton.textContent = "Payment unavailable";
+  }
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const status = byId("payStatus");
@@ -115,6 +142,13 @@ export function renderPaymentPage(data) {
       if (status) status.textContent = "Please complete the required fields.";
       return;
     }
+    if (!gateway.isConfigured) {
+      if (status)
+        status.textContent =
+          "Payment gateway has not been configured. Contact support to complete your order.";
+      return;
+    }
+
     const cardNumber = byId("card")?.value.replace(/\s+/g, "");
     if (!luhnCheck(cardNumber)) {
       if (status) status.textContent = "Enter a valid card number.";
@@ -133,12 +167,9 @@ export function renderPaymentPage(data) {
       return;
     }
     const services = selectedServices();
-    const button = form.querySelector("button[type='submit']");
     if (status) status.textContent = "Processing secure payment…";
-    if (button) button.setAttribute("disabled", "disabled");
-    setTimeout(async () => {
-      const services = selectedServices();
-      // Persist the same breakdown so confirmation pages can surface the detail later.
+    if (submitButton) submitButton.setAttribute("disabled", "disabled");
+    try {
       const totals = calculateOrderTotals(currentPlan.price, services, billing);
       const order = {
         reference: generateReference(),
@@ -155,7 +186,33 @@ export function renderPaymentPage(data) {
         })),
         createdAt: new Date().toISOString(),
         breakdown: totals,
+        billingAddress: {
+          line1: byId("address")?.value.trim() || "",
+          city: byId("city")?.value.trim() || "",
+          state: byId("state")?.value.trim() || "",
+          postalCode: byId("zip")?.value.trim() || "",
+          country: billing.country || "AU",
+        },
       };
+
+      const cardDetails = {
+        number: cardNumber,
+        expMonth: exp.month,
+        expYear: exp.year,
+        cvc,
+      };
+
+      const result = await gateway.processPayment({
+        order,
+        card: cardDetails,
+        billing: { address: order.billingAddress },
+      });
+
+      order.transactionId = result.transactionId;
+      order.receiptUrl = result.receiptUrl || null;
+      order.cardLast4 = cardNumber.slice(-4);
+      order.gatewayMode = result.mode;
+      order.gatewayProvider = gateway.provider;
       storeLastOrder(order);
       try {
         await logCustomerEvent("payment_submitted", {
@@ -166,10 +223,15 @@ export function renderPaymentPage(data) {
           currency: order.currency,
         });
       } catch (error) {
-        // Fails silently — logging should never block checkout completion.
+        // Logging failures should never block checkout completion.
       }
-      if (button) button.removeAttribute("disabled");
-      window.location.href = "success.html";
-    }, 900);
+      if (status) status.textContent = "Payment successful! Redirecting…";
+      setTimeout(() => {
+        window.location.href = "success.html";
+      }, 900);
+    } catch (error) {
+      if (status) status.textContent = error?.message || "Unable to process payment.";
+      if (submitButton) submitButton.removeAttribute("disabled");
+    }
   });
 }

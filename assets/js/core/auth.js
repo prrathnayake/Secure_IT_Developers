@@ -4,6 +4,8 @@ const DEFAULT_NAMESPACE = "secure_it";
 const DEFAULT_SESSION_TTL_HOURS = 72;
 const AUTH_CHANGE_EVENT = "auth:change";
 let authStatusTimeout;
+let googleScriptPromise;
+let activeGoogleContext = "login";
 
 function getConfig() {
   return window.ENV?.auth || {};
@@ -17,6 +19,50 @@ function getNamespace() {
 function getSessionTtlMs() {
   const hours = Number(getConfig().sessionTtlHours || DEFAULT_SESSION_TTL_HOURS);
   return Number.isFinite(hours) ? hours * 60 * 60 * 1000 : DEFAULT_SESSION_TTL_HOURS * 60 * 60 * 1000;
+}
+
+function getGoogleConfig() {
+  return window.ENV?.googleAuth || {};
+}
+
+function loadGoogleScript() {
+  if (googleScriptPromise) return googleScriptPromise;
+  if (window.google?.accounts?.id) {
+    googleScriptPromise = Promise.resolve(window.google);
+    return googleScriptPromise;
+  }
+  googleScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve(window.google);
+    script.onerror = () => reject(new Error("Failed to load Google Identity Services"));
+    document.head.appendChild(script);
+  });
+  return googleScriptPromise;
+}
+
+function decodeJwt(token) {
+  try {
+    const part = token?.split(".")?.[1];
+    if (!part) return null;
+    const normalized = part.replace(/-/g, "+").replace(/_/g, "/");
+    const decoded = atob(normalized);
+    try {
+      return JSON.parse(decoded);
+    } catch (error) {
+      const json = decodeURIComponent(
+        decoded
+          .split("")
+          .map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, "0")}`)
+          .join("")
+      );
+      return JSON.parse(json);
+    }
+  } catch (error) {
+    return null;
+  }
 }
 
 function storageKeys() {
@@ -88,6 +134,17 @@ function buildSession(customer) {
   };
 }
 
+function startSession(customer) {
+  if (!customer?.id) return;
+  const session = buildSession(customer);
+  saveSession(session);
+  notifyAuthChange({
+    id: customer.id,
+    name: customer.name,
+    email: customer.email,
+  });
+}
+
 function sessionExpired(session) {
   if (!session?.createdAt) return true;
   const created = new Date(session.createdAt).getTime();
@@ -143,7 +200,7 @@ function createCustomer({ name, email, password }) {
   const salt = saltSource.toString(16);
   const passwordHash = hashPassword(password, salt);
   const customers = loadCustomers();
-  const customer = {
+  const stored = {
     id: `cust_${Date.now()}`,
     name: name.trim(),
     email: trimmedEmail,
@@ -151,21 +208,82 @@ function createCustomer({ name, email, password }) {
     passwordHash,
     createdAt: new Date().toISOString(),
   };
-  customers.push(customer);
+  customers.push(stored);
   saveCustomers(customers);
-  return { ok: true, customer };
+  return {
+    ok: true,
+    customer: {
+      id: stored.id,
+      name: stored.name,
+      email: stored.email,
+    },
+  };
 }
 
 function authenticate({ email, password }) {
-  const customer = findCustomerByEmail(email);
-  if (!customer) {
+  const record = findCustomerByEmail(email);
+  if (!record) {
     return { ok: false, error: "No account found for that email." };
   }
-  const passwordHash = hashPassword(password, customer.salt);
-  if (passwordHash !== customer.passwordHash) {
+  const passwordHash = hashPassword(password, record.salt);
+  if (passwordHash !== record.passwordHash) {
     return { ok: false, error: "Incorrect password. Please try again." };
   }
-  return { ok: true, customer };
+  return {
+    ok: true,
+    customer: {
+      id: record.id,
+      name: record.name,
+      email: record.email,
+    },
+  };
+}
+
+function upsertProviderCustomer({ name, email, provider = "google" }) {
+  if (!email) {
+    return { ok: false, error: "Google sign-in did not return an email address." };
+  }
+  const existing = findCustomerByEmail(email);
+  if (existing) {
+    return {
+      ok: true,
+      customer: {
+        id: existing.id,
+        name: existing.name,
+        email: existing.email,
+      },
+    };
+  }
+  const saltSource =
+    typeof crypto !== "undefined" && crypto.getRandomValues
+      ? crypto.getRandomValues(new Uint32Array(1))[0]
+      : Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+  const salt = saltSource.toString(16);
+  const randomPassword =
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`;
+  const passwordHash = hashPassword(randomPassword, salt);
+  const customers = loadCustomers();
+  const stored = {
+    id: `cust_${Date.now()}`,
+    name: (name || email).trim(),
+    email: email.trim(),
+    salt,
+    passwordHash,
+    provider,
+    createdAt: new Date().toISOString(),
+  };
+  customers.push(stored);
+  saveCustomers(customers);
+  return {
+    ok: true,
+    customer: {
+      id: stored.id,
+      name: stored.name,
+      email: stored.email,
+    },
+  };
 }
 
 function ensureSlots() {
@@ -319,13 +437,7 @@ function handleSignup() {
       if (status) status.textContent = result.error;
       return;
     }
-    const session = buildSession(result.customer);
-    saveSession(session);
-    notifyAuthChange({
-      id: result.customer.id,
-      name: result.customer.name,
-      email: result.customer.email,
-    });
+    startSession(result.customer);
     if (status) status.textContent = "Account created! Redirecting…";
     const redirect = getRedirectParam() || "checkout.html";
     setTimeout(() => {
@@ -350,13 +462,7 @@ function handleLogin() {
       if (status) status.textContent = result.error;
       return;
     }
-    const session = buildSession(result.customer);
-    saveSession(session);
-    notifyAuthChange({
-      id: result.customer.id,
-      name: result.customer.name,
-      email: result.customer.email,
-    });
+    startSession(result.customer);
     if (status) status.textContent = "Login successful! Redirecting…";
     const redirect = getRedirectParam() || "pricing.html";
     setTimeout(() => {
@@ -378,39 +484,143 @@ function handleLogoutClicks() {
   });
 }
 
+function handleGoogleCredential(response, context = "login") {
+  const loginStatus = byId("googleLoginStatus");
+  const signupStatus = byId("googleSignupStatus");
+  const status = context === "signup" ? signupStatus : loginStatus;
+  if (response?.error) {
+    if (status) status.textContent = `Google sign-in error: ${response.error}`;
+    return;
+  }
+  if (!response?.credential) {
+    if (status) status.textContent = "Google sign-in was cancelled.";
+    return;
+  }
+  const profile = decodeJwt(response.credential);
+  if (!profile?.email) {
+    if (status)
+      status.textContent =
+        "Google did not return an email address. Enable the email scope for your Google client.";
+    return;
+  }
+  const fullName =
+    profile.name || `${profile.given_name || ""} ${profile.family_name || ""}`.trim() || profile.email;
+  const result = upsertProviderCustomer({
+    name: fullName,
+    email: profile.email,
+    provider: "google",
+  });
+  if (!result.ok) {
+    if (status) status.textContent = result.error || "Unable to sign in with Google.";
+    return;
+  }
+  startSession(result.customer);
+  if (status) status.textContent = "Signed in with Google. Redirecting…";
+  const redirect =
+    context === "signup"
+      ? getRedirectParam() || "checkout.html"
+      : getRedirectParam() || "pricing.html";
+  setTimeout(() => {
+    window.location.href = redirect;
+  }, 600);
+}
+
+function initGoogleAuth() {
+  const slots = [
+    { container: byId("googleLogin"), status: byId("googleLoginStatus"), context: "login" },
+    { container: byId("googleSignup"), status: byId("googleSignupStatus"), context: "signup" },
+  ].filter((entry) => entry.container);
+  if (!slots.length) return;
+
+  const config = getGoogleConfig();
+  const missingClient = !config.clientId || /replace/i.test(config.clientId);
+
+  if (missingClient) {
+    slots.forEach(({ container, status }) => {
+      if (container) {
+        container.innerHTML = "";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn";
+        button.disabled = true;
+        button.textContent = "Google sign-in unavailable";
+        container.appendChild(button);
+      }
+      if (status) {
+        status.textContent =
+          "Set googleAuth.clientId in assets/js/env.local.js to enable Google sign-in.";
+      }
+    });
+    return;
+  }
+
+  slots.forEach(({ container }) => {
+    if (container) container.innerHTML = "";
+  });
+
+  loadGoogleScript()
+    .then((google) => {
+      if (!google?.accounts?.id) {
+        throw new Error("Google Identity Services are unavailable.");
+      }
+      google.accounts.id.initialize({
+        client_id: config.clientId,
+        callback: (response) => handleGoogleCredential(response, activeGoogleContext),
+        auto_select: Boolean(config.autoSelect),
+        cancel_on_tap_outside: true,
+      });
+      slots.forEach(({ container, status, context }) => {
+        if (!container) return;
+        google.accounts.id.renderButton(container, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: context === "signup" ? "signup_with" : "signin_with",
+          logo_alignment: "center",
+          click_listener: () => {
+            activeGoogleContext = context;
+            if (status) status.textContent = "Opening Google sign-in…";
+          },
+        });
+        if (status) status.textContent = "";
+      });
+    })
+    .catch((error) => {
+      slots.forEach(({ status }) => {
+        if (status)
+          status.textContent =
+            error?.message || "Google sign-in could not be initialised. Check your network connection.";
+      });
+    });
+}
+
 function renderDatabaseNotice() {
   const notice = byId("dbConfigNotice");
   if (!notice) return;
   const db = window.ENV?.database;
   notice.innerHTML = "";
+  notice.className = "auth-db callout";
   if (!db) {
+    notice.classList.add("callout--warning");
     notice.textContent =
-      "Set database credentials in assets/js/env.js before deploying.";
+      "Add database connection variables to assets/js/env.local.js before deploying.";
     return;
   }
-  const list = document.createElement("ul");
-  list.className = "auth-db__list";
-  const items = [
-    { label: "Host", value: db.host || "not set" },
-    { label: "Port", value: db.port ?? "not set" },
-    { label: "Database", value: db.name || "not set" },
-    { label: "User", value: db.user || "not set" },
-  ];
-  if (db.passwordEnvVar) {
-    items.push({ label: "Password env var", value: db.passwordEnvVar });
+  const missing = ["host", "port", "name", "user"].filter((key) => !db[key]);
+  if (missing.length) {
+    notice.classList.add("callout--warning");
+    notice.textContent = `Database configuration incomplete: ${missing.join(", ")}. Update assets/js/env.local.js.`;
+  } else {
+    notice.classList.add("callout--info");
+    notice.textContent =
+      "Database credentials are loaded securely from your server environment.";
   }
-  items.forEach((item) => {
-    const li = document.createElement("li");
-    const label = document.createElement("strong");
-    label.textContent = `${item.label}:`;
-    const value = document.createElement("span");
-    value.textContent = String(item.value);
-    li.appendChild(label);
-    li.appendChild(document.createTextNode(" "));
-    li.appendChild(value);
-    list.appendChild(li);
-  });
-  notice.appendChild(list);
+  if (db.passwordEnvVar) {
+    const hint = document.createElement("p");
+    hint.className = "muted";
+    hint.textContent = `Store the database password in the ${db.passwordEnvVar} environment variable.`;
+    notice.appendChild(hint);
+  }
 }
 
 export function requireAuth(redirectTo) {
@@ -430,6 +640,7 @@ export function initAuth() {
   handleSignup();
   handleLogin();
   handleLogoutClicks();
+  initGoogleAuth();
   document.addEventListener(AUTH_CHANGE_EVENT, renderAuthControls);
   document.addEventListener(AUTH_CHANGE_EVENT, renderDatabaseNotice);
 }

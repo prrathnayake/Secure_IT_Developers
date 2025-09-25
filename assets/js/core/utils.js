@@ -105,7 +105,13 @@ export function parseExpiry(value = "") {
   const fullYear = 2000 + year;
   const now = new Date();
   const expiryDate = new Date(fullYear, month);
-  return { valid: expiryDate > now };
+  return {
+    valid: expiryDate > now,
+    month,
+    year: fullYear,
+    shortYear: yy,
+    formatted: `${String(month).padStart(2, "0")}/${yy}`,
+  };
 }
 
 export function generateReference() {
