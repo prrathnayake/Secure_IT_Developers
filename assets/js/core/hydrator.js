@@ -1,0 +1,122 @@
+import { telHref, byId } from "./utils.js";
+import { updateHeadMeta, injectOrganizationSchema, injectServiceSchema } from "./meta.js";
+import { renderHomePage } from "../renderers/home.js";
+import { renderAboutPage } from "../renderers/about.js";
+import { renderPricingPage, renderCompareTable } from "../renderers/pricing.js";
+import { renderContactPage } from "../renderers/contact.js";
+import { renderMessagePage } from "../renderers/message.js";
+import { renderCheckoutPage } from "../renderers/checkout.js";
+import { renderPaymentPage } from "../renderers/payment.js";
+
+export function hydrateSite(data) {
+  const pageKey = document.body?.dataset?.page || "home";
+  applyBranding(data);
+  applyNavigation(data, pageKey);
+  applyFooter(data);
+  updateHeadMeta(data, pageKey);
+  injectOrganizationSchema(data);
+  injectServiceSchema(data);
+  renderPage(pageKey, data);
+}
+
+function applyBranding(data) {
+  document
+    .querySelectorAll("[data-bind='brandName']")
+    .forEach((el) => (el.textContent = data.org?.name || ""));
+  const taglineEl = document.querySelector("[data-bind='brandTagline']");
+  if (taglineEl) taglineEl.textContent = data.org?.tagline || "";
+}
+
+function applyNavigation(data, pageKey) {
+  const nav = document.getElementById("primaryNav");
+  if (!nav) return;
+  nav.innerHTML = "";
+  (data.navigation || []).forEach((item) => {
+    const link = document.createElement("a");
+    link.href = item.href;
+    link.textContent = item.label;
+    const currentPath = pageKey === "home" ? "index.html" : `${pageKey}.html`;
+    if (item.href === currentPath) {
+      link.setAttribute("aria-current", "page");
+    }
+    nav.appendChild(link);
+  });
+}
+
+function applyFooter(data) {
+  const about = document.getElementById("footerAbout");
+  if (about) about.textContent = data.footer?.about || "";
+
+  const contactList = document.getElementById("footerContact");
+  if (contactList) {
+    contactList.innerHTML = "";
+    if (data.org?.email) {
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="mailto:${data.org.email}">${data.org.email}</a>`;
+      contactList.appendChild(li);
+    }
+    if (data.org?.phone) {
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="${telHref(data.org.phone)}">${data.org.phone}</a>`;
+      contactList.appendChild(li);
+    }
+    if (data.contact?.locationLabel) {
+      const li = document.createElement("li");
+      li.textContent = data.contact.locationLabel;
+      contactList.appendChild(li);
+    }
+  }
+
+  const social = document.getElementById("footerSocial");
+  if (social) {
+    social.innerHTML = "";
+    (data.socials || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
+          <span class="icon">${item.icon || ""}</span>
+          <span class="sr-only">${item.label}</span>
+        </a>
+      `;
+      social.appendChild(li);
+    });
+  }
+
+  const legal = document.getElementById("footerLegal");
+  if (legal) {
+    const year = new Date().getFullYear();
+    const parts = [`© ${year} ${data.org?.name || ""}`];
+    if (data.footer?.legalNote) parts.push(data.footer.legalNote);
+    legal.textContent = parts.filter(Boolean).join(" • ");
+  }
+}
+
+function renderPage(pageKey, data) {
+  switch (pageKey) {
+    case "home":
+      renderHomePage(data);
+      break;
+    case "about":
+      renderAboutPage(data);
+      break;
+    case "pricing":
+      renderPricingPage(data);
+      renderCompareTable(data);
+      break;
+    case "contact":
+      renderContactPage(data);
+      break;
+    case "checkout":
+      renderCheckoutPage(data);
+      break;
+    case "payment":
+      renderPaymentPage();
+      break;
+    case "success":
+    case "failed":
+      renderMessagePage(pageKey, data);
+      break;
+    default:
+      break;
+  }
+}

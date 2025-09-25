@@ -20,11 +20,15 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
     <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
-    <script defer src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
   </head>
 
   <body data-page="contact">
+    <div id="pageLoader" class="page-loader" aria-hidden="true">
+      <div class="page-loader__spinner"></div>
+      <p>Loading Secure IT Developers…</p>
+    </div>
     <header class="site-header" role="banner">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Go to home">
@@ -56,12 +60,12 @@
           data-form-key="contact"
         >
           <div class="form-row">
-            <label for="name2">Name</label
-            ><input id="name2" name="name" autocomplete="name" required />
+            <label for="name2">Name</label>
+            <input id="name2" name="name" autocomplete="name" required />
           </div>
           <div class="form-row">
-            <label for="email2">Email</label
-            ><input
+            <label for="email2">Email</label>
+            <input
               id="email2"
               name="email"
               type="email"
@@ -70,8 +74,8 @@
             />
           </div>
           <div class="form-row">
-            <label for="budget">Budget (A$)</label
-            ><input
+            <label for="budget">Budget (A$)</label>
+            <input
               id="budget"
               name="budget"
               type="number"
@@ -80,9 +84,19 @@
             />
           </div>
           <div class="form-row">
-            <label for="message2">Message</label
-            ><textarea id="message2" name="message" rows="5" required></textarea>
+            <label for="message2">Project background</label>
+            <textarea
+              id="message2"
+              name="message"
+              rows="5"
+              placeholder="Share goals, timelines, or pain points you're solving."
+              required
+            ></textarea>
           </div>
+          <fieldset class="service-selector">
+            <legend>Select services you're interested in</legend>
+            <div id="contactServices" class="service-selector__grid"></div>
+          </fieldset>
           <input type="hidden" name="form" value="Contact page" />
           <button class="btn" type="submit">Send</button>
           <p id="contactStatus2" role="status" aria-live="polite"></p>
