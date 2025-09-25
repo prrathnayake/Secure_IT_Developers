@@ -55,10 +55,25 @@
         <h1 id="loginHeading">Customer login</h1>
         <p>
           Sign in with your Secure IT Developers account to review your cart and
-          continue checkout. Database credentials are loaded from your environment
-          file, keeping production secrets off the client.
+          continue checkout. Database connections stay on the server so secrets
+          never appear in the browser.
         </p>
-        <div id="dbConfigNotice" class="auth-db" aria-live="polite"></div>
+        <div
+          id="dbConfigNotice"
+          class="auth-db"
+          aria-live="polite"
+          role="status"
+        ></div>
+        <div class="auth-provider" aria-label="Social sign-in options">
+          <div id="googleLogin" class="oauth-button-slot"></div>
+          <p
+            id="googleLoginStatus"
+            class="oauth-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <div class="oauth-divider"><span>or continue with email</span></div>
+        </div>
         <form id="loginForm" class="form auth-form" novalidate>
           <div class="form-row">
             <label for="loginEmail">Email</label>

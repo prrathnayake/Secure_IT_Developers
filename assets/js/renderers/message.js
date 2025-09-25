@@ -28,6 +28,24 @@ export function renderMessagePage(pageKey, data) {
     if (order?.plan) {
       const services = Array.isArray(order.services) ? order.services : [];
       const breakdown = order.breakdown || {};
+      const paymentMeta = [
+        order.transactionId
+          ? `<li><strong>Payment ID:</strong> ${order.transactionId}</li>`
+          : "",
+        order.cardLast4
+          ? `<li><strong>Card:</strong> **** **** **** ${order.cardLast4}</li>`
+          : "",
+        order.gatewayProvider
+          ? `<li><strong>Processor:</strong> ${order.gatewayProvider}${
+              order.gatewayMode ? ` (${String(order.gatewayMode).toUpperCase()} mode)` : ""
+            }</li>`
+          : "",
+        order.receiptUrl
+          ? `<li><strong>Receipt:</strong> <a href="${order.receiptUrl}" target="_blank" rel="noopener">Download receipt</a></li>`
+          : "",
+      ]
+        .filter(Boolean)
+        .join("");
       const servicesMarkup = services.length
         ? `<li><strong>Add-ons:</strong>
             <ul class="order-services">${services
@@ -69,6 +87,7 @@ export function renderMessagePage(pageKey, data) {
           <li><strong>Amount:</strong> ${formatCurrency(order.amount, order.currency)}</li>
           <li><strong>Client:</strong> ${order.name || "Pending"}</li>
           <li><strong>Email:</strong> ${order.email || "Pending"}</li>
+          ${paymentMeta}
           ${servicesMarkup}
           ${breakdownMarkup}
         </ul>

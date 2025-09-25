@@ -70,6 +70,8 @@ export function storeLastOrder(order) {
   const payload = {
     ...order,
     services,
+    billingAddress: order.billingAddress || null,
+    cardLast4: order.cardLast4 || null,
   };
   localStorage.setItem("lastOrder", JSON.stringify(payload));
 }
