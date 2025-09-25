@@ -893,6 +893,99 @@ textarea::placeholder {
   margin-inline: auto;
 }
 
+.contact-page > p {
+  max-width: 65ch;
+  color: var(--muted);
+}
+
+.contact-page .grid-2 {
+  gap: clamp(24px, 5vw, 52px);
+  align-items: start;
+}
+
+.contact-page .form {
+  width: min(100%, 560px);
+  margin-inline: auto;
+  padding: clamp(24px, 4vw, 38px);
+  border-radius: 22px;
+  background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--card) 92%, rgba(37, 99, 235, 0.06)),
+      color-mix(in srgb, #fff 85%, rgba(124, 58, 237, 0.08))
+    );
+  box-shadow: 0 24px 55px rgba(15, 23, 42, 0.14);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+[data-theme="dark"] .contact-page .form {
+  background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--card) 88%, rgba(15, 23, 42, 0.2)),
+      color-mix(in srgb, var(--bg) 90%, rgba(96, 165, 250, 0.12))
+    );
+  box-shadow: 0 32px 55px rgba(2, 6, 23, 0.45);
+}
+
+.contact-page .form button {
+  justify-self: flex-start;
+  min-width: 180px;
+}
+
+.contact-page .contact-info {
+  background: color-mix(in srgb, var(--card) 92%, rgba(37, 99, 235, 0.04));
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: 20px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 18px;
+}
+
+.contact-page .contact-info h2 {
+  margin: 0;
+}
+
+.contact-page .contact-info ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.contact-page .contact-info li {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+}
+
+.contact-page .contact-info strong {
+  color: var(--text);
+}
+
+.contact-page .contact-info a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-page .contact-info a:hover,
+.contact-page .contact-info a:focus-visible {
+  text-decoration: underline;
+}
+
+@media (min-width: 961px) {
+  .contact-page .grid-2 {
+    grid-template-columns: minmax(0, 560px) minmax(240px, 1fr);
+    justify-content: center;
+  }
+
+  .contact-page .contact-info {
+    position: sticky;
+    top: 120px;
+  }
+}
+
 @media (max-width: 520px) {
   .service-selector__grid .service-option {
     flex-basis: min(280px, calc(100vw - 48px));
