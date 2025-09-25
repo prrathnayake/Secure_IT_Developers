@@ -1,61 +1,67 @@
 -- Secure IT Developers initial database schema.
--- Run this script against a PostgreSQL database before deploying the customer portal.
+-- Run this script against a MySQL database before deploying the customer portal.
 
-BEGIN;
+START TRANSACTION;
 
 CREATE TABLE IF NOT EXISTS customers (
-    id SERIAL PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(191) NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    salt TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    salt VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS products (
-    id SERIAL PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     slug VARCHAR(120) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    price NUMERIC(12, 2) NOT NULL,
+    price DECIMAL(12, 2) NOT NULL,
     currency CHAR(3) NOT NULL DEFAULT 'AUD',
     category VARCHAR(120)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS carts (
-    id SERIAL PRIMARY KEY,
-    customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT UNSIGNED NOT NULL,
     status VARCHAR(30) NOT NULL DEFAULT 'active',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_carts_customer FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS cart_items (
-    id SERIAL PRIMARY KEY,
-    cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
-    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-    quantity INTEGER NOT NULL DEFAULT 1,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (cart_id, product_id)
-);
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT UNSIGNED NOT NULL,
+    product_id INT UNSIGNED NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cart_items_cart FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
+    CONSTRAINT fk_cart_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE KEY uq_cart_product (cart_id, product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS orders (
-    id SERIAL PRIMARY KEY,
-    cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
-    total NUMERIC(12, 2) NOT NULL,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT UNSIGNED NOT NULL,
+    total DECIMAL(12, 2) NOT NULL,
     currency CHAR(3) NOT NULL DEFAULT 'AUD',
     reference VARCHAR(32) NOT NULL UNIQUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_orders_cart FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS order_items (
-    id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    product_id INTEGER NOT NULL REFERENCES products(id),
-    quantity INTEGER NOT NULL DEFAULT 1,
-    price_each NUMERIC(12, 2) NOT NULL,
-    currency CHAR(3) NOT NULL DEFAULT 'AUD'
-);
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    order_id INT UNSIGNED NOT NULL,
+    product_id INT UNSIGNED NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    price_each DECIMAL(12, 2) NOT NULL,
+    currency CHAR(3) NOT NULL DEFAULT 'AUD',
+    CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES products(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
 CREATE INDEX IF NOT EXISTS idx_carts_customer ON carts(customer_id);
@@ -71,6 +77,6 @@ VALUES
     ('api-integration', 'API & integration build', 'Design and ship robust REST or GraphQL endpoints.', 4200.00, 'Engineering'),
     ('mobile-polish', 'Mobile polish sprint', 'Stabilise Flutter or React Native apps with performance tuning.', 3300.00, 'Mobile'),
     ('ux-accessibility', 'Accessibility & UX review', 'Audit flows against WCAG 2.2 AA with actionable remediation.', 1750.00, 'Experience')
-ON CONFLICT (slug) DO NOTHING;
+ON DUPLICATE KEY UPDATE slug = slug;
 
 COMMIT;
