@@ -508,7 +508,7 @@
       "TypeScript, Next.js, and Astro",
       "React Native & Flutter",
       "Node.js, Laravel, and Go microservices",
-      "PostgreSQL, PlanetScale, DynamoDB",
+      "MySQL, PlanetScale, DynamoDB",
       "AWS, Azure, GCP, and Vercel",
       "Terraform, Docker, and GitHub Actions",
     ],

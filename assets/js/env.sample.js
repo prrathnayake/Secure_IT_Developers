@@ -6,7 +6,7 @@ window.ENV = Object.assign(window.ENV || {}, {
   auditKey: "replace-with-deployment-secret",
   database: {
     host: "127.0.0.1",
-    port: 5432,
+    port: 3306,
     name: "secure_it",
     user: "secure_app",
     passwordEnvVar: "SECURE_IT_DB_PASSWORD",
