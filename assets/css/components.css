@@ -870,6 +870,8 @@ textarea::placeholder {
   align-items: stretch;
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  width: min(100%, 520px);
 }
 
 .service-selector__grid::-webkit-scrollbar {
@@ -882,9 +884,19 @@ textarea::placeholder {
 }
 
 .service-selector__grid .service-option {
-  flex: 0 0 clamp(260px, 80vw, 360px);
+  flex: 0 0 min(320px, calc(100vw - 64px));
   scroll-snap-align: start;
   height: 100%;
+}
+
+.contact-page .service-selector__grid {
+  margin-inline: auto;
+}
+
+@media (max-width: 520px) {
+  .service-selector__grid .service-option {
+    flex-basis: min(280px, calc(100vw - 48px));
+  }
 }
 .service-option p {
   margin: 0;

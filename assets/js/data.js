@@ -435,23 +435,26 @@
     gallery: {
       heading: "Recent build snapshots",
       copy:
-        "Swap these placeholders with live project visuals by updating assets and captions in data.js when you're ready.",
+        "A peek inside active engagements—from growth experiments to compliance workshops—captured by our in-house team.",
       items: [
         {
           title: "Security-focused team sync",
-          caption: "Sprint planning with live threat modelling to prioritise backlog hardening.",
+          caption:
+            "Sprint planning with Pasan and Sunara reviewing mitigations before the next deployment window.",
           img: "assets/img/placeholder-team.svg",
           alt: "Team collaborating around laptops",
         },
         {
           title: "Ops automation control",
-          caption: "Observability dashboards tracking deployments, uptime, and key incidents.",
+          caption:
+            "Realtime dashboards monitoring cloud costs, uptime, and incident readiness for a fintech client.",
           img: "assets/img/placeholder-ops.svg",
           alt: "Operations dashboard with charts",
         },
         {
           title: "Innovation lab",
-          caption: "Prototype environment where we validate UX flows and performance budgets.",
+          caption:
+            "Prototyping new onboarding flows and performance budgets ahead of usability testing sessions.",
           img: "assets/img/placeholder-labs.svg",
           alt: "Design lab workspace",
         },
