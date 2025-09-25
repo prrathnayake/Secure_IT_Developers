@@ -35,6 +35,98 @@
     themeColor: "#0b1d3a",
     ogImage: "assets/img/placeholder-growth.svg",
   };
+  const seoContent = {
+    home: {
+      title: "Secure IT Developers — Security-first web & app engineering",
+      description:
+        "Security-first websites, SaaS platforms, and eCommerce builds delivered with transparent pricing and measurable results.",
+      path: "index.html",
+      keywords:
+        "secure web development, managed web maintenance, seo optimisation, ecommerce development australia, security focused agency",
+      image: "assets/img/placeholder-growth.svg",
+    },
+    about: {
+      title: "About Secure IT Developers",
+      description:
+        "Inside the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
+      path: "about.html",
+      keywords:
+        "secure development team, security design sprints, australian dev studio, devops automation partner",
+      image: "assets/img/placeholder-team.svg",
+    },
+    pricing: {
+      title: "Pricing — Transparent, security-focused plans",
+      description:
+        "Compare Secure IT Developers pricing for websites, commerce, and custom product builds. Every plan includes security hardening and support.",
+      path: "pricing.html",
+      keywords:
+        "secure development pricing, ecommerce build cost, web maintenance retainer, seo optimisation retainers",
+      image: "assets/img/placeholder-ops.svg",
+    },
+    contact: {
+      title: "Contact Secure IT Developers",
+      description:
+        "Reach out to Secure IT Developers to discuss your goals, security requirements, and delivery timeline.",
+      path: "contact.html",
+      keywords:
+        "contact secure it developers, request security quote, talk to security developer, schedule discovery call",
+      image: "assets/img/placeholder-team.svg",
+    },
+    checkout: {
+      title: "Checkout — Review your Secure IT Developers plan",
+      description:
+        "Review the plan you selected from Secure IT Developers before proceeding to payment.",
+      path: "checkout.html",
+      keywords:
+        "secure it developers checkout, confirm web development package, add services to quote, security focused engagement review",
+      image: "assets/img/placeholder-ops.svg",
+    },
+    payment: {
+      title: "Payment — Secure billing with Secure IT Developers",
+      description:
+        "Enter billing details to complete your Secure IT Developers engagement.",
+      path: "payment.html",
+      keywords:
+        "secure it developers payment, pay for cybersecurity project, secure billing portal, web app development invoice",
+      image: "assets/img/placeholder-growth.svg",
+    },
+    success: {
+      title: "Payment successful — Welcome to Secure IT Developers",
+      description:
+        "Your Secure IT Developers engagement is confirmed. We'll reach out with next steps.",
+      path: "success.html",
+      keywords:
+        "secure it developers payment success, project kickoff confirmation, cybersecurity engagement onboarding",
+      image: "assets/img/placeholder-team.svg",
+    },
+    failed: {
+      title: "Payment issue — Secure IT Developers",
+      description:
+        "Something went wrong while processing your payment with Secure IT Developers.",
+      path: "failed.html",
+      keywords:
+        "secure it developers payment failed, retry secure payment, billing support cybersecurity agency",
+      image: "assets/img/placeholder-ops.svg",
+    },
+    detail: {
+      title: "Engagement details — Secure IT Developers",
+      description:
+        "Dive deeper into our engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
+      path: "detail.html",
+      keywords:
+        "secure it developers engagement details, security focused service breakdown, web app package inclusions, cybersecurity add ons",
+      image: "assets/img/placeholder-team.svg",
+    },
+    legal: {
+      title: "Privacy & legal — Secure IT Developers",
+      description:
+        "Review how Secure IT Developers safeguards data, governs engagements, and upholds compliance commitments.",
+      path: "legal.html",
+      keywords:
+        "secure it developers privacy policy, legal terms, data protection statement, cybersecurity agency compliance",
+      image: "assets/img/placeholder-ops.svg",
+    },
+  };
   const navigation = [
     { label: "Home", href: "index.html" },
     { label: "Pricing", href: "pricing.html" },
@@ -206,15 +298,7 @@
     },
   ];
   const homePage = {
-    meta: {
-      title: "Secure IT Developers — Security-first web & app engineering",
-      description:
-        "Security-first websites, SaaS platforms, and eCommerce builds delivered with transparent pricing and measurable results.",
-      path: "index.html",
-      keywords:
-        "secure web development, managed web maintenance, seo optimisation, ecommerce development australia, security focused agency",
-      image: "assets/img/placeholder-growth.svg",
-    },
+    meta: seoContent.home,
     hero: {
       eyebrow: "Melbourne engineered",
       title: "Secure builds that scale from day one",
@@ -405,15 +489,7 @@
   };
 
   const aboutPage = {
-    meta: {
-      title: "About Secure IT Developers",
-      description:
-        "Inside the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
-      path: "about.html",
-      keywords:
-        "secure development team, security design sprints, australian dev studio, devops automation partner",
-      image: "assets/img/placeholder-team.svg",
-    },
+    meta: seoContent.about,
     intro:
       "We architect and build resilient digital products for founders that value security, performance, and transparent delivery.",
     mission:
@@ -608,15 +684,7 @@
   };
 
   const pricingPage = {
-    meta: {
-      title: "Pricing — Transparent, security-focused plans",
-      description:
-        "Compare Secure IT Developers pricing for websites, commerce, and custom product builds. Every plan includes security hardening and support.",
-      path: "pricing.html",
-      keywords:
-        "secure development pricing, ecommerce build cost, web maintenance retainer, seo optimisation retainers",
-      image: "assets/img/placeholder-ops.svg",
-    },
+    meta: seoContent.pricing,
     intro:
       "Start with the category that matches your roadmap—web, mobile, platform, or commerce—then choose the engagement level that fits your timeline and complexity.",
     addOns: {
@@ -1168,56 +1236,24 @@
   ];
 
   const contactPage = {
-    meta: {
-      title: "Contact Secure IT Developers",
-      description:
-        "Reach out to Secure IT Developers to discuss your goals, security requirements, and delivery timeline.",
-      path: "contact.html",
-      keywords:
-        "contact secure it developers, request security quote, talk to security developer, schedule discovery call",
-      image: "assets/img/placeholder-team.svg",
-    },
+    meta: seoContent.contact,
     intro:
       "Share a few details and we'll send over a tailored proposal with security recommendations and delivery milestones.",
   };
 
   const checkoutPage = {
-    meta: {
-      title: "Checkout — Review your Secure IT Developers plan",
-      description:
-        "Review the plan you selected from Secure IT Developers before proceeding to payment.",
-      path: "checkout.html",
-      keywords:
-        "secure it developers checkout, confirm web development package, add services to quote, security focused engagement review",
-      image: "assets/img/placeholder-ops.svg",
-    },
+    meta: seoContent.checkout,
     message:
       "Need adjustments or a tailored engagement? Contact us and we'll customise the deliverables before you pay.",
   };
 
   const paymentPage = {
-    meta: {
-      title: "Payment — Secure billing with Secure IT Developers",
-      description:
-        "Enter billing details to complete your Secure IT Developers engagement.",
-      path: "payment.html",
-      keywords:
-        "secure it developers payment, pay for cybersecurity project, secure billing portal, web app development invoice",
-      image: "assets/img/placeholder-growth.svg",
-    },
+    meta: seoContent.payment,
     message: "All transactions are encrypted and reviewed by our finance team within one business day.",
   };
 
   const successPage = {
-    meta: {
-      title: "Payment successful — Welcome to Secure IT Developers",
-      description:
-        "Your Secure IT Developers engagement is confirmed. We'll reach out with next steps.",
-      path: "success.html",
-      keywords:
-        "secure it developers payment success, project kickoff confirmation, cybersecurity engagement onboarding",
-      image: "assets/img/placeholder-team.svg",
-    },
+    meta: seoContent.success,
     heading: "Payment confirmed",
     body:
       "Thanks for partnering with Secure IT Developers. Your project kickoff email, including onboarding steps and access invites, is on its way.",
@@ -1228,15 +1264,7 @@
   };
 
   const failedPage = {
-    meta: {
-      title: "Payment issue — Secure IT Developers",
-      description:
-        "Something went wrong while processing your payment with Secure IT Developers.",
-      path: "failed.html",
-      keywords:
-        "secure it developers payment failed, retry secure payment, billing support cybersecurity agency",
-      image: "assets/img/placeholder-ops.svg",
-    },
+    meta: seoContent.failed,
     heading: "Payment unsuccessful",
     body:
       "Your payment was not completed. No charges were made. You can retry below or contact us for manual invoicing support.",
@@ -1247,27 +1275,11 @@
   };
 
   const detailPage = {
-    meta: {
-      title: "Engagement details — Secure IT Developers",
-      description:
-        "Dive deeper into our engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
-      path: "detail.html",
-      keywords:
-        "secure it developers engagement details, security focused service breakdown, web app package inclusions, cybersecurity add ons",
-      image: "assets/img/placeholder-team.svg",
-    },
+    meta: seoContent.detail,
   };
 
   const legalPage = {
-    meta: {
-      title: "Privacy & legal — Secure IT Developers",
-      description:
-        "Review how Secure IT Developers safeguards data, governs engagements, and upholds compliance commitments.",
-      path: "legal.html",
-      keywords:
-        "secure it developers privacy policy, legal terms, data protection statement, cybersecurity agency compliance",
-      image: "assets/img/placeholder-ops.svg",
-    },
+    meta: seoContent.legal,
     heading: "Privacy, terms, and data protection",
     intro:
       "Security and trust guide every engagement. These policies outline how we protect information, set expectations, and respond when you need support.",
@@ -1517,6 +1529,7 @@
   window.DATA = {
     org,
     seo,
+    seoContent,
     navigation,
     socials,
     contact,

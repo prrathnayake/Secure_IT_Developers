@@ -1,7 +1,8 @@
 import { buildUrl, setMeta } from "./utils.js";
 
 export function updateHeadMeta(data, pageKey) {
-  const meta = data.pages?.[pageKey]?.meta || {};
+  const meta =
+    data.pages?.[pageKey]?.meta || data.seoContent?.[pageKey] || {};
   const title = meta.title || data.org?.name || document.title;
   document.title = title;
   const description = meta.description || data.org?.description || "";
