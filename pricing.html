@@ -20,11 +20,15 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
     <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
-    <script defer src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
   </head>
 
   <body data-page="pricing">
+    <div id="pageLoader" class="page-loader" aria-hidden="true">
+      <div class="page-loader__spinner"></div>
+      <p>Loading Secure IT Developers…</p>
+    </div>
     <header class="site-header" role="banner">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Go to home">
@@ -70,9 +74,10 @@
                 Project focus
                 <select id="quoteProject" name="project" required>
                   <option value="" disabled selected>Select one</option>
-                  <option value="starter">Website or marketing site</option>
-                  <option value="ecom">eCommerce</option>
-                  <option value="custom">Custom web/app build</option>
+                  <option value="web">Web or marketing site</option>
+                  <option value="mobile">Mobile application</option>
+                  <option value="api">API or backend platform</option>
+                  <option value="ecom">Commerce experience</option>
                 </select>
               </label>
               <label>
@@ -171,6 +176,15 @@
         id="pricingSubnav"
       ></div>
       <div class="container" id="pricingTabs"></div>
+      <section class="container standalone-services js-reveal">
+        <div class="section-header">
+          <p class="eyebrow" id="standaloneEyebrow"></p>
+          <h2 id="standaloneHeading"></h2>
+          <p id="standaloneCopy"></p>
+        </div>
+        <div class="service-grid" id="additionalServices"></div>
+        <p class="muted" id="standaloneNote"></p>
+      </section>
     </main>
 
     <footer class="site-footer">

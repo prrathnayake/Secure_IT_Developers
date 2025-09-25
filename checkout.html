@@ -20,11 +20,15 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
     <script defer src="assets/js/env.js"></script>
     <script defer src="assets/js/data.js"></script>
-    <script defer src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
   </head>
 
   <body data-page="checkout">
+    <div id="pageLoader" class="page-loader" aria-hidden="true">
+      <div class="page-loader__spinner"></div>
+      <p>Loading Secure IT Developers…</p>
+    </div>
     <header class="site-header" role="banner">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Go to home">
@@ -54,6 +58,10 @@
         role="region"
         aria-live="polite"
       ></div>
+      <section class="related-services" aria-label="Suggested services">
+        <h2>Recommended services</h2>
+        <div id="relatedServices" class="service-grid"></div>
+      </section>
       <div class="actions">
         <a class="btn" href="payment.html">Continue to payment</a>
         <a class="btn btn-ghost" href="pricing.html">Change plan</a>

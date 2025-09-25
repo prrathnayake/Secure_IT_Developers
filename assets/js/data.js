@@ -3,25 +3,25 @@ window.DATA = {
   org: {
     name: "Secure IT Developers",
     legalName: "Secure IT Developers",
-    tagline: "Security-first web & app engineering",
+    tagline: "Startup-ready web, mobile & API builders",
     description:
-      "Secure IT Developers partners with startups and scale-ups to ship resilient, high-performing digital products that are hardened for security from day one.",
+      "Secure IT Developers is a Melbourne-based studio led by Pasan Rathnayake, delivering security-first web, mobile, and platform builds that help startups move from concept to reliable revenue.",
     url: "https://secureitdevelopers.com",
     logo: "assets/img/favicon.svg",
-    email: "hello@secureitdevelopers.com",
-    phone: "+61 480 123 765",
+    email: "rans.rath@gmail.com",
+    phone: "+61 434 438 494",
     location: {
-      streetAddress: "Level 4, 11 York Street",
-      addressLocality: "Sydney",
-      addressRegion: "NSW",
-      postalCode: "2000",
+      streetAddress: "120 Spencer Street",
+      addressLocality: "Melbourne",
+      addressRegion: "VIC",
+      postalCode: "3000",
       addressCountry: "AU",
     },
     sameAs: [
       "https://secureitdevelopers.com",
-      "https://www.linkedin.com/company/secure-it-developers",
-      "https://github.com/secure-it-developers",
-      "https://twitter.com/secureitdev",
+      "https://www.linkedin.com/in/pasan-rathnayake",
+      "https://github.com/pasanrathnayake",
+      "https://www.instagram.com/secureitdevelopers",
     ],
   },
   seo: {
@@ -36,26 +36,38 @@ window.DATA = {
     { label: "Contact", href: "contact.html" },
   ],
   socials: [
-    { label: "Website", href: "https://secureitdevelopers.com", aria: "Website" },
+    {
+      label: "Website",
+      href: "https://secureitdevelopers.com",
+      aria: "Website",
+      icon: "<svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 2.1c1.5 0 2.9.5 4 1.3a16 16 0 01-4 6.6 16 16 0 01-4-6.6A7.9 7.9 0 0112 4.1zm-6.7 7.1a13.8 13.8 0 003.4 5.9A8 8 0 015.3 11.2zm5.3 6.9c1.1-1.3 2.1-2.7 2.8-4.2.7 1.5 1.7 2.9 2.8 4.2a7.9 7.9 0 01-5.6 0zm6.7-.9a13.8 13.8 0 003.4-5.9 8 8 0 01-3.4 5.9z'/></svg>",
+    },
     {
       label: "LinkedIn",
-      href: "https://www.linkedin.com/company/secure-it-developers",
+      href: "https://www.linkedin.com/in/pasan-rathnayake",
       aria: "LinkedIn profile",
+      icon: "<svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M4 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4zm3.2 4.2a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zM6.2 19V9.5h3.1V19H6.2zm5.3 0h-3V9.5h3v1.6c.7-1.1 2-1.9 3.3-1.9 2.1 0 3.7 1.4 3.7 4.3V19h-3.1v-4.6c0-1.1-.5-1.9-1.6-1.9-1.1 0-1.8.8-1.8 1.9V19z'/></svg>",
     },
     {
       label: "GitHub",
-      href: "https://github.com/secure-it-developers",
+      href: "https://github.com/pasanrathnayake",
       aria: "GitHub profile",
+      icon: "<svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M12 2a10 10 0 00-3.2 19.5c.5.1.7-.2.7-.5v-2c-2.8.6-3.3-1.3-3.3-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.7.3-1.1.5-1.4-2.2-.2-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.2-.4-1.2.1-2.6 0 0 .8-.3 2.8 1a9.6 9.6 0 015.1 0c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.6.6.7 1 1.6 1 2.7 0 3.8-2.3 4.7-4.5 4.9.3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0012 2z'/></svg>",
     },
-    { label: "X (Twitter)", href: "https://twitter.com/secureitdev", aria: "Twitter profile" },
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/secureitdevelopers",
+      aria: "Instagram profile",
+      icon: "<svg viewBox='0 0 24 24' aria-hidden='true'><path fill='currentColor' d='M7 3h10a4 4 0 014 4v10a4 4 0 01-4 4H7a4 4 0 01-4-4V7a4 4 0 014-4zm0 2a2 2 0 00-2 2v10c0 1.1.9 2 2 2h10a2 2 0 002-2V7a2 2 0 00-2-2H7zm5 3.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 2a2.5 2.5 0 100 5 2.5 2.5 0 000-5zm5.3-.6a1.1 1.1 0 11-2.2 0 1.1 1.1 0 012.2 0z'/></svg>",
+    },
   ],
   contact: {
-    heading: "Let's secure your next launch",
+    heading: "Let's build your next secure product",
     copy:
-      "Tell us what you need—penetration-ready marketing sites, conversion-optimised stores, or custom app builds. You'll get a technical reply within one business day.",
-    emailLabel: "hello@secureitdevelopers.com",
-    phoneLabel: "+61 480 123 765",
-    locationLabel: "Sydney, Australia (remote friendly)",
+      "Share where you are on the roadmap—brand-new landing page, mobile MVP, or API overhaul. Pasan replies personally with next steps inside one business day.",
+    emailLabel: "rans.rath@gmail.com",
+    phoneLabel: "+61 434 438 494",
+    locationLabel: "Melbourne, Australia (remote-first)",
     responseTime: "Replies in under 24 hours",
   },
   forms: {
@@ -65,7 +77,7 @@ window.DATA = {
       subject: "Secure IT Developers — New contact request",
       success: "Thanks for reaching out! We'll reply within one business day.",
       error:
-        "We couldn't send your message. Please email hello@secureitdevelopers.com instead.",
+        "We couldn't send your message. Please email rans.rath@gmail.com instead.",
     },
     quote: {
       endpointKey: "quoteEndpoint",
@@ -73,40 +85,40 @@ window.DATA = {
       subject: "Secure IT Developers — Quote request",
       success: "Your tailored quote has been generated. Watch your inbox for next steps.",
       error:
-        "We couldn't deliver the quote email. Refresh and try again or email hello@secureitdevelopers.com.",
+        "We couldn't deliver the quote email. Refresh and try again or email rans.rath@gmail.com.",
     },
   },
   footer: {
     about:
-      "Security-focused engineers building performant digital experiences, with measurable business impact and transparent collaboration.",
+      "Melbourne-based engineers delivering security-first web, mobile, and platform builds with startup-friendly collaboration.",
     legalNote: "ABN 00 123 456 789",
   },
   team: [
     {
-      id: "avery-patel",
-      name: "Avery Patel",
-      role: "Founder & Lead Full-Stack Engineer",
-      location: "Sydney, Australia",
+      id: "pasan-rathnayake",
+      name: "Pasan Rathnayake",
+      role: "Founder & Lead Engineer",
+      location: "Melbourne, Australia",
       bio:
-        "Avery is a security-conscious engineer with 8+ years delivering web platforms, eCommerce stacks, and cloud-native applications for regulated industries.",
+        "Pasan blends 9+ years of full-stack development with hands-on security consulting, partnering with founders to launch and scale products that are hardened from day one.",
       testimonial:
-        "“I believe every build should launch with security, performance, and business impact measured from day one.”",
+        "“I love translating ambitious roadmaps into stable, secure experiences your customers can trust.”",
       portfolio: "https://secureitdevelopers.com/portfolio",
       focus: [
-        "Application security reviews & OWASP hardening",
-        "TypeScript, React, and modern frontend architectures",
-        "Node.js, Laravel, and API-first development",
-        "DevOps automation across AWS, Azure, and GCP",
+        "End-to-end SaaS and marketing platform builds",
+        "React, Next.js, Flutter, and modern mobile stacks",
+        "Node.js, Laravel, and API-first architecture",
+        "Security audits, DevOps automation, and observability",
       ],
       links: [
         { label: "Portfolio", href: "https://secureitdevelopers.com/portfolio" },
         { label: "Website", href: "https://secureitdevelopers.com" },
         {
           label: "LinkedIn",
-          href: "https://www.linkedin.com/in/averypatel",
+          href: "https://www.linkedin.com/in/pasan-rathnayake",
         },
-        { label: "GitHub", href: "https://github.com/averypatel" },
-        { label: "X (Twitter)", href: "https://twitter.com/secureitavery" },
+        { label: "GitHub", href: "https://github.com/pasanrathnayake" },
+        { label: "X (Twitter)", href: "https://twitter.com/pasanbuilds" },
       ],
     },
   ],
@@ -122,30 +134,48 @@ window.DATA = {
         image: "assets/img/placeholder-growth.svg",
       },
       hero: {
-        eyebrow: "Secure. Performant. Maintainable.",
-        title: "Build and ship with confidence",
+        eyebrow: "Melbourne engineered",
+        title: "Secure builds that scale from day one",
         subtitle:
-          "From launch-ready marketing sites to complex SaaS products, we combine security engineering with design-led development to accelerate your roadmap.",
-        primaryCta: { label: "View pricing", href: "pricing.html" },
-        secondaryCta: { label: "Schedule a call", href: "contact.html" },
+          "Launch marketing sites, mobile apps, and API platforms with startup-speed delivery and enterprise-grade hardening led by Pasan Rathnayake.",
+        primaryCta: { label: "Explore packages", href: "pricing.html" },
+        secondaryCta: { label: "Book a discovery call", href: "contact.html" },
       },
       services: {
         heading: "What we deliver",
         cards: [
           {
-            title: "Websites & platforms",
+            title: "Web experiences that convert",
+            icon: "🚀",
             description:
-              "High-performing marketing sites, documentation hubs, and portals optimised for accessibility, SEO, and conversion.",
+              "Marketing sites, launchpads, and SaaS dashboards built in Next.js, Astro, or Laravel with accessibility and analytics baked in.",
+            highlights: [
+              "Component libraries wired for rapid iteration",
+              "Core Web Vitals tuned for every release",
+              "Governance-ready privacy and consent tooling",
+            ],
           },
           {
-            title: "Commerce ecosystems",
+            title: "Mobile & cross-platform apps",
+            icon: "📱",
             description:
-              "Shopify, WooCommerce, and headless storefronts with secure payments, automation, and analytics instrumentation.",
+              "Flutter and React Native builds that share code smartly while keeping experiences native, secure, and easy to ship.",
+            highlights: [
+              "App Store and Play Store launch readiness",
+              "CI/CD pipelines with automated testing",
+              "Secure storage, auth, and offline-first design",
+            ],
           },
           {
-            title: "Custom apps & integrations",
+            title: "APIs & backend platforms",
+            icon: "🛠️",
             description:
-              "Role-aware dashboards, API-first backends, and integrations that connect your product stack end-to-end.",
+              "Node.js, Laravel, and Go services powering integrations, automation, and data workflows with full observability.",
+            highlights: [
+              "REST and GraphQL APIs with contract testing",
+              "Event-driven architecture with queues & workers",
+              "Secrets management, RBAC, and compliance logs",
+            ],
           },
         ],
       },
@@ -157,9 +187,9 @@ window.DATA = {
         cards: [
           {
             title: "Monthly maintenance & security",
-            price: "From $580/mo",
+            price: "From $680/mo",
             description:
-              "Scheduled framework upgrades, dependency patching, uptime monitoring, and recovery runbooks.",
+              "Framework upgrades, dependency patching, uptime monitoring, and incident-ready recovery runbooks.",
             highlights: [
               "Applies to Next.js, Astro, Shopify, and WordPress builds",
               "24-hour security patch SLA with change logs",
@@ -169,9 +199,9 @@ window.DATA = {
           },
           {
             title: "Search & content optimisation",
-            price: "From $720/mo",
+            price: "From $760/mo",
             description:
-              "Technical SEO audits, schema refreshes, and editorial calendars aligned to your growth metrics.",
+              "Technical SEO audits, schema refreshes, and editorial calendars aligned with revenue metrics.",
             highlights: [
               "Quarterly keyword strategy with competitor insights",
               "Schema markup + Core Web Vitals tuning",
@@ -181,7 +211,7 @@ window.DATA = {
           },
           {
             title: "Experimentation & analytics",
-            price: "From $960/mo",
+            price: "From $990/mo",
             description:
               "Data-informed CRO and product experiments with dashboards that track the signal, not just vanity metrics.",
             highlights: [
@@ -197,25 +227,37 @@ window.DATA = {
         heading: "Recent outcomes",
         items: [
           {
-            title: "Product-led SaaS upgrade",
+            title: "Fintech marketing engine",
             description:
-              "Re-platformed a compliance SaaS to a modern stack with SSO and audit logging, improving retention by 18%.",
+              "Rolled out a modular Next.js marketing system with gated resources, attribution dashboards, and SOC2-ready governance.",
             img: "assets/img/placeholder1.svg",
             alt: "Dashboard interface showing security analytics",
+            metrics: [
+              { value: "6 weeks", label: "Concept to launch" },
+              { value: "+38%", label: "Qualified demos" },
+            ],
           },
           {
-            title: "Conversion-focused retail store",
+            title: "Subscription commerce relaunch",
             description:
-              "Delivered a Shopify build with subscriptions, Klaviyo flows, and A/B-tested landing pages—lifting revenue per visitor by 32%.",
+              "Delivered a headless Shopify stack with custom bundles, subscription logic, and Klaviyo lifecycle automation.",
             img: "assets/img/placeholder2.svg",
             alt: "Screenshot of ecommerce storefront",
+            metrics: [
+              { value: "32%", label: "Revenue lift" },
+              { value: "<2.5s", label: "Checkout LCP" },
+            ],
           },
           {
-            title: "Executive analytics hub",
+            title: "Ops command centre",
             description:
-              "Built a cloud dashboard ingesting IoT data with granular RBAC, SOC2-ready logging, and automated reporting.",
+              "Built an API-first analytics hub ingesting IoT data, with real-time alerting, RBAC, and automated compliance reporting.",
             img: "assets/img/placeholder3.svg",
             alt: "Analytics dashboard visualising metrics",
+            metrics: [
+              { value: "99.98%", label: "Uptime" },
+              { value: "12 hrs", label: "Incident MTTR" },
+            ],
           },
         ],
       },
@@ -260,10 +302,10 @@ window.DATA = {
         ],
       },
       spotlight: {
-        heading: "Meet the team",
+        heading: "Meet your lead engineer",
         copy:
-          "A single founder-led squad means you collaborate directly with the person building, auditing, and optimising your product.",
-        memberId: "avery-patel",
+          "Work directly with Pasan from strategy to deployment—no hand-offs, just a founder-level partner shipping alongside you.",
+        memberId: "pasan-rathnayake",
       },
       contact: {
         heading: "Ready to scope your project?",
@@ -278,29 +320,29 @@ window.DATA = {
       meta: {
         title: "About Secure IT Developers",
         description:
-          "Learn how Secure IT Developers blends security engineering, product strategy, and design to deliver dependable digital products.",
+          "Meet the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
         path: "about.html",
         keywords:
           "secure development team, security design sprints, australian dev studio, devops automation partner",
         image: "assets/img/placeholder-team.svg",
       },
       intro:
-        "We architect and build resilient digital products for founders and teams that value security, performance, and measurable results.",
+        "We architect and build resilient digital products for founders that value security, performance, and transparent delivery.",
       mission:
         "Our mission is to embed security and reliability into every product we ship while keeping collaboration transparent and outcomes data-driven.",
       story: {
         copy:
-          "Secure IT Developers started as a solo consultancy helping regulated startups ship faster without sacrificing compliance. Today we operate as an embedded product partner for founders that need security, design, and growth thinking in one squad.",
+          "Secure IT Developers began as Pasan's consultancy helping regulated startups ship faster without sacrificing compliance. Today we operate as an embedded product partner for founders that need security, design, and growth thinking in one squad.",
         milestones: [
           {
             year: "2018",
             detail:
-              "Launched the studio after delivering a PCI-compliant commerce rebuild for an enterprise retailer.",
+              "Pasan launched the studio after delivering a PCI-compliant commerce rebuild for an enterprise retailer.",
           },
           {
             year: "2020",
             detail:
-              "Introduced our security design sprints, pairing UX prototyping with threat modelling for fintech teams.",
+              "Introduced security design sprints, pairing UX prototyping with threat modelling for fintech teams.",
           },
           {
             year: "2022",
@@ -420,7 +462,7 @@ window.DATA = {
         ],
       },
       teamIntro:
-        "Secure IT Developers is currently founder-led, giving you direct access to senior engineering leadership on every engagement.",
+        "Secure IT Developers is founder-led, giving you direct access to senior engineering leadership on every engagement.",
     },
     pricing: {
       meta: {
@@ -433,7 +475,7 @@ window.DATA = {
         image: "assets/img/placeholder-ops.svg",
       },
       intro:
-        "Pick the category that fits your roadmap, then choose the engagement level that matches your timeline and complexity.",
+        "Start with the category that matches your roadmap—web, mobile, platform, or commerce—then choose the engagement level that fits your timeline and complexity.",
       addOns: {
         eyebrow: "Extend your engagement",
         heading: "Recurring services for continuous gains",
@@ -442,7 +484,7 @@ window.DATA = {
         cards: [
           {
             title: "Monthly maintenance retainer",
-            price: "From $580/mo",
+            price: "From $680/mo",
             description:
               "Framework upgrades, hosting patching, uptime monitoring, and quarterly recovery drills.",
             highlights: [
@@ -453,7 +495,7 @@ window.DATA = {
           },
           {
             title: "SEO & content optimisation",
-            price: "From $720/mo",
+            price: "From $760/mo",
             description:
               "Roadmaps combining keyword research, structured data, and UX copy updates for compounding organic growth.",
             highlights: [
@@ -464,7 +506,7 @@ window.DATA = {
           },
           {
             title: "Experimentation squad",
-            price: "From $960/mo",
+            price: "From $990/mo",
             description:
               "Hypothesis-driven experiments across landing pages, checkout, and product funnels with analytics instrumentation.",
             highlights: [
@@ -475,44 +517,51 @@ window.DATA = {
           },
         ],
       },
+      standalone: {
+        eyebrow: "Need help without a package?",
+        heading: "Book standalone services",
+        copy:
+          "Pick the sprints and reviews that solve your immediate challenges—from security audits to SEO growth plays.",
+        note: "Every service includes a discovery call, scoped roadmap, and documented next steps.",
+      },
       compare: {
         heading: "Compare project tiers",
         copy:
           "Understand how deliverables evolve within each category so you can pick the right balance of investment and velocity.",
         categories: [
           {
-            id: "starter",
-            label: "Marketing & product websites",
+            id: "web",
+            label: "Web & marketing websites",
             summary:
-              "From rapid landing pages to systemised, multi-region platforms ready for scale.",
+              "Move from launch-ready pages to global storytelling engines with experimentation built in.",
             columns: [
-              { planId: "starter-basic", label: "Launch" },
-              { planId: "starter-pro", label: "Growth" },
-              { planId: "starter-premium", label: "Scale" },
+              { planId: "web-launch", label: "Launch" },
+              { planId: "web-growth", label: "Growth" },
+              { planId: "web-scale", label: "Scale" },
             ],
             rows: [
               {
                 label: "Ideal for",
                 values: [
-                  "Founders validating positioning",
-                  "Series A teams refreshing product story",
-                  "Global teams with complex governance",
+                  "Idea-stage founders shipping credibility",
+                  "Scaling teams running content and CRO",
+                  "Global organisations with governance needs",
                 ],
               },
               {
-                label: "Team involvement",
+                label: "Content ops",
                 values: [
-                  "1 lead engineer/designer",
-                  "Lead + specialist network",
-                  "Embedded squad across design, content, and DevOps",
+                  "Component-driven pages + messaging workshop",
+                  "CMS-driven content with automation hooks",
+                  "Multi-region publishing with localisation workflows",
                 ],
               },
               {
-                label: "SEO maturity",
+                label: "Experience",
                 values: [
-                  "Foundational technical SEO",
-                  "Ongoing content optimisation",
-                  "Enterprise localisation, schema, and analytics alignment",
+                  "Responsive layouts + SEO baseline",
+                  "Motion design & experimentation roadmap",
+                  "A/B testing suite with analytics dashboards",
                 ],
               },
               {
@@ -520,7 +569,7 @@ window.DATA = {
                 values: [
                   "Best-practice hardening",
                   "Security headers + WAF automation",
-                  "Multi-region compliance with threat modelling",
+                  "Regional privacy workflows & threat modelling",
                 ],
               },
               {
@@ -528,44 +577,97 @@ window.DATA = {
                 values: [
                   "Analytics baseline",
                   "Conversion dashboards",
-                  "Experimentation platform with executive reporting",
+                  "Executive reporting with experimentation insights",
+                ],
+              },
+            ],
+          },
+          {
+            id: "mobile",
+            label: "Mobile products",
+            summary:
+              "From MVPs in the app stores to enterprise-ready cross-platform experiences.",
+            columns: [
+              { planId: "mobile-launch", label: "Launch" },
+              { planId: "mobile-growth", label: "Growth" },
+              { planId: "mobile-scale", label: "Scale" },
+            ],
+            rows: [
+              {
+                label: "Ideal for",
+                values: [
+                  "Founders validating a mobile MVP",
+                  "Product teams growing retention",
+                  "Enterprises demanding resilience & compliance",
+                ],
+              },
+              {
+                label: "Platform coverage",
+                values: [
+                  "iOS & Android with shared code",
+                  "Native patterns + advanced device features",
+                  "Background tasks, realtime sync, localisation",
+                ],
+              },
+              {
+                label: "Engagement",
+                values: [
+                  "Analytics + crash monitoring",
+                  "Segmentation, push, and lifecycle flows",
+                  "Warehouses, cohorts, and experimentation",
+                ],
+              },
+              {
+                label: "Security",
+                values: [
+                  "Secure storage + auth best practice",
+                  "Secure code review + penetration testing",
+                  "Compliance-aligned release playbooks",
+                ],
+              },
+              {
+                label: "Delivery",
+                values: [
+                  "Store submission + release pipeline",
+                  "CI/CD automation with QA suite",
+                  "24/7 observability with incident runbooks",
                 ],
               },
             ],
           },
           {
             id: "ecom",
-            label: "eCommerce ecosystems",
+            label: "Commerce & subscriptions",
             summary:
-              "Scaling from secure carts to multi-market, automated commerce engines.",
+              "Scale from secure carts to multi-market commerce engines.",
             columns: [
-              { planId: "ecom-basic", label: "Launch" },
-              { planId: "ecom-pro", label: "Growth" },
-              { planId: "ecom-premium", label: "Scale" },
+              { planId: "ecom-launch", label: "Launch" },
+              { planId: "ecom-growth", label: "Growth" },
+              { planId: "ecom-scale", label: "Scale" },
             ],
             rows: [
               {
                 label: "Merchandising",
                 values: [
-                  "Up to 80 SKUs with variant logic",
-                  "Advanced bundling and subscriptions",
-                  "Headless catalog with marketplace feeds",
+                  "Tailored theme + 120 SKUs",
+                  "Headless catalogue with bundles & subscriptions",
+                  "Composable commerce with marketplaces + wholesale",
                 ],
               },
               {
                 label: "Customer experience",
                 values: [
                   "Optimised storefront templates",
-                  "Personalised journeys with segmentation",
-                  "Composable UX with experimentation and loyalty integration",
+                  "Personalised journeys & segmentation",
+                  "Custom checkout + experimentation program",
                 ],
               },
               {
                 label: "Operations",
                 values: [
-                  "Core fulfilment + payment automation",
-                  "ERP/IMS integrations with forecasting",
-                  "Global fulfilment orchestration + service mesh",
+                  "Payments, tax, shipping automation",
+                  "ERP/IMS integration + forecasting",
+                  "Global fulfilment orchestration & service mesh",
                 ],
               },
               {
@@ -579,7 +681,7 @@ window.DATA = {
               {
                 label: "Growth",
                 values: [
-                  "Foundational analytics",
+                  "Analytics baseline",
                   "Attribution + lifecycle automation",
                   "Customer data platforms with BI dashboards",
                 ],
@@ -587,21 +689,21 @@ window.DATA = {
             ],
           },
           {
-            id: "custom",
-            label: "Custom web & app builds",
+            id: "api",
+            label: "API & backend platforms",
             summary:
-              "Align the scope with the complexity of your SaaS, portal, or platform roadmap.",
+              "Evolve from foundational APIs to compliant, data-rich platforms.",
             columns: [
-              { planId: "custom-basic", label: "MVP" },
-              { planId: "custom-pro", label: "Growth" },
-              { planId: "custom-premium", label: "Enterprise" },
+              { planId: "api-launch", label: "Launch" },
+              { planId: "api-growth", label: "Growth" },
+              { planId: "api-scale", label: "Scale" },
             ],
             rows: [
               {
                 label: "Architecture",
                 values: [
                   "Secure monolith with modular patterns",
-                  "Service-ready modular architecture",
+                  "Service-ready architecture with event flows",
                   "Microservices with service mesh & governance",
                 ],
               },
@@ -609,8 +711,8 @@ window.DATA = {
                 label: "Integrations",
                 values: [
                   "Core system APIs",
-                  "Event-driven + streaming workflows",
-                  "Enterprise integrations and data lakehouse",
+                  "Webhooks + automation",
+                  "Enterprise integrations & data lakehouse",
                 ],
               },
               {
@@ -625,7 +727,7 @@ window.DATA = {
                 label: "Scalability",
                 values: [
                   "CI/CD with automated tests",
-                  "Blue/green + observability suite",
+                  "Autoscaling + observability suite",
                   "Multi-region deployments with chaos testing",
                 ],
               },
@@ -707,150 +809,345 @@ window.DATA = {
   },
   pricingGroups: [
     {
-      id: "starter",
-      label: "Website Starter",
+      id: "web",
+      label: "Web & Marketing",
+      tagline: "Polished marketing sites ready to convert",
       plans: [
         {
-          id: "basic",
+          id: "launch",
           label: "Launch",
-          price: 799,
+          price: 1490,
           currency: "AUD",
+          summary:
+            "Perfect for founders validating positioning and shipping a credible presence fast.",
           features: [
-            "Up to 3 bespoke pages with responsive layouts",
-            "Content strategy workshop and copy polishing",
-            "On-page SEO setup with schema markup",
-            "Privacy, cookie, and consent management tooling",
-            "Analytics instrumentation (GA4 + Meta Pixel)",
-            "Hardened deployment on Vercel or Netlify",
+            "Up to 5 responsive pages with reusable components",
+            "Story, messaging, and SEO discovery workshop",
+            "Technical SEO baseline with analytics setup",
+            "Privacy, consent, and cookie tooling",
+            "Secure hosting on Vercel or Netlify",
+            "Performance budget with automated checks",
           ],
+          recommendedServices: ["seo-technical", "ux-accessibility"],
         },
         {
-          id: "pro",
+          id: "growth",
           label: "Growth",
-          price: 2299,
+          price: 3290,
           currency: "AUD",
+          summary:
+            "For teams scaling content, experiments, and lead capture with confidence.",
           features: [
-            "Up to 10 modular pages with CMS integration",
-            "Design system components and animation polish",
-            "Technical SEO audit and performance tuning",
-            "Lead capture automations into your CRM",
+            "10-15 modular pages with CMS integration",
+            "Motion design and interactive components",
+            "CRO roadmap with multivariate experiments",
+            "CRM and marketing automation hooks",
             "Accessibility review (WCAG 2.2 AA)",
-            "Security headers, WAF setup, and uptime alerts",
+            "Security headers, WAF, and uptime alerts",
           ],
+          recommendedServices: ["seo-technical", "performance-hardening"],
         },
         {
-          id: "premium",
+          id: "scale",
           label: "Scale",
-          price: 4299,
+          price: 5490,
           currency: "AUD",
+          summary:
+            "Enterprise-grade storytelling with global governance and measurement baked in.",
           features: [
-            "Unlimited pages with localization support",
-            "Composable architecture with headless CMS",
-            "Conversion experimentation setup (A/B + heatmaps)",
-            "Multi-region deployment with CDN optimisation",
-            "Quarterly security & performance reviews",
-            "Team training + detailed documentation handover",
+            "Unlimited locales with content governance workflows",
+            "Headless architecture with reusable design systems",
+            "Experimentation program and analytics dashboards",
+            "Regional compliance and privacy workflows",
+            "Quarterly performance and security reviews",
+            "Team enablement and documentation handover",
           ],
+          recommendedServices: ["seo-technical", "security-audit"],
+        },
+      ],
+    },
+    {
+      id: "mobile",
+      label: "Mobile Products",
+      tagline: "Cross-platform apps with native polish",
+      plans: [
+        {
+          id: "launch",
+          label: "Launch",
+          price: 3490,
+          currency: "AUD",
+          summary:
+            "Get your MVP into the App Store and Play Store with secure foundations.",
+          features: [
+            "React Native or Flutter build with design system",
+            "Authentication, onboarding, and secure storage",
+            "API integration with offline-first data sync",
+            "Automated QA pipeline with device testing",
+            "Store submission support and release management",
+            "Crash and performance monitoring setup",
+          ],
+          recommendedServices: ["mobile-polish", "performance-hardening"],
+        },
+        {
+          id: "growth",
+          label: "Growth",
+          price: 6290,
+          currency: "AUD",
+          summary:
+            "Scale retention, engagement, and monetisation with confidence.",
+          features: [
+            "Design system with native interaction patterns",
+            "Push notifications, deep links, and segmentation",
+            "CI/CD with fastlane or Codemagic",
+            "In-app purchases or subscription flows",
+            "Analytics, retention, and cohort dashboards",
+            "Security audit and secure code review",
+          ],
+          recommendedServices: ["mobile-polish", "security-audit"],
+        },
+        {
+          id: "scale",
+          label: "Scale",
+          price: 9890,
+          currency: "AUD",
+          summary:
+            "For venture-backed teams operating at enterprise-level scale and reliability.",
+          features: [
+            "Modular architecture for multi-team delivery",
+            "Realtime sync, background tasks, and edge caching",
+            "Advanced accessibility and localisation",
+            "Integration with analytics warehouses",
+            "Chaos testing and performance hardening",
+            "24/7 observability with incident runbooks",
+          ],
+          recommendedServices: ["mobile-polish", "performance-hardening", "security-audit"],
+        },
+      ],
+    },
+    {
+      id: "api",
+      label: "API & Backend Platforms",
+      tagline: "Secure foundations for data-rich products",
+      plans: [
+        {
+          id: "launch",
+          label: "Launch",
+          price: 2990,
+          currency: "AUD",
+          summary:
+            "Ship a reliable backend or integration layer with confidence.",
+          features: [
+            "REST or GraphQL API with schema and docs",
+            "Role-based access, auth, and audit logging",
+            "Infrastructure-as-code deployment",
+            "Unit and integration tests with coverage reports",
+            "Monitoring and alerting baseline",
+            "DevOps pipeline for staging and production",
+          ],
+          recommendedServices: ["api-integration", "security-audit"],
+        },
+        {
+          id: "growth",
+          label: "Growth",
+          price: 5990,
+          currency: "AUD",
+          summary:
+            "Extend your platform with automation, scale, and full observability.",
+          features: [
+            "Event-driven architecture and queue processing",
+            "Third-party integrations and webhook orchestration",
+            "Secrets management and rotation policies",
+            "Autoscaling container or serverless setup",
+            "Full observability (logs, metrics, tracing)",
+            "Load testing with remediation backlog",
+          ],
+          recommendedServices: ["api-integration", "performance-hardening", "security-audit"],
+        },
+        {
+          id: "scale",
+          label: "Scale",
+          price: 10490,
+          currency: "AUD",
+          summary:
+            "Enterprise-grade platforms with compliance and resilience engineered in.",
+          features: [
+            "Modular microservices with API gateway",
+            "Zero-downtime deployments and blue/green rollout",
+            "Compliance support (SOC2, ISO 27001, HIPAA)",
+            "Data lakehouse and BI integration",
+            "Disaster recovery and chaos engineering drills",
+            "Quarterly threat modelling workshops",
+          ],
+          recommendedServices: ["security-audit", "performance-hardening"],
         },
       ],
     },
     {
       id: "ecom",
-      label: "eCommerce",
+      label: "Commerce & Subscriptions",
+      tagline: "Sell and scale with automation baked-in",
       plans: [
         {
-          id: "basic",
+          id: "launch",
           label: "Launch",
-          price: 1899,
+          price: 2190,
           currency: "AUD",
+          summary:
+            "Get trading quickly with a secure, conversion-friendly storefront.",
           features: [
-            "Shopify or WooCommerce theme setup customised to brand",
-            "Product catalogue up to 80 SKUs with variant logic",
-            "Secure payment gateways and tax/shipping rules",
-            "Abandoned cart and welcome email automations",
-            "Core Web Vitals optimisation for PDP and checkout",
-            "Foundational analytics & attribution dashboard",
+            "Shopify or WooCommerce theme tailored to brand",
+            "Catalogue up to 120 SKUs with variant logic",
+            "Secure payments, tax, and shipping rules",
+            "Lifecycle automations (welcome + abandoned cart)",
+            "Performance tuning for PDP and checkout",
+            "Analytics and attribution baseline",
           ],
+          recommendedServices: ["seo-technical", "security-audit"],
         },
         {
-          id: "pro",
+          id: "growth",
           label: "Growth",
-          price: 3899,
+          price: 4290,
           currency: "AUD",
+          summary:
+            "Level up operations, personalisation, and automation for scale.",
           features: [
             "Headless storefront using Hydrogen or Next.js",
-            "Subscription, bundles, and loyalty program integrations",
-            "ERP/IMS sync with inventory forecasting",
-            "Advanced Klaviyo/Drip flows with segmentation",
-            "Fraud prevention rules and security audits",
-            "Performance budget monitoring with monthly reports",
+            "Subscriptions, bundles, and loyalty programs",
+            "ERP/IMS integrations with forecasting",
+            "Advanced segmentation and personalisation",
+            "Fraud prevention and security audits",
+            "Performance budget dashboards",
           ],
+          recommendedServices: ["seo-technical", "api-integration"],
         },
         {
-          id: "premium",
+          id: "scale",
           label: "Scale",
-          price: 6999,
+          price: 7290,
           currency: "AUD",
+          summary:
+            "For multi-region commerce leaders needing compliance and experimentation.",
           features: [
-            "Composable commerce with custom checkout experiences",
-            "Global storefronts with multi-currency support",
-            "Complex fulfilment integrations (3PL, EDI, marketplaces)",
-            "Customer data platform setup and BI dashboards",
-            "Penetration testing with remediation sprints",
-            "Dedicated optimisation retainer (CRO + SEO)",
+            "Composable commerce with multi-region catalogue",
+            "Marketplace and wholesale channel integrations",
+            "Custom checkout experiences with A/B testing",
+            "Customer data platform and BI dashboards",
+            "Pen testing with remediation sprints",
+            "Dedicated optimisation retainer",
           ],
-        },
-      ],
-    },
-    {
-      id: "custom",
-      label: "Custom Web/App",
-      plans: [
-        {
-          id: "basic",
-          label: "MVP",
-          price: 2899,
-          currency: "AUD",
-          features: [
-            "Authentication, RBAC, and secure session handling",
-            "CRUD modules with audit logging",
-            "REST or GraphQL API with documentation",
-            "CI/CD pipeline with automated testing",
-            "Cloud infrastructure provisioning (AWS/Azure/GCP)",
-            "Product analytics instrumentation (PostHog/Amplitude)",
-          ],
-        },
-        {
-          id: "pro",
-          label: "Growth",
-          price: 5699,
-          currency: "AUD",
-          features: [
-            "Modular architecture ready for microservices",
-            "Advanced RBAC, SSO, and secrets management",
-            "Streaming or event-driven integrations",
-            "Observability stack (logs, metrics, tracing)",
-            "Blue/green deployments with rollback automation",
-            "Load testing with remediation recommendations",
-          ],
-        },
-        {
-          id: "premium",
-          label: "Enterprise",
-          price: 10499,
-          currency: "AUD",
-          features: [
-            "Enterprise-grade security review and threat modelling",
-            "Compliance support (SOC2, ISO 27001, HIPAA)",
-            "Modular microservices with API gateway & service mesh",
-            "Custom analytics lakehouse & reporting dashboards",
-            "24/7 monitoring with incident response playbooks",
-            "Quarterly roadmap workshops with leadership",
-          ],
+          recommendedServices: ["security-audit", "seo-technical", "performance-hardening"],
         },
       ],
     },
   ],
+  serviceCatalog: [
+    {
+      id: "security-audit",
+      title: "Security & compliance audit",
+      description:
+        "Deep-dive review of your web, mobile, or API stack with actionable remediation steps mapped to OWASP and ISO controls.",
+      priceLabel: "From $3,600",
+      category: "Security",
+    },
+    {
+      id: "seo-technical",
+      title: "Technical SEO & content sprint",
+      description:
+        "Optimise Core Web Vitals, schema, and editorial workflows to lift organic visibility and conversions.",
+      priceLabel: "From $2,950",
+      category: "Growth",
+    },
+    {
+      id: "performance-hardening",
+      title: "Performance hardening",
+      description:
+        "Stress-test and tune critical journeys with profiling, caching strategies, and infrastructure optimisation.",
+      priceLabel: "From $2,400",
+      category: "Engineering",
+    },
+    {
+      id: "api-integration",
+      title: "API & integration build",
+      description:
+        "Design and ship robust REST or GraphQL endpoints with documentation, auth, and monitoring.",
+      priceLabel: "From $4,200",
+      category: "Engineering",
+    },
+    {
+      id: "mobile-polish",
+      title: "Mobile polish sprint",
+      description:
+        "Stabilise and improve existing Flutter or React Native apps with performance tuning and UX refinements.",
+      priceLabel: "From $3,300",
+      category: "Mobile",
+    },
+    {
+      id: "ux-accessibility",
+      title: "Accessibility & UX review",
+      description:
+        "Audit flows against WCAG 2.2 AA, deliver remediation tickets, and coach teams on inclusive design.",
+      priceLabel: "From $1,750",
+      category: "Experience",
+    },
+  ],
+  quoteCalculator: {
+    projects: {
+      web: {
+        label: "Web & marketing site",
+        tiers: {
+          small: { title: "Launch site", base: 1800, currency: "AUD" },
+          medium: { title: "Growth site", base: 3600, currency: "AUD" },
+          large: { title: "Scale site", base: 5800, currency: "AUD" },
+        },
+      },
+      mobile: {
+        label: "Mobile app",
+        tiers: {
+          small: { title: "MVP app", base: 4200, currency: "AUD" },
+          medium: { title: "Growth app", base: 7200, currency: "AUD" },
+          large: { title: "Enterprise app", base: 11200, currency: "AUD" },
+        },
+      },
+      api: {
+        label: "API / platform",
+        tiers: {
+          small: { title: "Core API", base: 3600, currency: "AUD" },
+          medium: { title: "Platform expansion", base: 6900, currency: "AUD" },
+          large: { title: "Enterprise platform", base: 11800, currency: "AUD" },
+        },
+      },
+      ecom: {
+        label: "Commerce experience",
+        tiers: {
+          small: { title: "Launch store", base: 3200, currency: "AUD" },
+          medium: { title: "Growth store", base: 5400, currency: "AUD" },
+          large: { title: "Scale commerce", base: 8900, currency: "AUD" },
+        },
+      },
+    },
+    timelines: {
+      standard: { label: "6–10 weeks", adjustment: 0 },
+      accelerated: { label: "3–5 weeks", adjustment: 1200 },
+      rush: { label: "Under 3 weeks", adjustment: 2400 },
+    },
+    compliance: {
+      standard: { label: "General best practice", adjustment: 0 },
+      regulated: { label: "Regulated industry support", adjustment: 1500 },
+      critical: { label: "Mission critical / audited", adjustment: 2800 },
+    },
+    support: {
+      0: { label: "No ongoing support", multiplier: 0 },
+      "0.12": {
+        label: "Monthly performance & CRO (12% of build)",
+        multiplier: 0.12,
+      },
+      "0.2": {
+        label: "Embedded optimisation squad (20% of build)",
+        multiplier: 0.2,
+      },
+    },
+  },
   faqs: [
     {
       q: "How quickly can we start?",
