@@ -11,8 +11,14 @@ export function qsa(selector, scope = document) {
 }
 
 export function setMeta(attr, name, content) {
-  const el = document.querySelector(`meta[${attr}='${name}']`);
-  if (el && content) {
+  if (typeof name !== "string") return;
+  let el = document.querySelector(`meta[${attr}='${name}']`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, name);
+    document.head.appendChild(el);
+  }
+  if (typeof content === "string") {
     el.setAttribute("content", content);
   }
 }

@@ -42,6 +42,10 @@ img {
   display: block;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -415,8 +419,8 @@ img {
 }
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 .grid-2 {
   display: grid;
@@ -808,6 +812,12 @@ textarea::placeholder {
   gap: 12px;
 }
 
+.service-chip__header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .service-chip h4 {
   margin: 0;
 }
@@ -817,6 +827,25 @@ textarea::placeholder {
   color: var(--muted);
 }
 
+.service-chip__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.service-chip__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 18%, var(--card) 82%);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .service-chip__price {
   font-weight: 600;
   color: var(--brand);
@@ -824,7 +853,31 @@ textarea::placeholder {
 
 .service-chip .btn {
   width: fit-content;
-  margin-top: 12px;
+}
+
+.service-chip__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.service-chip__actions .btn {
+  margin-top: 0;
+}
+
+.service-chip__actions .detail-link {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.service-chip__toggle {
+  cursor: pointer;
+}
+
+.service-chip__toggle[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 25%, transparent);
 }
 
 .service-option {
@@ -878,6 +931,40 @@ textarea::placeholder {
   border: 1px solid var(--border);
   padding: 16px;
   border-radius: 12px;
+}
+.order-addons {
+  border-top: 1px solid var(--border);
+  margin-top: 16px;
+  padding-top: 12px;
+}
+.order-addons--list {
+  display: grid;
+  gap: 12px;
+}
+.order-addons--list h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.order-addons--list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.order-addons--list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 15px;
+}
+.order-addons--list li span {
+  color: var(--muted);
+  font-size: 14px;
+}
+.order-addons--empty {
+  margin-bottom: 0;
 }
 .order-details {
   background: var(--card);
@@ -1100,6 +1187,45 @@ textarea::placeholder {
 .detail-card ul {
   margin: 0;
   padding-left: 20px;
+  color: var(--muted);
+}
+
+.detail-card--team {
+  gap: 16px;
+}
+
+.team-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.team-list li {
+  display: grid;
+  gap: 6px;
+}
+
+.team-list strong {
+  font-size: 1rem;
+}
+
+.team-member__role {
+  display: block;
+  color: var(--brand);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.team-member__location {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.team-list p {
+  margin: 0;
   color: var(--muted);
 }
 

@@ -27,6 +27,12 @@ window.DATA = {
   seo: {
     defaultKeywords:
       "secure web development, security-first developers, seo optimisation services, managed web maintenance, ecommerce security, australia web agency",
+    siteName: "Secure IT Developers",
+    author: "Secure IT Developers",
+    robots: "index, follow",
+    twitterHandle: "@secureitdev",
+    twitterCreator: "@pasanbuilds",
+    themeColor: "#0b1d3a",
     ogImage: "assets/img/placeholder-growth.svg",
   },
   navigation: [
@@ -123,8 +129,8 @@ window.DATA = {
     },
     {
       id: "sunera-ranasooriya",
-      name: "Sunera Ranasooriya",
-      role: "Cyber Security Specialist",
+      name: "Sunera Ranasooroya",
+      role: "Cybersecurity Specialist",
       location: "Colombo, Sri Lanka",
       bio:
         "Sunera leads threat modelling and incident readiness for regulated teams, drawing on 8+ years across telecom and fintech SOC leadership.",
@@ -325,9 +331,9 @@ window.DATA = {
         ],
       },
       spotlight: {
-        heading: "Meet your lead engineer",
+        heading: "This is our team",
         copy:
-          "Work directly with Pasan from strategy to deployment—no hand-offs, just a founder-level partner shipping alongside you.",
+          "Partner with founder-engineer Pasan Rathnayake and cybersecurity specialist Sunera Ranasooroya from discovery to deployment—no hand-offs, just leadership embedded in every sprint.",
         memberId: "pasan-rathnayake",
       },
       contact: {
@@ -343,7 +349,7 @@ window.DATA = {
       meta: {
         title: "About Secure IT Developers",
         description:
-          "Meet the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
+          "Inside the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
         path: "about.html",
         keywords:
           "secure development team, security design sprints, australian dev studio, devops automation partner",
@@ -781,6 +787,8 @@ window.DATA = {
         description:
           "Dive deeper into our engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
         path: "detail.html",
+        keywords:
+          "secure it developers engagement details, security focused service breakdown, web app package inclusions, cybersecurity add ons",
         image: "assets/img/placeholder-team.svg",
       },
     },
@@ -803,6 +811,9 @@ window.DATA = {
         description:
           "Review the plan you selected from Secure IT Developers before proceeding to payment.",
         path: "checkout.html",
+        keywords:
+          "secure it developers checkout, confirm web development package, add services to quote, security focused engagement review",
+        image: "assets/img/placeholder-ops.svg",
       },
       message:
         "Need adjustments or a tailored engagement? Contact us and we'll customise the deliverables before you pay.",
@@ -813,6 +824,9 @@ window.DATA = {
         description:
           "Enter billing details to complete your Secure IT Developers engagement.",
         path: "payment.html",
+        keywords:
+          "secure it developers payment, pay for cybersecurity project, secure billing portal, web app development invoice",
+        image: "assets/img/placeholder-growth.svg",
       },
       message: "All transactions are encrypted and reviewed by our finance team within one business day.",
     },
@@ -822,6 +836,9 @@ window.DATA = {
         description:
           "Your Secure IT Developers engagement is confirmed. We'll reach out with next steps.",
         path: "success.html",
+        keywords:
+          "secure it developers payment success, project kickoff confirmation, cybersecurity engagement onboarding",
+        image: "assets/img/placeholder-team.svg",
       },
       heading: "Payment confirmed",
       body:
@@ -837,6 +854,9 @@ window.DATA = {
         description:
           "Something went wrong while processing your payment with Secure IT Developers.",
         path: "failed.html",
+        keywords:
+          "secure it developers payment failed, retry secure payment, billing support cybersecurity agency",
+        image: "assets/img/placeholder-ops.svg",
       },
       heading: "Payment unsuccessful",
       body:
