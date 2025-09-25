@@ -433,5 +433,3 @@ export function initAuth() {
   document.addEventListener(AUTH_CHANGE_EVENT, renderAuthControls);
   document.addEventListener(AUTH_CHANGE_EVENT, renderDatabaseNotice);
 }
-
-*** End of File

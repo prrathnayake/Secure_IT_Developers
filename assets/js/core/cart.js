@@ -278,4 +278,3 @@ export function clearCart() {
   cartIds = new Set();
   setSelectedServices([]);
 }
-*** End of File
