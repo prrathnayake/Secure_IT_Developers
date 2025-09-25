@@ -6,14 +6,21 @@ import {
   toggleSelectedService,
 } from "../core/storage.js";
 import { renderOtherServices } from "./shared.js";
+import { requireAuth } from "../core/auth.js";
 
 export function renderCheckoutPage(data) {
+  const customer = requireAuth("checkout.html");
+  if (!customer) return;
   const plan = getSelectedPlan();
   const info = byId("messageInfo");
   if (info) {
     info.textContent = plan
       ? data.pages?.checkout?.message || ""
       : "No plan selected. Please choose a package from pricing.";
+  }
+  const account = byId("checkoutAccount");
+  if (account) {
+    account.textContent = `Logged in as ${customer.email}`;
   }
   const summaryTarget = byId("orderSummary");
   const servicesCatalog = data.serviceCatalog || [];

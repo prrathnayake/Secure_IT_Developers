@@ -30,6 +30,11 @@ export function setSelectedServices(services = []) {
     new Set((Array.isArray(services) ? services : []).filter(Boolean))
   );
   localStorage.setItem(SELECTED_SERVICES_KEY, JSON.stringify(unique));
+  if (typeof document !== "undefined") {
+    document.dispatchEvent(
+      new CustomEvent("cart:selectedServices", { detail: { ids: unique } })
+    );
+  }
   return unique;
 }
 

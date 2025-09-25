@@ -3,19 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Secure IT Developers</title>
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <link rel="canonical" href="#" />
-    <meta property="og:title" content="" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="" />
-    <meta property="og:image" content="" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:description" content="" />
-    <meta name="twitter:image" content="" />
+    <title>Secure IT Developers — Create an account</title>
+    <meta name="description" content="Create a Secure IT Developers customer account." />
     <link rel="icon" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
     <script defer src="assets/js/env.js"></script>
@@ -24,7 +13,7 @@
     <script id="orgJsonLd" type="application/ld+json"></script>
   </head>
 
-  <body data-page="payment">
+  <body data-page="signup">
     <div id="pageLoader" class="page-loader" aria-hidden="true">
       <div class="page-loader__spinner"></div>
       <p>Loading Secure IT Developers…</p>
@@ -58,85 +47,66 @@
         >
           🌓
         </button>
-
       </div>
     </header>
 
-    <main class="container payment-page">
-      <h1>Payment</h1>
-      <p id="messageInfo" class="muted"></p>
-      <p id="paymentAccount" class="muted" aria-live="polite"></p>
-      <ol class="progress" aria-label="Checkout steps">
-        <li class="done">Order</li>
-        <li class="done">Billing</li>
-        <li class="current">Payment</li>
-      </ol>
-      <section class="cart-review js-reveal" aria-labelledby="cartHeading">
-        <h2 id="cartHeading">Review your secure order</h2>
-        <div id="paymentSummary" class="cart-summary"></div>
+    <main class="container auth-page" role="main">
+      <section class="auth-card" aria-labelledby="signupHeading">
+        <h1 id="signupHeading">Create your account</h1>
+        <p>
+          Set up a secure customer login so you can build a cart, manage orders,
+          and confirm projects with confidence. Passwords are hashed locally before
+          being stored.
+        </p>
+        <form id="signupForm" class="form auth-form" novalidate>
+          <div class="form-row">
+            <label for="signupName">Full name</label>
+            <input
+              id="signupName"
+              name="fullname"
+              autocomplete="name"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="signupEmail">Email</label>
+            <input
+              id="signupEmail"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="signupPassword">Password</label>
+            <input
+              id="signupPassword"
+              name="password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="signupConfirm">Confirm password</label>
+            <input
+              id="signupConfirm"
+              name="confirm"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+            />
+          </div>
+          <button class="btn" type="submit">Create account</button>
+          <p id="signupStatus" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+        <p class="auth-switch">
+          Already registered? <a href="login.html">Log in to continue.</a>
+        </p>
       </section>
-      <form id="paymentForm" class="form" novalidate>
-        <fieldset>
-          <legend>Billing details</legend>
-          <div class="grid-2">
-            <div class="form-row">
-              <label for="fullname">Full name</label>
-              <input id="fullname" required />
-            </div>
-            <div class="form-row">
-              <label for="emailPay">Email</label>
-              <input id="emailPay" type="email" required />
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="address">Address</label>
-            <input id="address" required />
-          </div>
-          <div class="grid-3">
-            <div class="form-row">
-              <label for="city">City</label>
-              <input id="city" required />
-            </div>
-            <div class="form-row">
-              <label for="state">State</label>
-              <input id="state" required />
-            </div>
-            <div class="form-row">
-              <label for="zip">Postcode</label>
-              <input id="zip" required />
-            </div>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Card</legend>
-          <div class="grid-2">
-            <div class="form-row">
-              <label for="card">Card number</label>
-              <input
-                id="card"
-                inputmode="numeric"
-                pattern="[0-9 ]{12,19}"
-                required
-                placeholder="4242 4242 4242 4242"
-              />
-            </div>
-            <div class="form-row">
-              <label for="exp">Expiry</label>
-              <input id="exp" placeholder="MM/YY" required />
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="cvc">CVC</label>
-            <input id="cvc" inputmode="numeric" pattern="[0-9]{3,4}" required />
-          </div>
-        </fieldset>
-        <div class="order-inline" id="miniSummary"></div>
-        <div class="actions">
-          <button type="submit" class="btn">Pay now</button>
-          <a class="btn btn-ghost" href="checkout.html">Back</a>
-        </div>
-        <p id="payStatus" role="status" aria-live="polite"></p>
-      </form>
     </main>
 
     <footer class="site-footer">

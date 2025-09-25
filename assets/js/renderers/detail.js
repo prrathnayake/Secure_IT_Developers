@@ -263,13 +263,30 @@ export function renderDetailPage(data) {
       });
       card.appendChild(ul);
     }
+    const actions = document.createElement("div");
+    actions.className = "detail-card__actions";
+    const cartButton = document.createElement("button");
+    cartButton.type = "button";
+    cartButton.className = "btn";
+    cartButton.textContent = "Add to cart";
+    cartButton.setAttribute(
+      "aria-label",
+      `Add ${service.title} to your cart`
+    );
+    cartButton.addEventListener("click", () => {
+      document.dispatchEvent(
+        new CustomEvent("cart:add", { detail: { id: service.id } })
+      );
+    });
+    actions.appendChild(cartButton);
     if (includeLink) {
       const link = document.createElement("a");
       link.className = "detail-link";
       link.href = `detail.html?type=service&id=${service.id}`;
       link.textContent = "Service details";
-      card.appendChild(link);
+      actions.appendChild(link);
     }
+    card.appendChild(actions);
     return card;
   }
 }

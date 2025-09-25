@@ -5,6 +5,8 @@ import { initScrollReveal, initHeaderScrollEffect } from "./core/effects.js";
 import { bindContact, initQuoteGenerator } from "./core/forms.js";
 import { initPageLoader } from "./features/loader.js";
 import { initMobileNav } from "./core/navigation.js";
+import { initAuth } from "./core/auth.js";
+import { initCart } from "./core/cart.js";
 
 initThemeToggle();
 initCookieBanner();
@@ -13,6 +15,8 @@ initPageLoader();
 document.addEventListener("DOMContentLoaded", () => {
   if (!window.DATA) return;
   hydrateSite(window.DATA);
+  initAuth();
+  initCart(window.DATA);
   initMobileNav();
   initScrollReveal();
   initHeaderScrollEffect();
