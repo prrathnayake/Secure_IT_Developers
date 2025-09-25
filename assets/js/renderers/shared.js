@@ -144,6 +144,7 @@ export function renderOtherServices(target, services = [], options = {}) {
     recommendedIds = new Set(),
     onToggle,
     detailLink = false,
+    scrollable = false,
   } = options;
   if (!target) return;
   const selectedSet = new Set(selectedIds);
@@ -152,6 +153,12 @@ export function renderOtherServices(target, services = [], options = {}) {
       ? recommendedIds
       : new Set(Array.isArray(recommendedIds) ? recommendedIds : []);
   target.innerHTML = "";
+  if (scrollable) {
+    // When requested, turn the grid into a horizontal rail that scrolls sideways.
+    target.classList.add("service-chip-list");
+  } else {
+    target.classList.remove("service-chip-list");
+  }
   services.forEach((service) => {
     const card = document.createElement("article");
     card.className = "service-chip";

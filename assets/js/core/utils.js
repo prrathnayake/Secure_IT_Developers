@@ -38,15 +38,17 @@ export function telHref(value) {
   return `tel:${cleaned}`;
 }
 
+// Format numeric values as currency with cents for transparency on quotes.
 export function formatCurrency(value, currency = "AUD") {
   try {
     return new Intl.NumberFormat("en-AU", {
       style: "currency",
       currency,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(value);
   } catch (error) {
-    return `${currency} ${Number(value).toLocaleString()}`;
+    return `${currency} ${Number(value).toFixed(2)}`;
   }
 }
 
@@ -109,4 +111,30 @@ export function parseExpiry(value = "") {
 export function generateReference() {
   const random = Math.random().toString(36).toUpperCase().slice(2, 6);
   return `SIT-${random}${Date.now().toString().slice(-4)}`;
+}
+
+// Calculate a transparent breakdown for plan pricing, add-ons, staffing, and taxes.
+export function calculateOrderTotals(planPrice = 0, services = [], billing = {}) {
+  const toNumber = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
+  const roundCurrency = (value) => Math.round(toNumber(value) * 100) / 100;
+  const base = roundCurrency(planPrice);
+  const addOns = roundCurrency(
+    services.reduce((sum, service) => sum + toNumber(service?.price), 0)
+  );
+  const subtotal = roundCurrency(base + addOns);
+  const staffRate = Number(billing.staffRate) || 0;
+  const minimumStaffFee = Number(billing.minimumStaffFee) || 0;
+  const staffFee = roundCurrency(Math.max(subtotal * staffRate, minimumStaffFee));
+  const taxRate = Number(billing.taxRate) || 0;
+  const taxableAmount = subtotal + staffFee;
+  const tax = roundCurrency(taxableAmount * taxRate);
+  const total = roundCurrency(taxableAmount + tax);
+  return {
+    base,
+    addOns,
+    subtotal,
+    staffFee,
+    tax,
+    total,
+  };
 }

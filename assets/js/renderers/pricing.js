@@ -165,6 +165,63 @@ export function renderPricingPage(data) {
     });
   }
 
+  // Bespoke engagements combine messaging, so keep CTA content editable via data.js.
+  const custom = page.customEngagement || {};
+  const customSection = byId("customEngagement");
+  if (customSection) {
+    const eyebrow = byId("customEngagementEyebrow");
+    if (eyebrow) eyebrow.textContent = custom.eyebrow || "";
+    const heading = byId("customEngagementHeading");
+    if (heading) heading.textContent = custom.heading || "";
+    const copy = byId("customEngagementCopy");
+    if (copy) copy.textContent = custom.copy || "";
+    const list = byId("customEngagementHighlights");
+    if (list) {
+      list.innerHTML = "";
+      (custom.highlights || []).forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+      });
+    }
+    const primary = byId("customEngagementPrimary");
+    if (primary) {
+      const hasPrimary = Boolean(custom.primaryCta?.label);
+      primary.textContent = custom.primaryCta?.label || "";
+      primary.href = custom.primaryCta?.href || "contact.html";
+      primary.toggleAttribute("hidden", !hasPrimary);
+    }
+    const secondary = byId("customEngagementSecondary");
+    if (secondary) {
+      const hasSecondary = Boolean(custom.secondaryCta?.label);
+      secondary.textContent = custom.secondaryCta?.label || "";
+      secondary.href = custom.secondaryCta?.href || "about.html";
+      secondary.toggleAttribute("hidden", !hasSecondary);
+    }
+    const aside = byId("customEngagementAside");
+    if (aside) {
+      aside.innerHTML = "";
+      const metricItems = custom.aside?.metrics || [];
+      if (custom.aside?.title) {
+        const title = document.createElement("h3");
+        title.textContent = custom.aside.title;
+        aside.appendChild(title);
+      }
+      if (metricItems.length) {
+        const metrics = document.createElement("ul");
+        metrics.className = "custom-metrics";
+        metricItems.forEach((metric) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${metric.value}</strong><span>${metric.label}</span>`;
+          metrics.appendChild(li);
+        });
+        aside.appendChild(metrics);
+      }
+      aside.toggleAttribute("hidden", !custom.aside?.title && !metricItems.length);
+    }
+    customSection.hidden = !custom.heading && !custom.copy;
+  }
+
   const standalone = page.standalone || {};
   const standaloneEyebrow = byId("standaloneEyebrow");
   if (standaloneEyebrow) standaloneEyebrow.textContent = standalone.eyebrow || "";

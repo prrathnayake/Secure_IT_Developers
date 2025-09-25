@@ -7,7 +7,14 @@ export function initPageLoader() {
   });
   document.addEventListener("click", (event) => {
     const link = event.target.closest("a[href]");
-    if (!link || link.target === "_blank" || link.getAttribute("download")) return;
+    if (
+      !link ||
+      link.target === "_blank" ||
+      link.getAttribute("download") ||
+      link.hasAttribute("data-no-loader")
+    ) {
+      return;
+    }
     loader.classList.remove("is-hidden");
   });
 }
