@@ -162,6 +162,7 @@ export function renderPricingPage(data) {
     renderOtherServices(additional, data.serviceCatalog || [], {
       showCtas: true,
       linkLabel: deepDiveLinkLabel,
+      enableCart: true,
     });
   }
 

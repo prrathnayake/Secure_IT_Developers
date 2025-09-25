@@ -12,8 +12,11 @@ import {
   storeLastOrder,
 } from "../core/storage.js";
 import { logCustomerEvent } from "../core/audit.js";
+import { requireAuth } from "../core/auth.js";
 
 export function renderPaymentPage(data) {
+  const customer = requireAuth("payment.html");
+  if (!customer) return;
   const servicesCatalog = data?.serviceCatalog || [];
   const billing = data?.billing || {};
   const summaryTarget = byId("paymentSummary");
@@ -25,6 +28,10 @@ export function renderPaymentPage(data) {
     messageInfo.textContent = plan
       ? data.pages?.payment?.message || ""
       : "No plan selected. Return to pricing to choose your package.";
+  }
+  const account = byId("paymentAccount");
+  if (account) {
+    account.textContent = `Logged in as ${customer.email}`;
   }
 
   const selectedServices = () =>

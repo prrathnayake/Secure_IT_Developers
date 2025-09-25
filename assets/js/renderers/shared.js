@@ -145,6 +145,7 @@ export function renderOtherServices(target, services = [], options = {}) {
     onToggle,
     detailLink = false,
     scrollable = false,
+    enableCart = false,
   } = options;
   if (!target) return;
   const selectedSet = new Set(selectedIds);
@@ -229,6 +230,24 @@ export function renderOtherServices(target, services = [], options = {}) {
       link.href = `detail.html?type=service&id=${service.id}`;
       link.textContent = linkLabel;
       actions.appendChild(link);
+      hasActions = true;
+    }
+
+    if (enableCart) {
+      const cartBtn = document.createElement("button");
+      cartBtn.type = "button";
+      cartBtn.className = "btn btn-ghost service-chip__cart";
+      cartBtn.textContent = "Add to cart";
+      cartBtn.setAttribute(
+        "aria-label",
+        `Add ${service.title} to your cart`
+      );
+      cartBtn.addEventListener("click", () => {
+        document.dispatchEvent(
+          new CustomEvent("cart:add", { detail: { id: service.id } })
+        );
+      });
+      actions.appendChild(cartBtn);
       hasActions = true;
     }
 
