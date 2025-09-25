@@ -57,6 +57,10 @@
         <li class="done">Billing</li>
         <li class="current">Payment</li>
       </ol>
+      <section class="cart-review js-reveal" aria-labelledby="cartHeading">
+        <h2 id="cartHeading">Review your secure order</h2>
+        <div id="paymentSummary" class="cart-summary"></div>
+      </section>
       <form id="paymentForm" class="form" novalidate>
         <fieldset>
           <legend>Billing details</legend>
@@ -130,7 +134,11 @@
           </div>
           <div>
             <h4>Contact</h4>
-            <ul id="footerContact"></ul>
+            <ul id="footerContact" class="footer-contact"></ul>
+          </div>
+          <div>
+            <h4>Security</h4>
+            <ul id="footerSecurity" class="footer-security"></ul>
           </div>
           <div>
             <h4>Follow</h4>
@@ -139,6 +147,7 @@
         </div>
         <div class="foot-bottom">
           <span id="footerLegal"></span>
+          <nav id="footerPolicies" class="foot-links" aria-label="Legal"></nav>
           <a href="#" id="openCookie" class="link">Cookie preferences</a>
         </div>
       </div>
