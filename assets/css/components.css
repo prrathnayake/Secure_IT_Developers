@@ -850,10 +850,10 @@ textarea::placeholder {
 }
 
 .service-selector {
-  border: 1px dashed var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  background: color-mix(in srgb, var(--card) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  border-radius: 16px;
+  padding: 20px;
+  background: color-mix(in srgb, var(--card) 65%, transparent);
 }
 
 .service-selector legend {
@@ -862,87 +862,112 @@ textarea::placeholder {
 }
 
 .service-selector__grid {
-  display: flex;
+  display: grid;
   gap: 16px;
-  overflow-x: auto;
-  padding: 4px 4px 12px;
-  scroll-snap-type: x proximity;
-  align-items: stretch;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
-  max-width: 100%;
-  width: min(100%, 520px);
-}
-
-.service-selector__grid::-webkit-scrollbar {
-  height: 8px;
-}
-
-.service-selector__grid::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--brand) 25%, transparent);
-  border-radius: 999px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  padding: 0;
 }
 
 .service-selector__grid .service-option {
-  flex: 0 0 min(320px, calc(100vw - 64px));
-  scroll-snap-align: start;
   height: 100%;
 }
 
-.contact-page .service-selector__grid {
-  margin-inline: auto;
+.contact-page .service-selector {
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
 }
 
-.contact-page > p {
+.contact-page .service-selector__grid .service-option {
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  box-shadow: none;
+  padding: clamp(16px, 3vw, 20px);
+}
+
+.contact-page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 6vw, 64px);
+}
+
+.contact-page__hero {
+  padding-bottom: 0;
+}
+
+.contact-page__intro {
   max-width: 65ch;
   color: var(--muted);
+  margin-top: 12px;
 }
 
-.contact-page .grid-2 {
-  gap: clamp(24px, 5vw, 52px);
-  align-items: start;
+.contact-page__content {
+  background: color-mix(in srgb, var(--card) 55%, transparent);
+  border-block: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
 }
 
-.contact-page .form {
-  width: min(100%, 560px);
-  margin-inline: auto;
-  padding: clamp(24px, 4vw, 38px);
-  border-radius: 22px;
-  background: linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--card) 92%, rgba(37, 99, 235, 0.06)),
-      color-mix(in srgb, #fff 85%, rgba(124, 58, 237, 0.08))
-    );
-  box-shadow: 0 24px 55px rgba(15, 23, 42, 0.14);
+.contact-page__content .container {
+  padding-block: clamp(32px, 6vw, 72px);
+}
+
+.contact-layout {
+  display: grid;
+  gap: clamp(28px, 5vw, 56px);
+}
+
+.contact-form {
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
   border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: 18px;
+  padding: clamp(24px, 4vw, 40px);
+  box-shadow: none;
+  display: grid;
+  gap: 24px;
 }
 
-[data-theme="dark"] .contact-page .form {
-  background: linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--card) 88%, rgba(15, 23, 42, 0.2)),
-      color-mix(in srgb, var(--bg) 90%, rgba(96, 165, 250, 0.12))
-    );
-  box-shadow: 0 32px 55px rgba(2, 6, 23, 0.45);
+[data-theme="dark"] .contact-form {
+  background: color-mix(in srgb, var(--card) 82%, rgba(15, 23, 42, 0.2));
+  border-color: color-mix(in srgb, var(--border) 60%, transparent);
 }
 
-.contact-page .form button {
-  justify-self: flex-start;
+.form-row--split {
+  gap: 16px;
+}
+
+.form-row--split .form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.form-actions .btn {
   min-width: 180px;
 }
 
 .contact-page .contact-info {
-  background: color-mix(in srgb, var(--card) 92%, rgba(37, 99, 235, 0.04));
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  border-radius: 20px;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  border-radius: 18px;
   padding: clamp(24px, 4vw, 36px);
-  box-shadow: var(--shadow);
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
-.contact-page .contact-info h2 {
+[data-theme="dark"] .contact-page .contact-info {
+  background: color-mix(in srgb, var(--card) 85%, rgba(15, 23, 42, 0.2));
+  border-color: color-mix(in srgb, var(--border) 58%, transparent);
+}
+
+.contact-info h2 {
   margin: 0;
+}
+
+.contact-info__lede {
+  margin: 0;
+  color: var(--muted);
 }
 
 .contact-page .contact-info ul {
@@ -974,21 +999,42 @@ textarea::placeholder {
   text-decoration: underline;
 }
 
+.contact-meta {
+  border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  padding-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.contact-meta h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.contact-meta p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.contact-meta .btn {
+  justify-self: flex-start;
+}
+
+@media (min-width: 600px) {
+  .form-row--split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 961px) {
-  .contact-page .grid-2 {
-    grid-template-columns: minmax(0, 560px) minmax(240px, 1fr);
-    justify-content: center;
+  .contact-layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    align-items: start;
   }
 
   .contact-page .contact-info {
     position: sticky;
     top: 120px;
-  }
-}
-
-@media (max-width: 520px) {
-  .service-selector__grid .service-option {
-    flex-basis: min(280px, calc(100vw - 48px));
   }
 }
 .service-option p {
