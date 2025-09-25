@@ -54,5 +54,16 @@ export function getLastOrder() {
 
 export function storeLastOrder(order) {
   if (!order) return;
-  localStorage.setItem("lastOrder", JSON.stringify(order));
+  const services = Array.isArray(order.services)
+    ? order.services.map((service) => ({
+        id: service.id,
+        title: service.title,
+        priceLabel: service.priceLabel || null,
+      }))
+    : [];
+  const payload = {
+    ...order,
+    services,
+  };
+  localStorage.setItem("lastOrder", JSON.stringify(payload));
 }

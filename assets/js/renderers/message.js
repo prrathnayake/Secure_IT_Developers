@@ -26,6 +26,25 @@ export function renderMessagePage(pageKey, data) {
   if (pageKey === "success") {
     const order = getLastOrder();
     if (order?.plan) {
+      const services = Array.isArray(order.services) ? order.services : [];
+      const servicesMarkup = services.length
+        ? `<li><strong>Add-ons:</strong>
+            <ul class="order-services">${services
+              .map(
+                (service) => `
+                  <li>
+                    <span>${service.title}</span>
+                    ${
+                      service.priceLabel
+                        ? `<span class="order-services__price">${service.priceLabel}</span>`
+                        : ""
+                    }
+                  </li>
+                `
+              )
+              .join("")}</ul>
+          </li>`
+        : "";
       orderDetails.innerHTML = `
         <h3>Engagement summary</h3>
         <ul>
@@ -34,6 +53,7 @@ export function renderMessagePage(pageKey, data) {
           <li><strong>Amount:</strong> ${formatCurrency(order.amount, order.currency)}</li>
           <li><strong>Client:</strong> ${order.name || "Pending"}</li>
           <li><strong>Email:</strong> ${order.email || "Pending"}</li>
+          ${servicesMarkup}
         </ul>
         <p class="muted">We’ve emailed a detailed receipt and kickoff checklist.</p>
       `;

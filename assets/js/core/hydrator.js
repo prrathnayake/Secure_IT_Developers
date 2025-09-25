@@ -8,6 +8,7 @@ import { renderMessagePage } from "../renderers/message.js";
 import { renderCheckoutPage } from "../renderers/checkout.js";
 import { renderPaymentPage } from "../renderers/payment.js";
 import { renderDetailPage } from "../renderers/detail.js";
+import { renderLegalPage } from "../renderers/legal.js";
 
 export function hydrateSite(data) {
   const pageKey = document.body?.dataset?.page || "home";
@@ -51,21 +52,59 @@ function applyFooter(data) {
   const contactList = document.getElementById("footerContact");
   if (contactList) {
     contactList.innerHTML = "";
-    if (data.org?.email) {
+    const contactPoints = data.footer?.contactPoints?.length
+      ? data.footer.contactPoints
+      : [
+          {
+            label: "Email",
+            value: data.org?.email,
+            href: data.org?.email ? `mailto:${data.org.email}` : "",
+          },
+          {
+            label: "Phone",
+            value: data.org?.phone,
+            href: data.org?.phone ? telHref(data.org.phone) : "",
+          },
+          {
+            label: "Location",
+            value: data.contact?.locationLabel,
+          },
+        ];
+    contactPoints
+      .filter((item) => item && item.value)
+      .forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "footer-contact__item";
+        li.innerHTML = `
+          ${item.icon ? `<span class="footer-contact__icon">${item.icon}</span>` : ""}
+          <div>
+            <span class="footer-contact__label">${item.label}</span>
+            ${
+              item.href
+                ? `<a href="${item.href}" rel="noopener">${item.value}</a>`
+                : `<span>${item.value}</span>`
+            }
+          </div>
+        `;
+        contactList.appendChild(li);
+      });
+  }
+
+  const securityList = document.getElementById("footerSecurity");
+  if (securityList) {
+    securityList.innerHTML = "";
+    (data.footer?.securityPractices || []).forEach((item) => {
       const li = document.createElement("li");
-      li.innerHTML = `<a href="mailto:${data.org.email}">${data.org.email}</a>`;
-      contactList.appendChild(li);
-    }
-    if (data.org?.phone) {
-      const li = document.createElement("li");
-      li.innerHTML = `<a href="${telHref(data.org.phone)}">${data.org.phone}</a>`;
-      contactList.appendChild(li);
-    }
-    if (data.contact?.locationLabel) {
-      const li = document.createElement("li");
-      li.textContent = data.contact.locationLabel;
-      contactList.appendChild(li);
-    }
+      li.className = "footer-security__item";
+      li.innerHTML = `
+        ${item.icon ? `<span class="footer-security__icon">${item.icon}</span>` : ""}
+        <div>
+          <strong>${item.title}</strong>
+          <span>${item.detail || ""}</span>
+        </div>
+      `;
+      securityList.appendChild(li);
+    });
   }
 
   const social = document.getElementById("footerSocial");
@@ -90,6 +129,22 @@ function applyFooter(data) {
     if (data.footer?.legalNote) parts.push(data.footer.legalNote);
     legal.textContent = parts.filter(Boolean).join(" • ");
   }
+
+  const policies = document.getElementById("footerPolicies");
+  if (policies) {
+    policies.innerHTML = "";
+    const links = data.footer?.policies || [];
+    if (links.length) {
+      const list = document.createElement("ul");
+      list.className = "foot-links__list";
+      links.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${item.href || "#"}">${item.label}</a>`;
+        list.appendChild(li);
+      });
+      policies.appendChild(list);
+    }
+  }
 }
 
 function renderPage(pageKey, data) {
@@ -111,10 +166,13 @@ function renderPage(pageKey, data) {
       renderCheckoutPage(data);
       break;
     case "payment":
-      renderPaymentPage();
+      renderPaymentPage(data);
       break;
     case "detail":
       renderDetailPage(data);
+      break;
+    case "legal":
+      renderLegalPage(data);
       break;
     case "success":
     case "failed":

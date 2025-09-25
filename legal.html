@@ -23,7 +23,8 @@
     <script type="module" src="assets/js/main.js"></script>
     <script id="orgJsonLd" type="application/ld+json"></script>
   </head>
-  <body data-page="detail">
+
+  <body data-page="legal">
     <div id="pageLoader" class="page-loader" aria-hidden="true">
       <div class="page-loader__spinner"></div>
       <p>Loading Secure IT Developers…</p>
@@ -47,18 +48,16 @@
         </button>
       </div>
     </header>
-    <main id="main">
-      <section class="container detail-hero js-reveal" aria-live="polite">
-        <p class="eyebrow" id="detailEyebrow"></p>
-        <h1 id="detailHeading"></h1>
-        <p id="detailSummary"></p>
-        <div class="detail-meta" id="detailMeta"></div>
-      </section>
-      <section class="container detail-body js-reveal">
-        <div id="detailContent"></div>
-        <div id="detailRecommended"></div>
-      </section>
+
+    <main class="container legal-page">
+      <header class="legal-hero js-reveal">
+        <h1 id="legalHeading"></h1>
+        <p id="legalIntro"></p>
+      </header>
+      <div id="legalSections" class="legal-sections"></div>
+      <aside id="legalContact" class="legal-contact"></aside>
     </main>
+
     <footer class="site-footer">
       <div class="container">
         <div class="foot-grid">

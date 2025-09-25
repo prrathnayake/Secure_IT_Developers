@@ -4,56 +4,83 @@ import { byId } from "../core/utils.js";
 export function renderTeamSpotlight(config = {}, team = [], socials = []) {
   const heading = byId("teamSpotlightHeading");
   const copy = byId("teamSpotlightCopy");
-  const card = byId("teamSpotlightCard");
-  if (!card) return;
+  const grid = byId("teamSpotlightGrid");
+  if (!grid) return;
   if (heading) heading.textContent = config.heading || "";
   if (copy) copy.textContent = config.copy || "";
 
-  card.innerHTML = "";
-  const member = team.find((item) => item.id === config.memberId) || team[0];
-  if (!member) {
-    card.innerHTML = "<p class=\"muted\">Team details coming soon.</p>";
-    return;
+  const preferredIds = Array.isArray(config.memberIds)
+    ? config.memberIds
+    : config.memberId
+    ? [config.memberId]
+    : [];
+
+  const orderedMembers = (preferredIds.length ? preferredIds : team.map((m) => m.id))
+    .map((id) => team.find((member) => member.id === id))
+    .filter(Boolean);
+
+  if (!orderedMembers.length && team.length) {
+    orderedMembers.push(team[0]);
   }
 
-  const focus = (member.focus || [])
-    .slice(0, 3)
-    .map((item) => `<li>${item}</li>`)
-    .join("");
-  const testimonial = member.testimonial || "";
-  const portfolio = member.portfolio || member.links?.[0]?.href || "#";
-  card.innerHTML = `
-    <header>
-      <p class="eyebrow">${member.role}</p>
-      <h3>${member.name}</h3>
-      <p class="location">${member.location || ""}</p>
-    </header>
-    <p class="bio">${member.bio || ""}</p>
-    <blockquote class="founder-quote">${testimonial}</blockquote>
-    <h4>Common engagements</h4>
-    <ul class="focus">${focus}</ul>
-    <div class="spotlight-actions">
-      <a class="btn" href="${portfolio}" target="_blank" rel="noopener">View portfolio</a>
-    </div>
-    <div class="spotlight-socials" aria-label="Follow Secure IT Developers"></div>
-  `;
+  grid.innerHTML = "";
 
-  const socialWrap = card.querySelector(".spotlight-socials");
-  if (socialWrap && (socials || []).length) {
-    const list = document.createElement("ul");
-    list.className = "social";
-    (socials || []).forEach((item) => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
-          <span class="icon">${item.icon || ""}</span>
-          <span class="sr-only">${item.label}</span>
-        </a>
-      `;
-      list.appendChild(li);
-    });
-    socialWrap.appendChild(list);
-  }
+  orderedMembers.forEach((member) => {
+    const focus = (member.focus || [])
+      .slice(0, 3)
+      .map((item) => `<li>${item}</li>`)
+      .join("");
+    const testimonial = member.testimonial || "";
+    const portfolio = member.portfolio || member.links?.[0]?.href || "#";
+    const card = document.createElement("article");
+    card.className = "spotlight-card js-reveal";
+    const links = (member.links || [])
+      .map(
+        (link) => `
+          <li>
+            <a href="${link.href}" target="_blank" rel="noopener">
+              ${link.label}
+            </a>
+          </li>
+        `
+      )
+      .join("");
+    card.innerHTML = `
+      <header>
+        <p class="eyebrow">${member.role}</p>
+        <h3>${member.name}</h3>
+        <p class="location">${member.location || ""}</p>
+      </header>
+      <p class="bio">${member.bio || ""}</p>
+      ${testimonial ? `<blockquote class="founder-quote">${testimonial}</blockquote>` : ""}
+      <h4>Common engagements</h4>
+      <ul class="focus">${focus}</ul>
+      <div class="spotlight-actions">
+        <a class="btn" href="${portfolio}" target="_blank" rel="noopener">View portfolio</a>
+      </div>
+      ${links ? `<ul class="spotlight-links">${links}</ul>` : ""}
+      <div class="spotlight-socials" aria-label="Follow Secure IT Developers"></div>
+    `;
+
+    const socialWrap = card.querySelector(".spotlight-socials");
+    if (socialWrap && (socials || []).length) {
+      const list = document.createElement("ul");
+      list.className = "social";
+      socials.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
+            <span class="icon">${item.icon || ""}</span>
+            <span class="sr-only">${item.label}</span>
+          </a>
+        `;
+        list.appendChild(li);
+      });
+      socialWrap.appendChild(list);
+    }
+
+    grid.appendChild(card);
+  });
 }
 
 export function renderFaqs(container, faqs = []) {
