@@ -37,7 +37,19 @@
           </svg>
           <span data-bind="brandName"></span>
         </a>
+        <button
+          id="mobileNavToggle"
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="mobileNav"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
         <nav id="primaryNav" class="primary-nav" role="navigation" aria-label="Primary"></nav>
+        <nav id="mobileNav" class="mobile-nav" role="navigation" aria-label="Mobile" hidden></nav>
         <button
           id="themeToggle"
           class="btn btn-ghost"
@@ -46,6 +58,7 @@
         >
           🌓
         </button>
+
       </div>
     </header>
 
@@ -54,6 +67,11 @@
         <h1>About</h1>
         <p id="aboutIntro"></p>
       </header>
+
+      <section class="about-pillars js-reveal">
+        <h2 id="aboutPillarsHeading"></h2>
+        <div class="pillar-grid" id="aboutPillars"></div>
+      </section>
 
       <section class="about-story js-reveal">
         <div class="grid-2">
@@ -73,6 +91,21 @@
             <p id="aboutMission"></p>
             <h3>Values</h3>
             <ul id="valuesList"></ul>
+          </article>
+          <article>
+            <h2 id="aboutLeadershipHeading"></h2>
+            <p id="aboutLeadershipCopy"></p>
+            <ul id="aboutLeadershipDetails"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="about-assurance js-reveal">
+        <div class="grid-2">
+          <article>
+            <h2 id="aboutAssuranceHeading"></h2>
+            <p id="aboutAssuranceCopy"></p>
+            <ul id="aboutAssuranceList"></ul>
           </article>
           <article>
             <h2>Tech we rely on</h2>
@@ -144,7 +177,7 @@
         <div class="foot-bottom">
           <span id="footerLegal"></span>
           <nav id="footerPolicies" class="foot-links" aria-label="Legal"></nav>
-          <a href="#" id="openCookie" class="link">Cookie preferences</a>
+          <a href="#" id="openCookie" class="link" data-no-loader="true">Cookie preferences</a>
         </div>
       </div>
     </footer>

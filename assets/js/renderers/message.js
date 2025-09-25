@@ -27,6 +27,7 @@ export function renderMessagePage(pageKey, data) {
     const order = getLastOrder();
     if (order?.plan) {
       const services = Array.isArray(order.services) ? order.services : [];
+      const breakdown = order.breakdown || {};
       const servicesMarkup = services.length
         ? `<li><strong>Add-ons:</strong>
             <ul class="order-services">${services
@@ -35,7 +36,9 @@ export function renderMessagePage(pageKey, data) {
                   <li>
                     <span>${service.title}</span>
                     ${
-                      service.priceLabel
+                      Number.isFinite(Number(service.price))
+                        ? `<span class="order-services__price">${formatCurrency(service.price, order.currency)}</span>`
+                        : service.priceLabel
                         ? `<span class="order-services__price">${service.priceLabel}</span>`
                         : ""
                     }
@@ -43,6 +46,19 @@ export function renderMessagePage(pageKey, data) {
                 `
               )
               .join("")}</ul>
+          </li>`
+        : "";
+      // Show a transparent receipt breakdown when available.
+      const breakdownMarkup = breakdown.total
+        ? `<li>
+            <strong>Breakdown:</strong>
+            <ul class="order-services order-services--plain">
+              <li><span>Base plan</span><span class="order-services__price">${formatCurrency(breakdown.base, order.currency)}</span></li>
+              <li><span>Add-on services</span><span class="order-services__price">${formatCurrency(breakdown.addOns, order.currency)}</span></li>
+              <li><span>${data.billing?.staffLabel || "Project staffing"}</span><span class="order-services__price">${formatCurrency(breakdown.staffFee, order.currency)}</span></li>
+              <li><span>Tax (${Math.round((data.billing?.taxRate || 0) * 100)}%)</span><span class="order-services__price">${formatCurrency(breakdown.tax, order.currency)}</span></li>
+              <li><span>Total</span><span class="order-services__price">${formatCurrency(breakdown.total, order.currency)}</span></li>
+            </ul>
           </li>`
         : "";
       orderDetails.innerHTML = `
@@ -54,6 +70,7 @@ export function renderMessagePage(pageKey, data) {
           <li><strong>Client:</strong> ${order.name || "Pending"}</li>
           <li><strong>Email:</strong> ${order.email || "Pending"}</li>
           ${servicesMarkup}
+          ${breakdownMarkup}
         </ul>
         <p class="muted">We’ve emailed a detailed receipt and kickoff checklist.</p>
       `;

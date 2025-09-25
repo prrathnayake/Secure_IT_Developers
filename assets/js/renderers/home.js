@@ -21,6 +21,19 @@ export function renderHomePage(data) {
     heroSecondary.textContent = hero.secondaryCta?.label || "";
     heroSecondary.href = hero.secondaryCta?.href || "#";
   }
+  const heroMetrics = byId("heroMetrics");
+  if (heroMetrics) {
+    heroMetrics.innerHTML = "";
+    // Metrics are data-driven so marketing can refresh proof points without touching HTML.
+    (hero.metrics || []).forEach((metric) => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <strong>${metric.value}</strong>
+        <span>${metric.label}</span>
+      `;
+      heroMetrics.appendChild(div);
+    });
+  }
 
   const servicesHeading = byId("servicesHeading");
   if (servicesHeading) servicesHeading.textContent = page.services?.heading || "";

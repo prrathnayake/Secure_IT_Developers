@@ -4,6 +4,7 @@ import {
   luhnCheck,
   parseExpiry,
   generateReference,
+  calculateOrderTotals,
 } from "../core/utils.js";
 import {
   getSelectedPlan,
@@ -14,10 +15,17 @@ import { logCustomerEvent } from "../core/audit.js";
 
 export function renderPaymentPage(data) {
   const servicesCatalog = data?.serviceCatalog || [];
+  const billing = data?.billing || {};
   const summaryTarget = byId("paymentSummary");
   const mini = byId("miniSummary");
   const plan = getSelectedPlan();
   const selectedServiceIds = getSelectedServices();
+  const messageInfo = byId("messageInfo");
+  if (messageInfo) {
+    messageInfo.textContent = plan
+      ? data.pages?.payment?.message || ""
+      : "No plan selected. Return to pricing to choose your package.";
+  }
 
   const selectedServices = () =>
     selectedServiceIds
@@ -32,10 +40,17 @@ export function renderPaymentPage(data) {
       return;
     }
     const services = selectedServices();
+    // Reuse the same calculation used in checkout to avoid mismatched totals.
+    const totals = plan
+      ? calculateOrderTotals(plan.price, services, billing)
+      : null;
+    const currency = plan?.currency || billing.currency || "AUD";
     const items = services.length
       ? `<ul class="cart-summary__addons">${services
           .map((service) => {
-            const priceLabel = service.priceLabel
+            const priceLabel = Number.isFinite(Number(service.price))
+              ? `<span class="cart-summary__price">${formatCurrency(service.price, currency)}</span>`
+              : service.priceLabel
               ? `<span class="cart-summary__price">${service.priceLabel}</span>`
               : "";
             return `<li><strong>${service.title}</strong>${priceLabel}</li>`;
@@ -52,16 +67,24 @@ export function renderPaymentPage(data) {
         <h4>Included services</h4>
         ${items}
       </div>
-      <p class="cart-summary__note muted">Add-on pricing is finalised with your personalised proposal.</p>
+      <div class="order-breakdown">
+        <div><span>Base plan</span><strong>${formatCurrency(totals.base, currency)}</strong></div>
+        <div><span>Add-on services</span><strong>${formatCurrency(totals.addOns, currency)}</strong></div>
+        <div><span>${billing.staffLabel || "Project staffing"}</span><strong>${formatCurrency(totals.staffFee, currency)}</strong></div>
+        <div><span>Tax (${Math.round((billing.taxRate || 0) * 100)}%)</span><strong>${formatCurrency(totals.tax, currency)}</strong></div>
+      </div>
+      <p class="order-total"><span>Total due today</span><strong>${formatCurrency(totals.total, currency)}</strong></p>
+      ${
+        billing.note
+          ? `<p class="cart-summary__note muted">${billing.note}</p>`
+          : '<p class="cart-summary__note muted">Add-on pricing is finalised with your personalised proposal.</p>'
+      }
     `;
     if (mini) {
-      const addOnLabel = services.length
-        ? `${services.length} add-on${services.length > 1 ? "s" : ""}`
-        : "No add-ons";
       mini.textContent = `${plan.name} — ${formatCurrency(
-        plan.price,
-        plan.currency
-      )} (${addOnLabel})`;
+        totals.total,
+        currency
+      )}`;
     }
   };
 
@@ -107,19 +130,24 @@ export function renderPaymentPage(data) {
     if (status) status.textContent = "Processing secure payment…";
     if (button) button.setAttribute("disabled", "disabled");
     setTimeout(async () => {
+      const services = selectedServices();
+      // Persist the same breakdown so confirmation pages can surface the detail later.
+      const totals = calculateOrderTotals(currentPlan.price, services, billing);
       const order = {
         reference: generateReference(),
         plan: currentPlan,
-        amount: Number(currentPlan.price),
-        currency: currentPlan.currency || "AUD",
+        amount: totals.total,
+        currency: currentPlan.currency || billing.currency || "AUD",
         name: byId("fullname")?.value.trim(),
         email: byId("emailPay")?.value.trim(),
         services: services.map((service) => ({
           id: service.id,
           title: service.title,
           priceLabel: service.priceLabel || null,
+          price: service.price || null,
         })),
         createdAt: new Date().toISOString(),
+        breakdown: totals,
       };
       storeLastOrder(order);
       try {

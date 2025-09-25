@@ -31,8 +31,14 @@ function applyBranding(data) {
 
 function applyNavigation(data, pageKey) {
   const nav = document.getElementById("primaryNav");
+  const mobileNav = document.getElementById("mobileNav");
   if (!nav) return;
   nav.innerHTML = "";
+  if (mobileNav) {
+    mobileNav.innerHTML = "";
+    mobileNav.setAttribute("hidden", "hidden");
+    mobileNav.classList.remove("is-open");
+  }
   (data.navigation || []).forEach((item) => {
     const link = document.createElement("a");
     link.href = item.href;
@@ -42,6 +48,10 @@ function applyNavigation(data, pageKey) {
       link.setAttribute("aria-current", "page");
     }
     nav.appendChild(link);
+    if (mobileNav) {
+      const mobileLink = link.cloneNode(true);
+      mobileNav.appendChild(mobileLink);
+    }
   });
 }
 

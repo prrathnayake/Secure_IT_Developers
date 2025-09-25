@@ -94,6 +94,14 @@
         "We couldn't deliver the quote email. Refresh and try again or email rans.rath@gmail.com.",
     },
   };
+  const billing = {
+    currency: "AUD",
+    taxRate: 0.1,
+    staffRate: 0.08,
+    staffLabel: "Project leadership & QA assurance",
+    note:
+      "GST calculated for Australian clients. Staffing covers senior engineering oversight, QA analysts, and delivery management.",
+  };
   const footer = {
     about:
       "Melbourne-based engineers delivering security-first web, mobile, and platform builds with startup-friendly collaboration.",
@@ -214,6 +222,11 @@
         "Launch marketing sites, mobile apps, and API platforms with startup-speed delivery and enterprise-grade hardening led by Pasan Rathnayake.",
       primaryCta: { label: "Explore packages", href: "pricing.html" },
       secondaryCta: { label: "Book a discovery call", href: "contact.html" },
+      metrics: [
+        { value: "40+", label: "Launches hardened" },
+        { value: "120%", label: "Average ROI year one" },
+        { value: "1 day", label: "Kickoff turnaround" },
+      ],
     },
     services: {
       heading: "What we deliver",
@@ -405,6 +418,39 @@
       "We architect and build resilient digital products for founders that value security, performance, and transparent delivery.",
     mission:
       "Our mission is to embed security and reliability into every product we ship while keeping collaboration transparent and outcomes data-driven.",
+    pillarsHeading: "Why founders partner with us",
+    pillars: [
+      {
+        title: "Security leadership on tap",
+        detail:
+          "Access senior security engineers who join ceremonies, shape roadmaps, and document controls alongside your product team.",
+        highlights: [
+          "Security champions inside every squad",
+          "Runbooks and response playbooks documented",
+          "Audit support with evidence-ready artefacts",
+        ],
+      },
+      {
+        title: "Product strategy meets delivery",
+        detail:
+          "Blend product strategy, design, and engineering so experiments land fast without sacrificing resilience.",
+        highlights: [
+          "Design sprints with measurable KPIs",
+          "Weekly growth and performance reviews",
+          "Accessibility baked into QA gates",
+        ],
+      },
+      {
+        title: "Transparency from kickoff to launch",
+        detail:
+          "Shared dashboards show burn, velocity, incidents, and ROI so stakeholders stay aligned.",
+        highlights: [
+          "Single source of truth for delivery metrics",
+          "Daily async updates with loom recaps",
+          "Post-launch retros with documented wins",
+        ],
+      },
+    ],
     story: {
       copy:
         "Secure IT Developers began as Pasan's consultancy helping regulated startups ship faster without sacrificing compliance. Today we operate as an embedded product partner for founders that need security, design, and growth thinking in one squad.",
@@ -494,6 +540,27 @@
       "Transparent collaboration",
       "Continuous improvement",
     ],
+    leadership: {
+      heading: "Leadership & governance",
+      copy:
+        "Founder-led delivery keeps decision-makers close to the work. We pair a dedicated engagement lead with senior engineers, designers, and analysts so you always know who is accountable.",
+      details: [
+        "Every engagement includes a delivery lead, QA analyst, and security champion.",
+        "Fortnightly governance reviews cover scope, risk, and budget health.",
+        "Clients receive SOC2-aligned documentation packages at key milestones.",
+      ],
+    },
+    assurance: {
+      heading: "Assurance & ways of working",
+      copy:
+        "We treat every build as mission critical. Tooling, secrets, and client data are isolated per engagement with least-privilege access.",
+      commitments: [
+        "Dedicated compliance workspace with access logs",
+        "Secure vault for credential exchange and rotation",
+        "Signed NDAs and background checks for all staff",
+        "Structured incident communication within 1 hour",
+      ],
+    },
     certifications: [
       "AWS Certified Solutions Architect – Professional",
       "Certified Information Systems Security Professional (CISSP)",
@@ -600,6 +667,30 @@
         "Toggle between product types to explore the specialist services that keep each engagement secure, optimised, and compliant after launch.",
       empty: "Service recommendations are being finalised. Check back shortly.",
       linkLabel: "Explore service details",
+    },
+    customEngagement: {
+      eyebrow: "Bespoke programs",
+      heading: "Design a custom engagement around your roadmap",
+      copy:
+        "Mix and match retainers, discovery sprints, and compliance support. We assemble the right specialists to move your KPI targets while protecting customer data.",
+      highlights: [
+        "Dedicated engagement lead and security champion",
+        "Fortnightly ROI reporting with agreed KPIs",
+        "Shared delivery board with budget and runway visibility",
+      ],
+      primaryCta: { label: "Schedule a planning session", href: "contact.html" },
+      secondaryCta: {
+        label: "Browse delivery approach",
+        href: "about.html#aboutApproach",
+      },
+      aside: {
+        title: "What to expect",
+        metrics: [
+          { label: "Average payback", value: "4.2 months" },
+          { label: "Security incidents", value: "0 critical in 36 months" },
+          { label: "Client NPS", value: "+72" },
+        ],
+      },
     },
     standalone: {
       eyebrow: "Need help without a package?",
@@ -1249,6 +1340,7 @@
       title: "Security & compliance audit",
       description:
         "Deep-dive review of your web, mobile, or API stack with actionable remediation steps mapped to OWASP and ISO controls.",
+      price: 3600,
       priceLabel: "From $3,600",
       category: "Security",
       benefits: [
@@ -1262,6 +1354,7 @@
       title: "Technical SEO & content sprint",
       description:
         "Optimise Core Web Vitals, schema, and editorial workflows to lift organic visibility and conversions.",
+      price: 2950,
       priceLabel: "From $2,950",
       category: "Growth",
       benefits: [
@@ -1275,6 +1368,7 @@
       title: "Performance hardening",
       description:
         "Stress-test and tune critical journeys with profiling, caching strategies, and infrastructure optimisation.",
+      price: 2400,
       priceLabel: "From $2,400",
       category: "Engineering",
       benefits: [
@@ -1288,6 +1382,7 @@
       title: "API & integration build",
       description:
         "Design and ship robust REST or GraphQL endpoints with documentation, auth, and monitoring.",
+      price: 4200,
       priceLabel: "From $4,200",
       category: "Engineering",
       benefits: [
@@ -1301,6 +1396,7 @@
       title: "Mobile polish sprint",
       description:
         "Stabilise and improve existing Flutter or React Native apps with performance tuning and UX refinements.",
+      price: 3300,
       priceLabel: "From $3,300",
       category: "Mobile",
       benefits: [
@@ -1314,6 +1410,7 @@
       title: "Accessibility & UX review",
       description:
         "Audit flows against WCAG 2.2 AA, deliver remediation tickets, and coach teams on inclusive design.",
+      price: 1750,
       priceLabel: "From $1,750",
       category: "Experience",
       benefits: [
@@ -1399,6 +1496,22 @@
       q: "Can you handle compliance requirements?",
       a: "Absolutely. We design with SOC2, ISO 27001, HIPAA, GDPR, and PCI DSS controls in mind, and collaborate with your auditors when needed.",
     },
+    {
+      q: "What does onboarding look like?",
+      a: "We run a structured onboarding covering access, tooling, security checks, and project goals within the first 48 hours so delivery can start immediately.",
+    },
+    {
+      q: "Do you offer white-label partnerships?",
+      a: "Yes. Agencies partner with us for secure builds while retaining client ownership. NDAs and co-branded reporting are part of the package.",
+    },
+    {
+      q: "How do you communicate progress?",
+      a: "Clients receive weekly live reviews, async Loom walkthroughs, and shared dashboards covering backlog, burn, risks, and performance metrics.",
+    },
+    {
+      q: "Can we scale the team mid-engagement?",
+      a: "Absolutely. Our bench model lets you scale designers, engineers, and analysts up or down with two weeks notice without losing context.",
+    },
   ];
 
   window.DATA = {
@@ -1409,6 +1522,7 @@
     contact,
     forms,
     footer,
+    billing,
     team,
     pricingGroups,
     pages,

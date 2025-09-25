@@ -1,4 +1,4 @@
-import { byId, formatCurrency } from "../core/utils.js";
+import { byId, formatCurrency, calculateOrderTotals } from "../core/utils.js";
 import {
   getSelectedPlan,
   getSelectedServices,
@@ -17,6 +17,7 @@ export function renderCheckoutPage(data) {
   }
   const summaryTarget = byId("orderSummary");
   const servicesCatalog = data.serviceCatalog || [];
+  const billing = data.billing || {};
   let selectedServiceIds = getSelectedServices();
   const validSelected = selectedServiceIds.filter((id) =>
     servicesCatalog.some((service) => service.id === id)
@@ -35,21 +36,38 @@ export function renderCheckoutPage(data) {
     const selectedDetails = selectedServiceIds
       .map((id) => servicesCatalog.find((service) => service.id === id))
       .filter(Boolean);
+    // Calculate totals so the customer always sees how add-ons, staffing, and taxes combine.
+    const totals = calculateOrderTotals(plan.price, selectedDetails, billing);
+    const currency = plan.currency || billing.currency || "AUD";
+    const taxLabel = `${Math.round((billing.taxRate || 0) * 100)}%`;
     const addons = selectedDetails.length
       ? `<div class="order-addons order-addons--list"><h3>Added services</h3><ul>${selectedDetails
           .map((service) => {
-            const priceLabel = service.priceLabel
+            const priceLabel = Number.isFinite(Number(service.price))
+              ? `<span>${formatCurrency(service.price, currency)}</span>`
+              : service.priceLabel
               ? `<span>${service.priceLabel}</span>`
               : "";
             return `<li><strong>${service.title}</strong>${priceLabel}</li>`;
           })
           .join("")}</ul></div>`
       : '<p class="order-addons order-addons--empty muted">No extra services selected yet. Add services below to include them in your quote.</p>';
+    const note = billing.note
+      ? `<p class="order-note muted">${billing.note}</p>`
+      : "";
     summaryTarget.innerHTML = `
       <h2>${plan.name}</h2>
       <p class="price">${formatCurrency(plan.price, plan.currency)}</p>
       <p class="muted">Selected at ${new Date(plan.time).toLocaleString()}</p>
       ${addons}
+      <div class="order-breakdown">
+        <div><span>Base plan</span><strong>${formatCurrency(totals.base, currency)}</strong></div>
+        <div><span>Add-on services</span><strong>${formatCurrency(totals.addOns, currency)}</strong></div>
+        <div><span>${billing.staffLabel || "Project staffing"}</span><strong>${formatCurrency(totals.staffFee, currency)}</strong></div>
+        <div><span>Tax (${taxLabel})</span><strong>${formatCurrency(totals.tax, currency)}</strong></div>
+      </div>
+      <p class="order-total"><span>Total investment</span><strong>${formatCurrency(totals.total, currency)}</strong></p>
+      ${note}
     `;
   };
 
@@ -88,6 +106,7 @@ export function renderCheckoutPage(data) {
       recommendedIds: recommendedSet,
       detailLink: true,
       linkLabel: "View service details",
+      scrollable: true,
       onToggle: (serviceId) => {
         selectedServiceIds = toggleSelectedService(serviceId);
         updateSummary();

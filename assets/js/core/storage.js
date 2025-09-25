@@ -59,6 +59,7 @@ export function storeLastOrder(order) {
         id: service.id,
         title: service.title,
         priceLabel: service.priceLabel || null,
+        price: service.price || null,
       }))
     : [];
   const payload = {
