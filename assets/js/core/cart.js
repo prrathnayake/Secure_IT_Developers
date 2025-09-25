@@ -12,6 +12,74 @@ let serviceIndex = new Map();
 let cartIds = new Set();
 let statusTimeout;
 let billingCurrency = "AUD";
+let lastCartTrigger = null;
+
+function ensureMobileActionsContainer() {
+  const mobileNav = document.getElementById("mobileNav");
+  if (!mobileNav) return null;
+  let actions = mobileNav.querySelector("[data-mobile-actions]");
+  if (!actions) {
+    actions = document.createElement("div");
+    actions.className = "mobile-nav__actions";
+    actions.setAttribute("data-mobile-actions", "");
+    mobileNav.appendChild(actions);
+  }
+  return actions;
+}
+
+function closeMobileNav() {
+  const mobileNav = document.getElementById("mobileNav");
+  const toggle = document.getElementById("mobileNavToggle");
+  if (!mobileNav || !mobileNav.classList.contains("is-open")) return;
+  mobileNav.classList.remove("is-open");
+  mobileNav.setAttribute("hidden", "hidden");
+  document.body.classList.remove("nav-open");
+  if (toggle) {
+    toggle.setAttribute("aria-expanded", "false");
+  }
+}
+
+function ensureMobileCartToggle() {
+  const actions = ensureMobileActionsContainer();
+  if (!actions) return null;
+  let button = actions.querySelector("[data-cart-nav]");
+  if (!button) {
+    button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-ghost cart-toggle";
+    button.setAttribute("data-cart-nav", "");
+    button.setAttribute("data-cart-trigger", "");
+    button.setAttribute("aria-haspopup", "dialog");
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", "View cart");
+    button.innerHTML = `
+      <span class="cart-toggle__icon" aria-hidden="true">🛒</span>
+      <span class="cart-toggle__label">Cart</span>
+      <span class="cart-count" data-cart-count aria-live="polite">0</span>
+    `;
+    actions.prepend(button);
+  }
+  if (!button.dataset.boundCartToggle) {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      lastCartTrigger = event.currentTarget;
+      closeMobileNav();
+      toggleCartDrawer();
+    });
+    button.dataset.boundCartToggle = "true";
+  }
+  return button;
+}
+
+function toggleCartDrawer() {
+  const drawer = byId(CART_DRAWER_ID);
+  if (!drawer) return;
+  if (drawer.classList.contains("is-open")) {
+    closeDrawer();
+  } else {
+    openDrawer();
+  }
+}
 
 function ensureCartToggle() {
   const cartSlot = document.querySelector("[data-cart-slot]");
@@ -28,19 +96,20 @@ function ensureCartToggle() {
     toggle.innerHTML = `
       <span class="cart-toggle__icon" aria-hidden="true">🛒</span>
       <span class="cart-toggle__label">Cart</span>
-      <span class="cart-count" id="${CART_COUNT_ID}" aria-live="polite">0</span>
+      <span class="cart-count" id="${CART_COUNT_ID}" data-cart-count aria-live="polite">0</span>
     `;
     cartSlot.appendChild(toggle);
   }
-  toggle.addEventListener("click", () => {
-    const drawer = byId(CART_DRAWER_ID);
-    if (!drawer) return;
-    if (drawer.classList.contains("is-open")) {
-      closeDrawer();
-    } else {
-      openDrawer();
-    }
-  });
+  toggle.setAttribute("data-cart-trigger", "");
+  if (!toggle.dataset.boundCartToggle) {
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      lastCartTrigger = event.currentTarget;
+      toggleCartDrawer();
+    });
+    toggle.dataset.boundCartToggle = "true";
+  }
+  ensureMobileCartToggle();
   return toggle;
 }
 
@@ -116,11 +185,12 @@ function buildDrawer() {
 
 function openDrawer() {
   const drawer = byId(CART_DRAWER_ID);
-  const toggle = byId("cartToggle");
-  if (!drawer || !toggle) return;
+  if (!drawer) return;
   drawer.classList.add("is-open");
   drawer.setAttribute("aria-hidden", "false");
-  toggle.setAttribute("aria-expanded", "true");
+  document
+    .querySelectorAll("[data-cart-trigger]")
+    .forEach((trigger) => trigger.setAttribute("aria-expanded", "true"));
   const firstFocusable = drawer.querySelector(
     "button, a, input, textarea, select, [tabindex]:not([tabindex='-1'])"
   );
@@ -131,19 +201,31 @@ function openDrawer() {
 
 function closeDrawer() {
   const drawer = byId(CART_DRAWER_ID);
-  const toggle = byId("cartToggle");
-  if (!drawer || !toggle) return;
+  if (!drawer) return;
   drawer.classList.remove("is-open");
   drawer.setAttribute("aria-hidden", "true");
-  toggle.setAttribute("aria-expanded", "false");
-  toggle.focus();
+  document
+    .querySelectorAll("[data-cart-trigger]")
+    .forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+  if (lastCartTrigger && typeof lastCartTrigger.focus === "function") {
+    lastCartTrigger.focus();
+  }
+  lastCartTrigger = null;
 }
 
 function updateBadge() {
+  const count = String(cartIds.size);
   const countEl = byId(CART_COUNT_ID);
   if (countEl) {
-    countEl.textContent = String(cartIds.size);
+    countEl.textContent = count;
   }
+  document
+    .querySelectorAll("[data-cart-count]")
+    .forEach((element) => {
+      if (element.id !== CART_COUNT_ID) {
+        element.textContent = count;
+      }
+    });
   const checkoutButton = byId("cartCheckoutButton");
   if (checkoutButton) {
     checkoutButton.classList.toggle("is-disabled", !cartIds.size);
