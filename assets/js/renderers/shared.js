@@ -109,25 +109,99 @@ export function populateContactDetails(data) {
 }
 
 export function renderOtherServices(target, services = [], options = {}) {
-  const { showCtas = false, linkLabel = "View details" } = options;
+  const {
+    showCtas = false,
+    linkLabel = "View details",
+    selectable = false,
+    selectedIds = [],
+    recommendedIds = new Set(),
+    onToggle,
+    detailLink = false,
+  } = options;
   if (!target) return;
+  const selectedSet = new Set(selectedIds);
+  const recommendedSet =
+    recommendedIds instanceof Set
+      ? recommendedIds
+      : new Set(Array.isArray(recommendedIds) ? recommendedIds : []);
   target.innerHTML = "";
   services.forEach((service) => {
     const card = document.createElement("article");
     card.className = "service-chip";
-    const price = service.priceLabel
-      ? `<span class="service-chip__price">${service.priceLabel}</span>`
-      : "";
-    card.innerHTML = `
-      <h4>${service.title}</h4>
-      <p>${service.description}</p>
-      ${price}
-      ${
-        showCtas
-          ? `<a class="btn btn-ghost" href="detail.html?type=service&id=${service.id}">${linkLabel}</a>`
-          : ""
+    if (selectable) card.classList.add("service-chip--selectable");
+
+    const header = document.createElement("header");
+    header.className = "service-chip__header";
+    const title = document.createElement("h4");
+    title.textContent = service.title;
+    header.appendChild(title);
+
+    if (recommendedSet.has(service.id) || service.priceLabel) {
+      const meta = document.createElement("div");
+      meta.className = "service-chip__meta";
+      if (recommendedSet.has(service.id)) {
+        const badge = document.createElement("span");
+        badge.className = "service-chip__badge";
+        badge.textContent = "Recommended";
+        meta.appendChild(badge);
       }
-    `;
+      if (service.priceLabel) {
+        const price = document.createElement("span");
+        price.className = "service-chip__price";
+        price.textContent = service.priceLabel;
+        meta.appendChild(price);
+      }
+      header.appendChild(meta);
+    }
+
+    card.appendChild(header);
+
+    if (service.description) {
+      const description = document.createElement("p");
+      description.textContent = service.description;
+      card.appendChild(description);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "service-chip__actions";
+    let hasActions = false;
+
+    if (selectable) {
+      const isSelected = selectedSet.has(service.id);
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = `btn ${isSelected ? "" : "btn-ghost"} service-chip__toggle`;
+      toggle.textContent = isSelected ? "Remove from quote" : "Add to quote";
+      toggle.setAttribute("aria-pressed", String(isSelected));
+      toggle.addEventListener("click", () => {
+        if (typeof onToggle === "function") {
+          onToggle(service.id);
+        }
+      });
+      actions.appendChild(toggle);
+      hasActions = true;
+    }
+
+    if (showCtas) {
+      const cta = document.createElement("a");
+      cta.className = "btn btn-ghost";
+      cta.href = `detail.html?type=service&id=${service.id}`;
+      cta.textContent = linkLabel;
+      actions.appendChild(cta);
+      hasActions = true;
+    } else if (detailLink) {
+      const link = document.createElement("a");
+      link.className = "detail-link";
+      link.href = `detail.html?type=service&id=${service.id}`;
+      link.textContent = linkLabel;
+      actions.appendChild(link);
+      hasActions = true;
+    }
+
+    if (hasActions) {
+      card.appendChild(actions);
+    }
+
     target.appendChild(card);
   });
 }

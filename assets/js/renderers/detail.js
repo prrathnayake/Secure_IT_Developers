@@ -1,5 +1,5 @@
 import { byId, formatCurrency } from "../core/utils.js";
-import { savePlanSelection } from "../core/storage.js";
+import { savePlanSelection, setSelectedServices } from "../core/storage.js";
 
 export function renderDetailPage(data) {
   const container = byId("detailContent");
@@ -106,11 +106,9 @@ export function renderDetailPage(data) {
         name: `${group.label} – ${plan.label}`,
         price: Number(plan.price),
         currency: plan.currency,
+        recommendedServices: plan.recommendedServices || [],
       });
-      localStorage.setItem(
-        "selectedServices",
-        JSON.stringify(plan.recommendedServices || [])
-      );
+      setSelectedServices(plan.recommendedServices || []);
       window.location.href = "checkout.html";
     });
     actions.appendChild(selectButton);
@@ -122,18 +120,13 @@ export function renderDetailPage(data) {
     article.appendChild(actions);
     container.appendChild(article);
 
-    if (recommended && (plan.recommendedServices || []).length) {
-      const headingEl = document.createElement("h2");
-      headingEl.textContent = "Suggested services to pair with this plan";
-      recommended.appendChild(headingEl);
-      const grid = document.createElement("div");
-      grid.className = "detail-grid";
-      (plan.recommendedServices || []).forEach((serviceId) => {
-        const service = serviceCatalog.find((item) => item.id === serviceId);
-        if (!service) return;
-        grid.appendChild(createServiceCard(service));
-      });
-      recommended.appendChild(grid);
+    if (recommended) {
+      renderRecommendedServices(
+        recommended,
+        plan.recommendedServices || [],
+        serviceCatalog
+      );
+      appendTeamSpotlight(recommended, data.team || []);
     }
 
     return;
@@ -170,23 +163,73 @@ export function renderDetailPage(data) {
       });
     });
 
-    if (recommended && relatedPlans.length) {
-      const headingEl = document.createElement("h2");
-      headingEl.textContent = "Included in these packaged engagements";
-      recommended.appendChild(headingEl);
-      const list = document.createElement("ul");
-      list.className = "focus";
-      relatedPlans.forEach(({ group, plan }) => {
-        const li = document.createElement("li");
-        li.innerHTML = `<a class="detail-link" href="detail.html?type=plan&id=${group.id}-${plan.id}">${group.label} – ${plan.label}</a>`;
-        list.appendChild(li);
-      });
-      recommended.appendChild(list);
+    if (recommended) {
+      if (relatedPlans.length) {
+        const headingEl = document.createElement("h2");
+        headingEl.textContent = "Included in these packaged engagements";
+        recommended.appendChild(headingEl);
+        const list = document.createElement("ul");
+        list.className = "focus";
+        relatedPlans.forEach(({ group, plan }) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<a class="detail-link" href="detail.html?type=plan&id=${group.id}-${plan.id}">${group.label} – ${plan.label}</a>`;
+          list.appendChild(li);
+        });
+        recommended.appendChild(list);
+      }
+      appendTeamSpotlight(recommended, data.team || []);
     }
     return;
   }
 
   showFallback("We couldn't determine which detail to show. Please try again.");
+
+  function renderRecommendedServices(target, ids = [], catalog = []) {
+    target.innerHTML = "";
+    if (!ids.length) return;
+    const headingEl = document.createElement("h2");
+    headingEl.textContent = "Suggested services to pair with this plan";
+    target.appendChild(headingEl);
+    const grid = document.createElement("div");
+    grid.className = "detail-grid";
+    ids.forEach((serviceId) => {
+      const service = catalog.find((item) => item.id === serviceId);
+      if (!service) return;
+      grid.appendChild(createServiceCard(service));
+    });
+    target.appendChild(grid);
+  }
+
+  function appendTeamSpotlight(target, team = []) {
+    if (!target || !team.length) return;
+    if (target.querySelector(".detail-card--team")) return;
+    const card = document.createElement("article");
+    card.className = "detail-card detail-card--team";
+    card.innerHTML = `
+      <header>
+        <p class="eyebrow">Security leadership</p>
+        <h3>This is our team</h3>
+      </header>
+      <ul class="team-list">
+        ${team
+          .map((member) => {
+            const location = member.location ? `<span class="team-member__location">${member.location}</span>` : "";
+            return `
+              <li>
+                <div>
+                  <strong>${member.name}</strong>
+                  <span class="team-member__role">${member.role || ""}</span>
+                  ${location}
+                </div>
+                <p>${member.bio || ""}</p>
+              </li>
+            `;
+          })
+          .join("")}
+      </ul>
+    `;
+    target.appendChild(card);
+  }
 
   function createServiceCard(service, options = {}) {
     const { includeLink = true } = options;

@@ -12,6 +12,18 @@ export function updateHeadMeta(data, pageKey) {
   setMeta("property", "og:description", description);
   setMeta("name", "twitter:title", title);
   setMeta("name", "twitter:description", description);
+  const siteName = data.seo?.siteName || data.org?.name || "";
+  if (siteName) setMeta("property", "og:site_name", siteName);
+  const author = data.seo?.author || data.org?.name || "";
+  if (author) setMeta("name", "author", author);
+  const robots = data.seo?.robots;
+  if (robots) setMeta("name", "robots", robots);
+  const themeColor = data.seo?.themeColor;
+  if (themeColor) setMeta("name", "theme-color", themeColor);
+  const twitterSite = data.seo?.twitterHandle;
+  if (twitterSite) setMeta("name", "twitter:site", twitterSite);
+  const twitterCreator = data.seo?.twitterCreator || twitterSite;
+  if (twitterCreator) setMeta("name", "twitter:creator", twitterCreator);
 
   const canonical = document.querySelector("link[rel='canonical']");
   const url = buildUrl(meta.path || pageKey, data.org?.url);

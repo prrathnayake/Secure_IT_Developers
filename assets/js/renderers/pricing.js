@@ -1,5 +1,5 @@
 import { byId, formatCurrency } from "../core/utils.js";
-import { savePlanSelection } from "../core/storage.js";
+import { savePlanSelection, setSelectedServices } from "../core/storage.js";
 import { renderOtherServices } from "./shared.js";
 
 export function renderPricingPage(data) {
@@ -99,8 +99,9 @@ export function renderPricingPage(data) {
           name: `${group.label} – ${plan.label}`,
           price: Number(plan.price),
           currency: plan.currency,
+          recommendedServices: plan.recommendedServices || [],
         });
-        localStorage.setItem("selectedServices", JSON.stringify(plan.recommendedServices || []));
+        setSelectedServices(plan.recommendedServices || []);
         window.location.href = "checkout.html";
       });
       section.appendChild(card);

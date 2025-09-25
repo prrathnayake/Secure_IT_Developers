@@ -1,3 +1,5 @@
+const SELECTED_SERVICES_KEY = "selectedServices";
+
 export function savePlanSelection(plan) {
   if (!plan) return;
   const payload = {
@@ -13,6 +15,33 @@ export function getSelectedPlan() {
   } catch (error) {
     return null;
   }
+}
+
+export function getSelectedServices() {
+  try {
+    return JSON.parse(localStorage.getItem(SELECTED_SERVICES_KEY) || "[]");
+  } catch (error) {
+    return [];
+  }
+}
+
+export function setSelectedServices(services = []) {
+  const unique = Array.from(
+    new Set((Array.isArray(services) ? services : []).filter(Boolean))
+  );
+  localStorage.setItem(SELECTED_SERVICES_KEY, JSON.stringify(unique));
+  return unique;
+}
+
+export function toggleSelectedService(id) {
+  if (!id) return getSelectedServices();
+  const current = new Set(getSelectedServices());
+  if (current.has(id)) {
+    current.delete(id);
+  } else {
+    current.add(id);
+  }
+  return setSelectedServices([...current]);
 }
 
 export function getLastOrder() {
