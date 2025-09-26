@@ -106,40 +106,33 @@
     </main>
 
     <footer class="site-footer">
-      <div class="container">
-        <div class="foot-grid">
-          <div class="foot-about">
-            <h4>About</h4>
-            <p id="footerAbout"></p>
-          </div>
-          <div class="foot-table">
-            <table class="footer-info-table">
-              <thead>
-                <tr>
-                  <th scope="col">Contact</th>
-                  <th scope="col">Security</th>
-                  <th scope="col">Follow</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <ul id="footerContact" class="footer-contact"></ul>
-                  </td>
-                  <td>
-                    <ul id="footerSecurity" class="footer-security"></ul>
-                  </td>
-                  <td>
-                    <ul class="social" id="footerSocial"></ul>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div class="footer-top">
+        <div class="container footer-top__content">
+          <p class="footer-top__lead">Get connected with us on social networks</p>
+          <ul class="footer-social social" id="footerSocial"></ul>
         </div>
-        <div class="foot-bottom">
-          <span id="footerLegal"></span>
+      </div>
+      <div class="footer-main container">
+        <div class="footer-column footer-column--about">
+          <h4>About</h4>
+          <p id="footerAbout"></p>
+        </div>
+        <div class="footer-column">
+          <h4>Contact</h4>
+          <ul id="footerContact" class="footer-contact"></ul>
+        </div>
+        <div class="footer-column">
+          <h4>Security</h4>
+          <ul id="footerSecurity" class="footer-security"></ul>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
           <nav id="footerPolicies" class="foot-links" aria-label="Legal"></nav>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container footer-bottom__content">
+          <span id="footerLegal"></span>
           <a href="#" id="openCookie" class="link" data-no-loader="true">Cookie preferences</a>
         </div>
       </div>

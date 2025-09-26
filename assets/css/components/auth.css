@@ -1,16 +1,22 @@
-  .compare-row {
+@media (max-width: 768px) {
+  .compare-matrix {
+    min-width: 0;
+  }
+
+  .footer-main {
     grid-template-columns: 1fr;
   }
-  .foot-grid {
-    grid-template-columns: 1fr;
-  }
-  .foot-bottom {
+
+  .footer-bottom__content {
     flex-direction: column;
     align-items: flex-start;
   }
-  .foot-links {
-    margin-left: 0;
+
+  .footer-top__content {
+    flex-direction: column;
+    align-items: flex-start;
   }
+
   .custom-engagement {
     grid-template-columns: 1fr;
   }
