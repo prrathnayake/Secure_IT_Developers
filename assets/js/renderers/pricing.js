@@ -283,40 +283,69 @@ export function renderCompareTable(data) {
     });
     const category = categories.find((item) => item.id === id) || categories[0];
     if (!category) return;
+    const columnCount = category.columns?.length || 0;
     table.innerHTML = "";
     const summary = document.createElement("p");
     summary.className = "compare-summary";
     summary.textContent = category.summary || "";
     table.appendChild(summary);
-    const grid = document.createElement("div");
-    grid.className = "compare-grid";
-    const header = document.createElement("div");
-    header.className = "compare-row compare-row--header";
-    header.innerHTML =
-      '<span class="compare-label">Criteria</span>' +
-      (category.columns || [])
-        .map((column) => {
-          const plan = findPlanDetails(data, column.planId);
-          const price = plan ? formatCurrency(plan.price, plan.currency) : "";
-          return `<span><strong>${column.label}</strong><em>${price}</em></span>`;
-        })
-        .join("");
-    grid.appendChild(header);
-    (category.rows || []).forEach((row) => {
-      const div = document.createElement("div");
-      div.className = "compare-row";
-      const label = document.createElement("span");
-      label.className = "compare-label";
-      label.textContent = row.label;
-      div.appendChild(label);
-      (row.values || []).forEach((value) => {
-        const span = document.createElement("span");
-        span.textContent = value;
-        div.appendChild(span);
-      });
-      grid.appendChild(div);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "compare-table__wrapper";
+
+    const matrix = document.createElement("table");
+    matrix.className = "compare-matrix compare-matrix--cols-" + columnCount;
+
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+
+    const featureHeading = document.createElement("th");
+    featureHeading.scope = "col";
+    featureHeading.className = "compare-matrix__feature";
+    featureHeading.textContent = "Criteria";
+    headRow.appendChild(featureHeading);
+
+    (category.columns || []).forEach((column, columnIndex) => {
+      const plan = findPlanDetails(data, column.planId);
+      const price = plan ? formatCurrency(plan.price, plan.currency) : "";
+      const th = document.createElement("th");
+      th.scope = "col";
+      th.className = `compare-matrix__col compare-matrix__col--${columnIndex + 1}`;
+      th.innerHTML = `
+        <span class="compare-matrix__plan">${column.label}</span>
+        <span class="compare-matrix__price">${price}</span>
+      `;
+      headRow.appendChild(th);
     });
-    table.appendChild(grid);
+
+    thead.appendChild(headRow);
+    matrix.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    (category.rows || []).forEach((row) => {
+      const tr = document.createElement("tr");
+      const featureCell = document.createElement("th");
+      featureCell.scope = "row";
+      featureCell.className = "compare-matrix__feature";
+      featureCell.textContent = row.label;
+      tr.appendChild(featureCell);
+
+      for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
+        const value = row.values?.[columnIndex] || "—";
+        const td = document.createElement("td");
+        td.className = `compare-matrix__value compare-matrix__col--${
+          columnIndex + 1
+        }`;
+        td.textContent = value;
+        tr.appendChild(td);
+      }
+
+      tbody.appendChild(tr);
+    });
+
+    matrix.appendChild(tbody);
+    wrapper.appendChild(matrix);
+    table.appendChild(wrapper);
   };
   categories.forEach((category, index) => {
     const btn = document.createElement("button");
