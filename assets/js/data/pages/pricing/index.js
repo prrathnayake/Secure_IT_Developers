@@ -95,9 +95,9 @@ export const pricingPage = {
         summary:
           "Move from launch-ready pages to global storytelling engines with experimentation built in.",
         columns: [
-          { planId: "web-launch", label: "Launch" },
-          { planId: "web-growth", label: "Growth" },
-          { planId: "web-scale", label: "Scale" },
+          { planId: "web-launch", label: "Starter package" },
+          { planId: "web-growth", label: "Growth package" },
+          { planId: "web-scale", label: "Scale package" },
         ],
         rows: [
           {
@@ -148,9 +148,9 @@ export const pricingPage = {
         summary:
           "From MVPs in the app stores to enterprise-ready cross-platform experiences.",
         columns: [
-          { planId: "mobile-launch", label: "Launch" },
-          { planId: "mobile-growth", label: "Growth" },
-          { planId: "mobile-scale", label: "Scale" },
+          { planId: "mobile-launch", label: "Starter package" },
+          { planId: "mobile-growth", label: "Growth package" },
+          { planId: "mobile-scale", label: "Scale package" },
         ],
         rows: [
           {
@@ -173,8 +173,7 @@ export const pricingPage = {
             label: "Engagement",
             values: [
               "Analytics + crash monitoring",
-              "Store submission + release pipeline",
-              "CI/CD automation with QA suite",
+              "CI/CD automation with release pipeline",
               "24/7 observability with incident runbooks",
             ],
           },
@@ -186,9 +185,9 @@ export const pricingPage = {
         summary:
           "Scale from secure carts to multi-market commerce engines.",
         columns: [
-          { planId: "ecom-launch", label: "Launch" },
-          { planId: "ecom-growth", label: "Growth" },
-          { planId: "ecom-scale", label: "Scale" },
+          { planId: "ecom-launch", label: "Starter package" },
+          { planId: "ecom-growth", label: "Growth package" },
+          { planId: "ecom-scale", label: "Scale package" },
         ],
         rows: [
           {
@@ -239,9 +238,9 @@ export const pricingPage = {
         summary:
           "Evolve from foundational APIs to compliant, data-rich platforms.",
         columns: [
-          { planId: "api-launch", label: "Launch" },
-          { planId: "api-growth", label: "Growth" },
-          { planId: "api-scale", label: "Scale" },
+          { planId: "api-launch", label: "Starter package" },
+          { planId: "api-growth", label: "Growth package" },
+          { planId: "api-scale", label: "Scale package" },
         ],
         rows: [
           {
