@@ -238,21 +238,59 @@
   display: grid;
   gap: 24px;
   align-items: start;
-  justify-items: start;
 }
 
-.foot-grid > div {
+.foot-about {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
+.foot-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.footer-info-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  border-radius: 12px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+}
+
+.footer-info-table th,
+.footer-info-table td {
+  padding: 16px;
+  vertical-align: top;
+  min-width: 200px;
+}
+
+.footer-info-table thead th {
+  text-align: left;
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--text) 90%, var(--muted) 10%);
+  background: color-mix(in srgb, var(--brand) 6%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+.footer-info-table tbody tr {
+  background: transparent;
+}
+
+.footer-info-table tbody td:not(:last-child) {
+  border-right: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+}
+
 .footer-contact,
 .footer-security {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 16px;
 }
 .footer-contact__item,
@@ -356,7 +394,7 @@
 
 @media (min-width: 640px) {
   .foot-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: minmax(220px, 1fr) minmax(280px, 2fr);
     column-gap: 32px;
     row-gap: 32px;
   }
@@ -364,7 +402,7 @@
 
 @media (min-width: 1024px) {
   .foot-grid {
-    grid-template-columns: repeat(4, minmax(220px, 1fr));
+    grid-template-columns: minmax(220px, 1fr) minmax(420px, 2fr);
   }
 }
 
