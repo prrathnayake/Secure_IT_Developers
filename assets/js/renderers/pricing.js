@@ -290,8 +290,13 @@ export function renderCompareTable(data) {
     table.appendChild(summary);
     const grid = document.createElement("div");
     grid.className = "compare-grid";
+    const columnCount = (category.columns || []).length;
+    const columnTemplate = `minmax(200px, 1.1fr) repeat(${columnCount}, minmax(180px, 1fr))`;
+    const minWidth = `${200 + 180 * columnCount}px`;
     const header = document.createElement("div");
     header.className = "compare-row compare-row--header";
+    header.style.gridTemplateColumns = columnTemplate;
+    header.style.minWidth = minWidth;
     header.innerHTML =
       '<span class="compare-label">Criteria</span>' +
       (category.columns || [])
@@ -305,6 +310,8 @@ export function renderCompareTable(data) {
     (category.rows || []).forEach((row) => {
       const div = document.createElement("div");
       div.className = "compare-row";
+      div.style.gridTemplateColumns = columnTemplate;
+      div.style.minWidth = minWidth;
       const label = document.createElement("span");
       label.className = "compare-label";
       label.textContent = row.label;

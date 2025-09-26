@@ -186,12 +186,16 @@
   color: var(--muted);
 }
 .compare-grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
 }
 .compare-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
   align-items: start;
   padding: 12px;
