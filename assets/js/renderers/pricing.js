@@ -284,39 +284,62 @@ export function renderCompareTable(data) {
     const category = categories.find((item) => item.id === id) || categories[0];
     if (!category) return;
     table.innerHTML = "";
-    const summary = document.createElement("p");
-    summary.className = "compare-summary";
-    summary.textContent = category.summary || "";
-    table.appendChild(summary);
-    const grid = document.createElement("div");
-    grid.className = "compare-grid";
-    const header = document.createElement("div");
-    header.className = "compare-row compare-row--header";
-    header.innerHTML =
-      '<span class="compare-label">Criteria</span>' +
-      (category.columns || [])
-        .map((column) => {
-          const plan = findPlanDetails(data, column.planId);
-          const price = plan ? formatCurrency(plan.price, plan.currency) : "";
-          return `<span><strong>${column.label}</strong><em>${price}</em></span>`;
-        })
-        .join("");
-    grid.appendChild(header);
-    (category.rows || []).forEach((row) => {
-      const div = document.createElement("div");
-      div.className = "compare-row";
-      const label = document.createElement("span");
-      label.className = "compare-label";
-      label.textContent = row.label;
-      div.appendChild(label);
-      (row.values || []).forEach((value) => {
-        const span = document.createElement("span");
-        span.textContent = value;
-        div.appendChild(span);
-      });
-      grid.appendChild(div);
+    if (category.summary) {
+      const summary = document.createElement("p");
+      summary.className = "compare-summary";
+      summary.textContent = category.summary;
+      table.appendChild(summary);
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "compare-table__wrapper";
+    const matrix = document.createElement("table");
+    matrix.className = "compare-matrix";
+
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+    const criteriaTh = document.createElement("th");
+    criteriaTh.scope = "col";
+    criteriaTh.textContent = "Criteria";
+    headRow.appendChild(criteriaTh);
+
+    const columns = category.columns || [];
+    columns.forEach((column) => {
+      const plan = findPlanDetails(data, column.planId);
+      const price = plan ? formatCurrency(plan.price, plan.currency) : "";
+      const label = plan?.label || column.label;
+      const th = document.createElement("th");
+      th.scope = "col";
+      th.innerHTML = `
+        <div class="compare-plan">
+          <span class="compare-plan__label">${label}</span>
+          ${price ? `<span class="compare-plan__price">${price}</span>` : ""}
+        </div>
+      `;
+      headRow.appendChild(th);
     });
-    table.appendChild(grid);
+    thead.appendChild(headRow);
+    matrix.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    (category.rows || []).forEach((row) => {
+      const tr = document.createElement("tr");
+      const labelTh = document.createElement("th");
+      labelTh.scope = "row";
+      labelTh.textContent = row.label || "";
+      tr.appendChild(labelTh);
+
+      const values = row.values || [];
+      columns.forEach((_, index) => {
+        const td = document.createElement("td");
+        td.textContent = values[index] || "—";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    matrix.appendChild(tbody);
+    wrapper.appendChild(matrix);
+    table.appendChild(wrapper);
   };
   categories.forEach((category, index) => {
     const btn = document.createElement("button");

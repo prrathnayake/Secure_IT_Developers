@@ -173,8 +173,7 @@ export const pricingPage = {
             label: "Engagement",
             values: [
               "Analytics + crash monitoring",
-              "Store submission + release pipeline",
-              "CI/CD automation with QA suite",
+              "CI/CD automation with release pipeline",
               "24/7 observability with incident runbooks",
             ],
           },

@@ -119,24 +119,32 @@
       </section>
     </main>
 
+    
+
     <footer class="site-footer">
+      <div class="footer-social">
+        <div class="container footer-social__inner">
+          <p class="footer-social__text">Get connected with us on social networks!</p>
+          <ul class="social" data-footer-social></ul>
+        </div>
+      </div>
       <div class="container">
         <div class="foot-grid">
-          <div>
+          <div class="foot-column foot-about">
             <h4>About</h4>
             <p id="footerAbout"></p>
           </div>
-          <div>
+          <div class="foot-column">
             <h4>Contact</h4>
             <ul id="footerContact" class="footer-contact"></ul>
           </div>
-          <div>
+          <div class="foot-column">
             <h4>Security</h4>
             <ul id="footerSecurity" class="footer-security"></ul>
           </div>
-          <div>
+          <div class="foot-column">
             <h4>Follow</h4>
-            <ul class="social" id="footerSocial"></ul>
+            <ul class="social social--stacked" data-footer-social></ul>
           </div>
         </div>
         <div class="foot-bottom">
@@ -146,6 +154,7 @@
         </div>
       </div>
     </footer>
+
     <div
       id="cookieBanner"
       class="cookie-banner"

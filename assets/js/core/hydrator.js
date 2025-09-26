@@ -126,19 +126,36 @@ function applyFooter(data) {
     });
   }
 
-  const social = document.getElementById("footerSocial");
-  if (social) {
-    social.innerHTML = "";
-    (data.socials || []).forEach((item) => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
-          <span class="icon">${item.icon || ""}</span>
-          <span class="sr-only">${item.label}</span>
-        </a>
-      `;
-      social.appendChild(li);
+  const socialTargets = document.querySelectorAll("[data-footer-social]");
+  if (socialTargets.length) {
+    socialTargets.forEach((list) => {
+      list.innerHTML = "";
+      (data.socials || []).forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
+            <span class="icon">${item.icon || ""}</span>
+            <span class="sr-only">${item.label}</span>
+          </a>
+        `;
+        list.appendChild(li);
+      });
     });
+  } else {
+    const social = document.getElementById("footerSocial");
+    if (social) {
+      social.innerHTML = "";
+      (data.socials || []).forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <a href="${item.href}" aria-label="${item.aria || item.label}" target="_blank" rel="noopener">
+            <span class="icon">${item.icon || ""}</span>
+            <span class="sr-only">${item.label}</span>
+          </a>
+        `;
+        social.appendChild(li);
+      });
+    }
   }
 
   const legal = document.getElementById("footerLegal");
