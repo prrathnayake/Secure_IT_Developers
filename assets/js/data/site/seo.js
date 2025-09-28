@@ -1,8 +1,8 @@
 export const seo = {
   defaultKeywords:
     "secure web development, security-first developers, seo optimisation services, managed web maintenance, ecommerce security, australia web agency",
-  siteName: "Secure IT Developers",
-  author: "Secure IT Developers",
+  siteName: "Cyberion",
+  author: "Cyberion",
   robots: "index, follow",
   twitterHandle: "@secureitdev",
   twitterCreator: "@pasanbuilds",
@@ -12,7 +12,7 @@ export const seo = {
 
 export const seoContent = {
   home: {
-    title: "Secure IT Developers — Security-first web & app engineering",
+    title: "Cyberion — Security-first web & app engineering",
     description:
       "Security-first websites, SaaS platforms, and eCommerce builds delivered with transparent pricing and measurable results.",
     path: "index.html",
@@ -21,7 +21,7 @@ export const seoContent = {
     image: "assets/img/placeholder-growth.svg",
   },
   about: {
-    title: "About Secure IT Developers",
+    title: "About Cyberion",
     description:
       "Inside the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
     path: "about.html",
@@ -32,59 +32,59 @@ export const seoContent = {
   pricing: {
     title: "Pricing — Transparent, security-focused plans",
     description:
-      "Compare Secure IT Developers pricing for websites, commerce, and custom product builds. Every plan includes security hardening and support.",
+      "Compare Cyberion pricing for websites, commerce, and custom product builds. Every plan includes security hardening and support.",
     path: "pricing.html",
     keywords:
       "secure development pricing, ecommerce build cost, web maintenance retainer, seo optimisation retainers",
     image: "assets/img/placeholder-ops.svg",
   },
   contact: {
-    title: "Contact Secure IT Developers",
+    title: "Contact Cyberion",
     description:
-      "Reach out to Secure IT Developers to discuss your goals, security requirements, and delivery timeline.",
+      "Reach out to Cyberion to discuss your goals, security requirements, and delivery timeline.",
     path: "contact.html",
     keywords:
       "contact secure it developers, request security quote, talk to security developer, schedule discovery call",
     image: "assets/img/placeholder-team.svg",
   },
   checkout: {
-    title: "Checkout — Review your Secure IT Developers plan",
+    title: "Checkout — Review your Cyberion plan",
     description:
-      "Review the plan you selected from Secure IT Developers before proceeding to payment.",
+      "Review the plan you selected from Cyberion before proceeding to payment.",
     path: "checkout.html",
     keywords:
       "secure it developers checkout, confirm web development package, add services to quote, security focused engagement review",
     image: "assets/img/placeholder-ops.svg",
   },
   payment: {
-    title: "Payment — Secure billing with Secure IT Developers",
+    title: "Payment — Secure billing with Cyberion",
     description:
-      "Enter billing details to complete your Secure IT Developers engagement.",
+      "Enter billing details to complete your Cyberion engagement.",
     path: "payment.html",
     keywords:
       "secure it developers payment, pay for cybersecurity project, secure billing portal, web app development invoice",
     image: "assets/img/placeholder-growth.svg",
   },
   success: {
-    title: "Payment successful — Welcome to Secure IT Developers",
+    title: "Payment successful — Welcome to Cyberion",
     description:
-      "Your Secure IT Developers engagement is confirmed. We'll reach out with next steps.",
+      "Your Cyberion engagement is confirmed. We'll reach out with next steps.",
     path: "success.html",
     keywords:
       "secure it developers payment success, project kickoff confirmation, cybersecurity engagement onboarding",
     image: "assets/img/placeholder-team.svg",
   },
   failed: {
-    title: "Payment issue — Secure IT Developers",
+    title: "Payment issue — Cyberion",
     description:
-      "Something went wrong while processing your payment with Secure IT Developers.",
+      "Something went wrong while processing your payment with Cyberion.",
     path: "failed.html",
     keywords:
       "secure it developers payment failed, retry secure payment, billing support cybersecurity agency",
     image: "assets/img/placeholder-ops.svg",
   },
   detail: {
-    title: "Engagement details — Secure IT Developers",
+    title: "Engagement details — Cyberion",
     description:
       "Dive deeper into our engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
     path: "detail.html",
@@ -93,9 +93,9 @@ export const seoContent = {
     image: "assets/img/placeholder-team.svg",
   },
   legal: {
-    title: "Privacy & legal — Secure IT Developers",
+    title: "Privacy & legal — Cyberion",
     description:
-      "Review how Secure IT Developers safeguards data, governs engagements, and upholds compliance commitments.",
+      "Review how Cyberion safeguards data, governs engagements, and upholds compliance commitments.",
     path: "legal.html",
     keywords:
       "secure it developers privacy policy, legal terms, data protection statement, cybersecurity agency compliance",

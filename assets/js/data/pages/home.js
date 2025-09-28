@@ -168,7 +168,7 @@ export const homePage = {
     items: [
       {
         quote:
-          "Secure IT Developers helped us ship a compliant platform ahead of schedule. Their security insight saved weeks of remediation.",
+          "Cyberion helped us ship a compliant platform ahead of schedule. Their security insight saved weeks of remediation.",
         author: "Mia Thompson, COO — RegTech Labs",
       },
       {

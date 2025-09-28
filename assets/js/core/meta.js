@@ -92,7 +92,7 @@ export function injectServiceSchema(data) {
   if (services.length) {
     graph.push({
       "@type": "ItemList",
-      name: "Secure IT Developers service catalog",
+      name: "Cyberion service catalog",
       itemListElement: services.map((service, index) => ({
         "@type": "ListItem",
         position: index + 1,

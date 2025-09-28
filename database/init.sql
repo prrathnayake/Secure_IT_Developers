@@ -1,4 +1,4 @@
--- Secure IT Developers initial database schema.
+-- Cyberion initial database schema.
 -- Run this script against a MySQL database before deploying the customer portal.
 
 START TRANSACTION;

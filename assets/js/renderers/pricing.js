@@ -613,7 +613,7 @@ function downloadInvoicePdf(custom, invoice, metrics) {
 
 function buildInvoiceLines(custom, invoice, metrics) {
   const currency = invoice.currency || "USD";
-  const lines = ["Secure IT Developers"];
+  const lines = ["Cyberion"];
   if (custom?.heading) lines.push(custom.heading);
   lines.push("");
   lines.push(`Invoice #: ${invoice.reference || "Draft"}`);

@@ -41,7 +41,7 @@ export const aboutPage = {
   ],
   story: {
     copy:
-      "Secure IT Developers began as Pasan's consultancy helping regulated startups ship faster without sacrificing compliance. Today we operate as an embedded product partner for founders that need security, design, and growth thinking in one squad.",
+      "Cyberion began as Pasan's consultancy helping regulated startups ship faster without sacrificing compliance. Today we operate as an embedded product partner for founders that need security, design, and growth thinking in one squad.",
     milestones: [
       {
         year: "2018",
@@ -66,8 +66,8 @@ export const aboutPage = {
     ],
     media: {
       img: "assets/img/placeholder-team.svg",
-      alt: "Secure IT Developers team workshop",
-      caption: "Weekly roadmap and security review inside the Secure IT Developers studio.",
+      alt: "Cyberion team workshop",
+      caption: "Weekly roadmap and security review inside the Cyberion studio.",
     },
   },
   approach: [
@@ -192,5 +192,5 @@ export const aboutPage = {
     ],
   },
   teamIntro:
-    "Secure IT Developers is founder-led, giving you direct access to senior engineering leadership on every engagement.",
+    "Cyberion is founder-led, giving you direct access to senior engineering leadership on every engagement.",
 };
