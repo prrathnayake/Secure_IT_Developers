@@ -233,7 +233,11 @@ export function renderPricingPage(data) {
       const hasContent = aside.innerHTML.trim().length > 0;
       aside.toggleAttribute("hidden", !hasContent);
     }
-    customSection.hidden = !custom.heading && !custom.copy;
+    const shouldHide = !custom.heading && !custom.copy;
+    customSection.hidden = shouldHide;
+    if (!shouldHide) {
+      customSection.classList.add("is-visible");
+    }
   }
 
   const standalone = page.standalone || {};

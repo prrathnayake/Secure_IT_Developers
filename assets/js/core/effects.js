@@ -1,22 +1,43 @@
 export function initScrollReveal() {
-  const revealables = document.querySelectorAll(".js-reveal");
+  const revealables = Array.from(document.querySelectorAll(".js-reveal"));
   if (!revealables.length) return;
+
+  const show = (el) => {
+    if (!el.classList.contains("is-visible")) {
+      el.classList.add("is-visible");
+    }
+  };
+
   if (!("IntersectionObserver" in window)) {
-    revealables.forEach((el) => el.classList.add("is-visible"));
+    revealables.forEach(show);
     return;
   }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
+          show(entry.target);
           observer.unobserve(entry.target);
         }
       });
     },
     { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
   );
+
   revealables.forEach((el) => observer.observe(el));
+
+  // Ensure sections already in view after hydration are revealed immediately.
+  requestAnimationFrame(() => {
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    revealables.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < viewportHeight * 0.92 && rect.bottom > 0) {
+        show(el);
+        observer.unobserve(el);
+      }
+    });
+  });
 }
 
 export function initHeaderScrollEffect() {
