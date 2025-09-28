@@ -12,6 +12,7 @@
 
   function emitReady(detail) {
     mergeEnvironment();
+    window.__SECURE_ENV_READY__ = { ready: true, detail: detail || null };
     if (typeof document?.dispatchEvent === "function") {
       const EventCtor = typeof window.CustomEvent === "function"
         ? window.CustomEvent
