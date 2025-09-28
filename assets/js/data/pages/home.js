@@ -182,7 +182,7 @@ export const homePage = {
     heading: "This is our team",
     copy:
       "Partner with founder-engineer Pasan Rathnayake and cybersecurity specialist Sunara Ranasooriya from discovery to deployment—no hand-offs, just leadership embedded in every sprint.",
-    memberIds: ["pasan-rathnayake", "sunara-ranasooriya"],
+    memberIds: ["pasan-rathnayake", "sunera-ranasooriya"],
   },
   contact: {
     heading: "Ready to scope your project?",

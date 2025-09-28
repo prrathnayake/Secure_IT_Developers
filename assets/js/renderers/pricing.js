@@ -205,12 +205,12 @@ export function renderPricingPage(data) {
       const metrics = custom.aside?.metrics || [];
       const invoice = custom.invoice;
       if (invoice) {
-        const invoiceCard = buildInvoiceCard(custom, invoice, metrics);
+        const invoiceCard = buildInvoiceCard(custom, invoice, metrics, data);
         aside.appendChild(invoiceCard);
         const downloadButton = invoiceCard.querySelector("#customInvoiceDownload");
         if (downloadButton) {
           downloadButton.addEventListener("click", () =>
-            downloadInvoicePdf(custom, invoice, metrics)
+            downloadInvoicePdf(custom, invoice, metrics, data)
           );
         }
       } else {
@@ -396,80 +396,99 @@ function findPlanDetails(data, compositeId) {
   };
 }
 
-function buildInvoiceCard(custom, invoice, metrics) {
+function buildInvoiceCard(custom, invoice, metrics, data) {
   const card = document.createElement("article");
   card.className = "custom-invoice";
   const currency = invoice.currency || "USD";
+  const safeMetrics = Array.isArray(metrics) ? metrics : [];
 
   const header = document.createElement("header");
   header.className = "custom-invoice__header";
-  header.innerHTML = `
-    <div>
-      <p class="custom-invoice__eyebrow">${
-        invoice.label || "Pro-forma invoice"
-      }</p>
-      <h3>${invoice.reference || "Custom engagement estimate"}</h3>
-    </div>
-    <div class="custom-invoice__total">
-      <span>Total</span>
-      <strong>${formatAmount(invoice.total, currency) || "—"}</strong>
-    </div>
+
+  const headingBlock = document.createElement("div");
+  headingBlock.className = "custom-invoice__heading";
+  headingBlock.innerHTML = `
+    <p class="custom-invoice__eyebrow">${invoice.label || "Invoice"}</p>
+    <h3>${custom.heading || invoice.reference || "Custom engagement invoice"}</h3>
+    ${custom.copy ? `<p class="custom-invoice__lead">${custom.copy}</p>` : ""}
   `;
+  header.appendChild(headingBlock);
+
+  const summaryEntries = [
+    { label: "Invoice #", value: invoice.reference || "Draft" },
+    { label: "Amount due", value: formatAmount(invoice.total, currency) || "—" },
+  ];
+  if (invoice.issued)
+    summaryEntries.push({ label: "Issued", value: invoice.issued });
+  if (invoice.due) summaryEntries.push({ label: "Valid until", value: invoice.due });
+
+  if (summaryEntries.some((entry) => entry.value)) {
+    const summary = document.createElement("dl");
+    summary.className = "custom-invoice__summary";
+    summaryEntries.forEach((entry) => {
+      if (!entry.value) return;
+      const row = document.createElement("div");
+      const dt = document.createElement("dt");
+      dt.textContent = entry.label;
+      const dd = document.createElement("dd");
+      dd.textContent = entry.value;
+      row.appendChild(dt);
+      row.appendChild(dd);
+      summary.appendChild(row);
+    });
+    header.appendChild(summary);
+  }
+
   card.appendChild(header);
 
-  const meta = document.createElement("dl");
-  meta.className = "custom-invoice__meta";
-  const metaEntries = [];
-  if (invoice.issued) metaEntries.push({ label: "Issued", value: invoice.issued });
-  if (invoice.due) metaEntries.push({ label: "Valid until", value: invoice.due });
-  if (invoice.billTo?.company) {
-    metaEntries.push({
-      label: "Prepared for",
-      value: invoice.billTo.company,
-      subtext: invoice.billTo.contact || "",
-    });
+  const layout = document.createElement("div");
+  layout.className = "custom-invoice__layout";
+
+  const primaryColumn = document.createElement("div");
+  primaryColumn.className = "custom-invoice__column custom-invoice__column--primary";
+
+  const parties = document.createElement("div");
+  parties.className = "custom-invoice__parties";
+
+  const billToLines = createPartyLines(invoice.billTo);
+  if (billToLines.length) {
+    parties.appendChild(createPartyBlock("Billed to", billToLines));
   }
-  if (invoice.turnaround)
-    metaEntries.push({ label: "Engagement length", value: invoice.turnaround });
+
+  const issuerLines = createIssuerLines(data);
+  if (issuerLines.length) {
+    parties.appendChild(createPartyBlock("Issued by", issuerLines));
+  }
+
+  const projectLines = [];
+  const projectLabel = invoice.project || custom.heading;
+  if (projectLabel) projectLines.push(projectLabel);
+  if (invoice.turnaround) projectLines.push(`Timeline: ${invoice.turnaround}`);
   if (invoice.paymentTerms)
-    metaEntries.push({ label: "Payment terms", value: invoice.paymentTerms });
-
-  metaEntries.forEach((entry) => {
-    if (!entry.value) return;
-    const row = document.createElement("div");
-    const dt = document.createElement("dt");
-    dt.textContent = entry.label;
-    const dd = document.createElement("dd");
-    dd.textContent = entry.value;
-    if (entry.subtext) {
-      dd.appendChild(document.createElement("br"));
-      const span = document.createElement("span");
-      span.className = "custom-invoice__meta-subtext";
-      span.textContent = entry.subtext;
-      dd.appendChild(span);
-    }
-    row.appendChild(dt);
-    row.appendChild(dd);
-    meta.appendChild(row);
-  });
-  if (meta.childElementCount) {
-    card.appendChild(meta);
+    projectLines.push(`Payment terms: ${invoice.paymentTerms}`);
+  if (projectLines.length) {
+    parties.appendChild(createPartyBlock("Project", projectLines));
   }
 
-  const items = Array.isArray(invoice.lineItems) ? invoice.lineItems : [];
+  if (parties.childElementCount) {
+    primaryColumn.appendChild(parties);
+  }
+
   const table = document.createElement("table");
   table.className = "custom-invoice__table";
   table.innerHTML = `
     <thead>
       <tr>
-        <th scope="col">Line item</th>
+        <th scope="col">Item & description</th>
         <th scope="col">Qty</th>
         <th scope="col">Rate</th>
         <th scope="col">Amount</th>
       </tr>
     </thead>
   `;
+
   const tbody = document.createElement("tbody");
+  const items = Array.isArray(invoice.lineItems) ? invoice.lineItems : [];
   if (!items.length) {
     const row = document.createElement("tr");
     const cell = document.createElement("th");
@@ -486,7 +505,8 @@ function buildInvoiceCard(custom, invoice, metrics) {
       const row = document.createElement("tr");
       const description = document.createElement("th");
       description.scope = "row";
-      description.textContent = item.description || "Custom engagement component";
+      description.textContent =
+        item.description || "Custom engagement component";
       const quantity = document.createElement("td");
       const qtyParts = [];
       if (item.quantity !== undefined && item.quantity !== null) {
@@ -502,7 +522,9 @@ function buildInvoiceCard(custom, invoice, metrics) {
           ? item.rate * item.quantity
           : item.rate;
       amount.textContent =
-        formatAmount(item.total, currency) || formatAmount(fallbackAmount, currency) || "—";
+        formatAmount(item.total, currency) ||
+        formatAmount(fallbackAmount, currency) ||
+        "—";
       row.appendChild(description);
       row.appendChild(quantity);
       row.appendChild(rate);
@@ -518,65 +540,101 @@ function buildInvoiceCard(custom, invoice, metrics) {
   if (invoice.tax !== undefined && invoice.tax !== null)
     totals.push({ label: "Tax", value: formatAmount(invoice.tax, currency) });
   if (invoice.total !== undefined && invoice.total !== null)
-    totals.push({ label: "Total", value: formatAmount(invoice.total, currency), className: "custom-invoice__grand-total" });
-
+    totals.push({
+      label: "Total",
+      value: formatAmount(invoice.total, currency),
+      className: "custom-invoice__grand-total",
+    });
   if (totals.length) {
     const tfoot = document.createElement("tfoot");
-    totals.forEach((entry) => {
+    totals.forEach((total) => {
       const row = document.createElement("tr");
-      if (entry.className) row.className = entry.className;
-      const labelCell = document.createElement("td");
-      labelCell.colSpan = 3;
-      labelCell.textContent = entry.label;
-      const valueCell = document.createElement("td");
-      valueCell.textContent = entry.value || "—";
-      row.appendChild(labelCell);
-      row.appendChild(valueCell);
+      if (total.className) row.className = total.className;
+      const label = document.createElement("td");
+      label.colSpan = 3;
+      label.textContent = total.label;
+      const amount = document.createElement("td");
+      amount.textContent = total.value;
+      row.appendChild(label);
+      row.appendChild(amount);
       tfoot.appendChild(row);
     });
     table.appendChild(tfoot);
   }
 
-  card.appendChild(table);
-
-  if (metrics.length) {
-    const insights = document.createElement("div");
-    insights.className = "custom-invoice__insights";
-    const heading = document.createElement("h4");
-    heading.textContent = custom.aside?.title || "Engagement indicators";
-    const list = document.createElement("ul");
-    list.className = "custom-invoice__metrics";
-    metrics.forEach((metric) => {
-      const li = document.createElement("li");
-      const value = document.createElement("strong");
-      value.textContent = metric.value;
-      const label = document.createElement("span");
-      label.textContent = metric.label;
-      li.appendChild(value);
-      li.appendChild(label);
-      list.appendChild(li);
-    });
-    insights.appendChild(heading);
-    insights.appendChild(list);
-    card.appendChild(insights);
-  }
+  primaryColumn.appendChild(table);
 
   if (invoice.note) {
-    const note = document.createElement("p");
-    note.className = "custom-invoice__note";
-    note.textContent = invoice.note;
-    card.appendChild(note);
+    const note = document.createElement("section");
+    note.className = "custom-invoice__panel custom-invoice__note";
+    note.innerHTML = `<h4>Notes</h4><p>${invoice.note}</p>`;
+    primaryColumn.appendChild(note);
+  }
+
+  layout.appendChild(primaryColumn);
+
+  const summaryColumn = document.createElement("aside");
+  summaryColumn.className = "custom-invoice__column custom-invoice__column--summary";
+
+  const detailEntries = [];
+  if (invoice.turnaround)
+    detailEntries.push({ label: "Engagement length", value: invoice.turnaround });
+  if (invoice.paymentTerms)
+    detailEntries.push({ label: "Payment terms", value: invoice.paymentTerms });
+
+  if (detailEntries.length) {
+    const detailSection = document.createElement("section");
+    detailSection.className = "custom-invoice__panel";
+    const detailsHeading = document.createElement("h4");
+    detailsHeading.textContent = "Key details";
+    detailSection.appendChild(detailsHeading);
+    const dl = document.createElement("dl");
+    dl.className = "custom-invoice__meta";
+    detailEntries.forEach((entry) => {
+      if (!entry.value) return;
+      const row = document.createElement("div");
+      const dt = document.createElement("dt");
+      dt.textContent = entry.label;
+      const dd = document.createElement("dd");
+      dd.textContent = entry.value;
+      row.appendChild(dt);
+      row.appendChild(dd);
+      dl.appendChild(row);
+    });
+    detailSection.appendChild(dl);
+    summaryColumn.appendChild(detailSection);
+  }
+
+  if (safeMetrics.length) {
+    const insights = document.createElement("section");
+    insights.className = "custom-invoice__panel custom-invoice__insights";
+    const metricsHeading = document.createElement("h4");
+    metricsHeading.textContent = custom.aside?.title || "Engagement indicators";
+    insights.appendChild(metricsHeading);
+    const list = document.createElement("ul");
+    list.className = "custom-invoice__metrics";
+    safeMetrics.forEach((metric) => {
+      if (!metric?.value || !metric?.label) return;
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${metric.value}</strong><span>${metric.label}</span>`;
+      list.appendChild(li);
+    });
+    insights.appendChild(list);
+    summaryColumn.appendChild(insights);
   }
 
   const actions = document.createElement("div");
   actions.className = "custom-invoice__actions";
   const download = document.createElement("button");
-  download.id = "customInvoiceDownload";
+  download.className = "btn";
   download.type = "button";
-  download.className = "btn btn-ghost";
+  download.id = "customInvoiceDownload";
   download.textContent = invoice.downloadLabel || "Download PDF summary";
   actions.appendChild(download);
-  card.appendChild(actions);
+  summaryColumn.appendChild(actions);
+
+  layout.appendChild(summaryColumn);
+  card.appendChild(layout);
 
   return card;
 }
@@ -589,7 +647,7 @@ function formatAmount(value, currency) {
   return "";
 }
 
-function downloadInvoicePdf(custom, invoice, metrics) {
+function downloadInvoicePdf(custom, invoice, metrics, data) {
   try {
     if (typeof window === "undefined" || typeof Blob === "undefined" || !window.URL) {
       if (typeof window !== "undefined" && typeof window.print === "function") {
@@ -597,7 +655,7 @@ function downloadInvoicePdf(custom, invoice, metrics) {
       }
       return;
     }
-    const lines = buildInvoiceLines(custom, invoice, metrics);
+    const lines = buildInvoiceLines(custom, invoice, metrics, data);
     const pdfBlob = createSimplePdf(lines);
     const link = document.createElement("a");
     link.href = URL.createObjectURL(pdfBlob);
@@ -615,66 +673,150 @@ function downloadInvoicePdf(custom, invoice, metrics) {
   }
 }
 
-function buildInvoiceLines(custom, invoice, metrics) {
+function buildInvoiceLines(custom, invoice, metrics, data) {
   const currency = invoice.currency || "USD";
-  const lines = ["Cyberion"];
+  const lines = [];
+  const orgName = data?.org?.name || "Cyberion";
+  lines.push(orgName);
   if (custom?.heading) lines.push(custom.heading);
+  if (custom?.copy) lines.push(custom.copy);
   lines.push("");
   lines.push(`Invoice #: ${invoice.reference || "Draft"}`);
+  const amountDue = formatAmount(invoice.total, currency);
+  if (amountDue) lines.push(`Amount due: ${amountDue}`);
   if (invoice.issued) lines.push(`Issued: ${invoice.issued}`);
   if (invoice.due) lines.push(`Valid until: ${invoice.due}`);
-  if (invoice.billTo?.company) {
-    const preparedFor = invoice.billTo.contact
-      ? `${invoice.billTo.company} (${invoice.billTo.contact})`
-      : invoice.billTo.company;
-    lines.push(`Prepared for: ${preparedFor}`);
-  }
-  if (invoice.turnaround) lines.push(`Engagement length: ${invoice.turnaround}`);
-  if (invoice.paymentTerms) lines.push(`Payment terms: ${invoice.paymentTerms}`);
   lines.push("");
-  lines.push("Line items:");
+
+  const billToLines = createPartyLines(invoice.billTo);
+  if (billToLines.length) {
+    lines.push("Billed to:");
+    billToLines.forEach((line) => lines.push(line));
+    lines.push("");
+  }
+
+  const issuerLines = createIssuerLines(data);
+  if (issuerLines.length) {
+    lines.push("Issued by:");
+    issuerLines.forEach((line) => lines.push(line));
+    lines.push("");
+  }
+
+  const projectLines = [];
+  const projectLabel = invoice.project || custom.heading;
+  if (projectLabel) projectLines.push(projectLabel);
+  if (invoice.turnaround)
+    projectLines.push(`Timeline: ${invoice.turnaround}`);
+  if (invoice.paymentTerms)
+    projectLines.push(`Payment terms: ${invoice.paymentTerms}`);
+  if (projectLines.length) {
+    lines.push("Project:");
+    projectLines.forEach((line) => lines.push(line));
+    lines.push("");
+  }
+
+  lines.push("Items:");
+  lines.push("Description | Qty | Rate | Amount");
   const items = Array.isArray(invoice.lineItems) ? invoice.lineItems : [];
   if (items.length) {
     items.forEach((item) => {
-      const parts = [`• ${item.description || "Custom engagement component"}`];
+      const qtyParts = [];
       if (item.quantity !== undefined && item.quantity !== null) {
-        const qty = item.unit ? `${item.quantity} ${item.unit}` : String(item.quantity);
-        parts.push(`Qty: ${qty}`);
-      } else if (item.unit) {
-        parts.push(`Qty: ${item.unit}`);
+        qtyParts.push(String(item.quantity));
       }
-      const rate = formatAmount(item.rate, currency);
-      if (rate) parts.push(`Rate: ${rate}`);
+      if (item.unit) qtyParts.push(item.unit);
+      const qty = qtyParts.join(" ") || "—";
+      const rate = formatAmount(item.rate, currency) || "—";
       const fallbackAmount =
         typeof item.rate === "number" && typeof item.quantity === "number"
           ? item.rate * item.quantity
           : item.rate;
-      const amount = formatAmount(item.total, currency) || formatAmount(fallbackAmount, currency);
-      if (amount) parts.push(`Amount: ${amount}`);
-      lines.push(parts.join(" | "));
+      const amount =
+        formatAmount(item.total, currency) ||
+        formatAmount(fallbackAmount, currency) ||
+        "—";
+      lines.push(`${item.description || "Custom engagement component"} | ${qty} | ${rate} | ${amount}`);
     });
   } else {
-    lines.push("• Scope to be finalised with your delivery team.");
+    lines.push("Scope to be finalised with your delivery team. | — | — | —");
   }
+  lines.push("");
+
   if (invoice.subtotal !== undefined && invoice.subtotal !== null)
     lines.push(`Subtotal: ${formatAmount(invoice.subtotal, currency)}`);
   if (invoice.tax !== undefined && invoice.tax !== null)
     lines.push(`Tax: ${formatAmount(invoice.tax, currency)}`);
   if (invoice.total !== undefined && invoice.total !== null)
     lines.push(`Total due: ${formatAmount(invoice.total, currency)}`);
+
   if (invoice.note) {
     lines.push("");
+    lines.push("Notes:");
     lines.push(invoice.note);
   }
-  if (metrics.length) {
+
+  const safeMetrics = Array.isArray(metrics) ? metrics : [];
+  if (safeMetrics.length) {
+    const indicatorHeading = custom?.aside?.title || "Engagement indicators";
     lines.push("");
-    lines.push("Engagement indicators:");
-    metrics.forEach((metric) => {
+    lines.push(`${indicatorHeading}:`);
+    safeMetrics.forEach((metric) => {
       if (!metric?.value || !metric?.label) return;
       lines.push(`${metric.value} – ${metric.label}`);
     });
   }
+
   return lines;
+}
+
+function createPartyLines(billTo = {}) {
+  if (!billTo) return [];
+  const lines = [];
+  if (billTo.company) lines.push(billTo.company);
+  if (billTo.contact) lines.push(billTo.contact);
+  if (billTo.email) lines.push(billTo.email);
+  if (billTo.phone) lines.push(billTo.phone);
+  if (billTo.address) lines.push(billTo.address);
+  return lines;
+}
+
+function createIssuerLines(data) {
+  const org = data?.org || {};
+  const lines = [];
+  const issuer = org.legalName || org.name;
+  if (issuer) lines.push(issuer);
+  const address = formatOrgAddress(org.location || {});
+  if (address) lines.push(address);
+  if (org.email) lines.push(org.email);
+  if (org.phone) lines.push(org.phone);
+  return lines;
+}
+
+function formatOrgAddress(location = {}) {
+  const locality = [location.addressLocality, location.addressRegion]
+    .filter(Boolean)
+    .join(", ");
+  const parts = [
+    location.streetAddress,
+    locality,
+    location.postalCode,
+    location.addressCountry,
+  ];
+  return parts.filter(Boolean).join(", ");
+}
+
+function createPartyBlock(title, lines) {
+  const block = document.createElement("section");
+  block.className = "custom-invoice__party";
+  const heading = document.createElement("h4");
+  heading.textContent = title;
+  block.appendChild(heading);
+  lines.forEach((line) => {
+    const p = document.createElement("p");
+    p.textContent = line;
+    block.appendChild(p);
+  });
+  return block;
 }
 
 function createSimplePdf(lines) {
