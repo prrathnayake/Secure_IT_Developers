@@ -59,7 +59,8 @@ Edit the partial that matches the template you are working on; `assets/css/style
 
 ## Environment configuration
 
-- Duplicate `assets/js/env.sample.js` to `assets/js/env.js` and adjust endpoints for forms/quotes if you need to point requests at a different service.
+- Copy `assets/js/env.sample.js` to `assets/js/env.local.js` and update the values privately. The file is ignored by Git so deployment secrets stay out of the repository.
+- `assets/js/env.js` automatically loads `env.local.js` when present and merges any server-provided `window.SECURE_ENV` values. It emits a `secure-env-ready` event once variables are available, which allows runtime features (like the authentication flow) to react when credentials are injected.
 - Static HTML files reference `assets/js/data/index.js` with `<script type="module">`, so modern browsers will load the modular data without bundling.
 
 ## Local development tips
