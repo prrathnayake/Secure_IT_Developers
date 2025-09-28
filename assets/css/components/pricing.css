@@ -190,15 +190,16 @@
 .compare-table__wrapper {
   overflow-x: auto;
   border-radius: 26px;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.18), rgba(37, 99, 235, 0.12));
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(37, 99, 235, 0.08));
   padding: 2px;
-  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 28px 52px rgba(15, 23, 42, 0.14);
 }
 .compare-summary {
   margin-top: 0;
   margin-bottom: 20px;
-  color: color-mix(in srgb, var(--muted) 80%, #fff 20%);
+  color: color-mix(in srgb, var(--muted) 75%, var(--text) 25%);
   font-size: 1rem;
+  max-width: 760px;
 }
 .compare-matrix {
   width: 100%;
@@ -207,25 +208,26 @@
   border-spacing: 0;
   overflow: hidden;
   border-radius: 24px;
-  background: rgba(15, 23, 42, 0.98);
-  color: #fff;
+  background: color-mix(in srgb, var(--card) 96%, #fff 4%);
+  color: var(--text);
   --compare-col-1-start: #60a5fa;
   --compare-col-1-end: #2563eb;
-  --compare-col-2-start: #4c51bf;
-  --compare-col-2-end: #4338ca;
-  --compare-col-3-start: #3730a3;
-  --compare-col-3-end: #312e81;
-  --compare-col-4-start: #2e1065;
-  --compare-col-4-end: #1e1b4b;
+  --compare-col-2-start: #818cf8;
+  --compare-col-2-end: #4f46e5;
+  --compare-col-3-start: #a855f7;
+  --compare-col-3-end: #7c3aed;
+  --compare-col-4-start: #ec4899;
+  --compare-col-4-end: #db2777;
 }
 .compare-matrix thead th {
-  padding: 26px 20px 22px;
+  padding: 24px 20px 18px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.14em;
+  border-right: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, #fff 8%);
 }
 .compare-matrix thead th:last-child {
   border-right: none;
@@ -239,64 +241,64 @@
 }
 .compare-matrix__price {
   display: block;
-  font-size: 0.95rem;
-  font-weight: 500;
-  opacity: 0.85;
-  margin-top: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 8px;
+  color: color-mix(in srgb, var(--muted) 65%, var(--text) 35%);
 }
 .compare-matrix__feature {
-  background: color-mix(in srgb, #f8fafc 92%, #e2e8f0 8%);
-  color: color-mix(in srgb, var(--text) 92%, #0b1220 8%);
+  background: color-mix(in srgb, var(--card) 94%, #fff 6%);
+  color: color-mix(in srgb, var(--text) 92%, #0f172a 8%);
   text-align: left;
 }
 .compare-matrix thead .compare-matrix__feature {
-  padding: 28px 24px 24px;
+  padding: 26px 24px 22px;
   font-size: 0.9rem;
+  border-right: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+  background: color-mix(in srgb, var(--card) 96%, #fff 4%);
 }
 .compare-matrix tbody th.compare-matrix__feature {
   padding: 22px 24px;
   font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  border-right: 1px solid rgba(15, 23, 42, 0.08);
+  letter-spacing: 0.01em;
+  border-right: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
 }
 .compare-matrix tbody tr:nth-child(even) th.compare-matrix__feature {
-  background: color-mix(in srgb, #f1f5f9 90%, #e2e8f0 10%);
-}
-.compare-matrix__col--1 {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--compare-col-1-start) 40%, #ffffff 60%),
-    color-mix(in srgb, var(--compare-col-1-end) 80%, #0b1220 20%)
-  );
-}
-.compare-matrix__col--2 {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--compare-col-2-start) 45%, #ffffff 55%),
-    color-mix(in srgb, var(--compare-col-2-end) 85%, #0b1220 15%)
-  );
-}
-.compare-matrix__col--3 {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--compare-col-3-start) 50%, #ffffff 50%),
-    color-mix(in srgb, var(--compare-col-3-end) 90%, #0b1220 10%)
-  );
-}
-.compare-matrix__col--4 {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--compare-col-4-start) 55%, #ffffff 45%),
-    color-mix(in srgb, var(--compare-col-4-end) 90%, #0b1220 10%)
-  );
+  background: color-mix(in srgb, var(--card) 90%, #fff 10%);
 }
 .compare-matrix thead .compare-matrix__col--1,
 .compare-matrix thead .compare-matrix__col--2,
 .compare-matrix thead .compare-matrix__col--3,
 .compare-matrix thead .compare-matrix__col--4 {
   color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--compare-col-1-start) 55%, #ffffff 45%),
+    color-mix(in srgb, var(--compare-col-1-end) 75%, #0f172a 25%)
+  );
+}
+.compare-matrix thead .compare-matrix__col--2 {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--compare-col-2-start) 55%, #ffffff 45%),
+    color-mix(in srgb, var(--compare-col-2-end) 75%, #0f172a 25%)
+  );
+}
+.compare-matrix thead .compare-matrix__col--3 {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--compare-col-3-start) 55%, #ffffff 45%),
+    color-mix(in srgb, var(--compare-col-3-end) 78%, #0f172a 22%)
+  );
+}
+.compare-matrix thead .compare-matrix__col--4 {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--compare-col-4-start) 55%, #ffffff 45%),
+    color-mix(in srgb, var(--compare-col-4-end) 78%, #0f172a 22%)
+  );
 }
 .compare-matrix tbody td {
   padding: 22px 24px;
@@ -304,8 +306,9 @@
   line-height: 1.6;
   font-weight: 500;
   text-align: left;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-right: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: color-mix(in srgb, var(--card) 98%, #fff 2%);
 }
 .compare-matrix tbody td:last-child {
   border-right: none;
@@ -313,16 +316,28 @@
 .compare-matrix tbody tr:first-child td {
   border-top: none;
 }
+.compare-matrix tbody td.compare-matrix__col--1 {
+  background: color-mix(in srgb, var(--compare-col-1-start) 10%, var(--card) 90%);
+}
+.compare-matrix tbody td.compare-matrix__col--2 {
+  background: color-mix(in srgb, var(--compare-col-2-start) 10%, var(--card) 90%);
+}
+.compare-matrix tbody td.compare-matrix__col--3 {
+  background: color-mix(in srgb, var(--compare-col-3-start) 10%, var(--card) 90%);
+}
+.compare-matrix tbody td.compare-matrix__col--4 {
+  background: color-mix(in srgb, var(--compare-col-4-start) 10%, var(--card) 90%);
+}
 .compare-matrix tbody td.compare-matrix__col--1,
 .compare-matrix tbody td.compare-matrix__col--2,
 .compare-matrix tbody td.compare-matrix__col--3,
 .compare-matrix tbody td.compare-matrix__col--4 {
-  color: rgba(255, 255, 255, 0.92);
+  color: color-mix(in srgb, var(--text) 88%, #0f172a 12%);
 }
 .compare-matrix--cols-2 .compare-matrix__col--3,
 .compare-matrix--cols-2 .compare-matrix__col--4,
 .compare-matrix--cols-3 .compare-matrix__col--4 {
-  background: linear-gradient(135deg, rgba(30, 64, 175, 0.55), rgba(30, 64, 175, 0.8));
+  background: color-mix(in srgb, var(--brand) 12%, var(--card) 88%);
 }
 .compare-matrix--cols-0 {
   min-width: 0;
@@ -330,7 +345,229 @@
 .compare-matrix tbody td:empty::after {
   content: "—";
   display: inline-block;
-  opacity: 0.6;
+  opacity: 0.45;
+}
+
+.custom-invoice {
+  display: grid;
+  gap: 18px;
+  background: color-mix(in srgb, var(--card) 98%, #fff 2%);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 18px 32px rgba(15, 23, 42, 0.12);
+}
+
+.custom-invoice__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.custom-invoice__eyebrow {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  color: color-mix(in srgb, var(--muted) 60%, var(--text) 40%);
+}
+
+.custom-invoice__header h3 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.custom-invoice__total {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.custom-invoice__total span {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 70%, var(--text) 30%);
+}
+
+.custom-invoice__total strong {
+  font-size: 1.7rem;
+  color: color-mix(in srgb, var(--brand) 70%, var(--text) 30%);
+  line-height: 1.2;
+}
+
+.custom-invoice__meta {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: 0;
+}
+
+.custom-invoice__meta div {
+  display: grid;
+  gap: 6px;
+}
+
+.custom-invoice__meta dt {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 70%, var(--text) 30%);
+}
+
+.custom-invoice__meta dd {
+  margin: 0;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--text) 88%, #0f172a 12%);
+}
+
+.custom-invoice__meta-subtext {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--muted) 75%, var(--text) 25%);
+}
+
+.custom-invoice__table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+}
+
+.custom-invoice__table thead th {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.9), rgba(37, 99, 235, 0.88));
+  color: #fff;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 14px 18px;
+}
+
+.custom-invoice__table tbody th,
+.custom-invoice__table tbody td {
+  padding: 16px 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  font-size: 0.95rem;
+}
+
+.custom-invoice__table tbody th {
+  background: color-mix(in srgb, var(--card) 95%, #fff 5%);
+  font-weight: 600;
+  width: 45%;
+}
+
+.custom-invoice__table tbody td {
+  background: color-mix(in srgb, var(--card) 98%, #fff 2%);
+  color: color-mix(in srgb, var(--text) 88%, #0f172a 12%);
+}
+
+.custom-invoice__table tbody tr:nth-child(even) th,
+.custom-invoice__table tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--card) 92%, #fff 8%);
+}
+
+.custom-invoice__table tbody td:nth-child(2),
+.custom-invoice__table tbody td:nth-child(3),
+.custom-invoice__table tbody td:nth-child(4) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-invoice__table tfoot td {
+  padding: 14px 18px;
+  text-align: right;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--card) 94%, #fff 6%);
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-invoice__table tfoot tr + tr td {
+  border-top: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+}
+
+.custom-invoice__grand-total td {
+  font-size: 1.1rem;
+  color: color-mix(in srgb, var(--brand) 70%, var(--text) 30%);
+}
+
+.custom-invoice__insights {
+  border-top: 1px dashed color-mix(in srgb, var(--border) 70%, transparent);
+  padding-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.custom-invoice__insights h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.custom-invoice__metrics {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.custom-invoice__metrics li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.custom-invoice__metrics strong {
+  font-size: 1.1rem;
+  color: color-mix(in srgb, var(--brand) 65%, var(--text) 35%);
+}
+
+.custom-invoice__note {
+  margin: 0;
+  color: color-mix(in srgb, var(--muted) 78%, var(--text) 22%);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.custom-invoice__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.custom-invoice__actions .btn {
+  min-width: 180px;
+}
+
+@media (max-width: 960px) {
+  .custom-invoice__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .custom-invoice__total {
+    text-align: left;
+    min-width: 0;
+  }
+
+  .custom-invoice__table tbody td:nth-child(2),
+  .custom-invoice__table tbody td:nth-child(3),
+  .custom-invoice__table tbody td:nth-child(4),
+  .custom-invoice__table tfoot td {
+    text-align: left;
+  }
+
+  .custom-invoice__actions {
+    justify-content: flex-start;
+  }
 }
 
 .site-footer {
