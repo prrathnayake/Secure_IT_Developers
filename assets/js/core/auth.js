@@ -6,6 +6,11 @@ const AUTH_CHANGE_EVENT = "auth:change";
 let authStatusTimeout;
 let googleScriptPromise;
 let activeGoogleContext = "login";
+let googleAuthInitialized = false;
+const envReadyState = {
+  ready: Boolean(window.__SECURE_ENV_READY__?.ready),
+  detail: window.__SECURE_ENV_READY__?.detail || null,
+};
 
 function getConfig() {
   return window.ENV?.auth || {};
@@ -23,6 +28,42 @@ function getSessionTtlMs() {
 
 function getGoogleConfig() {
   return window.ENV?.googleAuth || {};
+}
+
+function markEnvReady(detail) {
+  envReadyState.ready = true;
+  envReadyState.detail = detail || envReadyState.detail || null;
+}
+
+function getEnvReadyDetail() {
+  return envReadyState.detail || {};
+}
+
+function renderGoogleStatus(slots, { buttonText, statusText }) {
+  slots.forEach(({ container, status }) => {
+    if (container) {
+      container.innerHTML = "";
+      if (buttonText) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn";
+        button.disabled = true;
+        button.textContent = buttonText;
+        container.appendChild(button);
+      }
+    }
+    if (status) status.textContent = statusText || "";
+  });
+}
+
+function googleMissingStatusMessage(detail) {
+  if (detail?.error) {
+    return "Google sign-in configuration failed to load. Check the console for details.";
+  }
+  if (detail?.source === "missing") {
+    return "Create assets/js/env.local.js and set googleAuth.clientId to enable Google sign-in.";
+  }
+  return "Set googleAuth.clientId in assets/js/env.local.js to enable Google sign-in.";
 }
 
 function loadGoogleScript() {
@@ -568,30 +609,36 @@ function initGoogleAuth() {
   if (!slots.length) return;
 
   const config = getGoogleConfig();
-  const missingClient = !config.clientId || /replace/i.test(config.clientId);
+  const clientId = config.clientId || config.client_id || "";
+  const missingClient = !clientId || /replace/i.test(clientId);
 
-  if (missingClient) {
-    slots.forEach(({ container, status }) => {
-      if (container) {
-        container.innerHTML = "";
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "btn";
-        button.disabled = true;
-        button.textContent = "Google sign-in unavailable";
-        container.appendChild(button);
-      }
-      if (status) {
-        status.textContent =
-          "Set googleAuth.clientId in assets/js/env.local.js to enable Google sign-in.";
-      }
-    });
+  if (googleAuthInitialized) {
     return;
   }
 
-  slots.forEach(({ container }) => {
+  if (missingClient) {
+    if (!envReadyState.ready && !clientId) {
+      renderGoogleStatus(slots, {
+        buttonText: "Loading Google sign-in…",
+        statusText: "Loading Google sign-in configuration…",
+      });
+    } else {
+      renderGoogleStatus(slots, {
+        buttonText: "Google sign-in unavailable",
+        statusText: googleMissingStatusMessage(getEnvReadyDetail()),
+      });
+    }
+    return;
+  }
+
+  config.clientId = clientId;
+
+  slots.forEach(({ container, status }) => {
     if (container) container.innerHTML = "";
+    if (status) status.textContent = "";
   });
+
+  googleAuthInitialized = true;
 
   loadGoogleScript()
     .then((google) => {
@@ -599,7 +646,7 @@ function initGoogleAuth() {
         throw new Error("Google Identity Services are unavailable.");
       }
       google.accounts.id.initialize({
-        client_id: config.clientId,
+        client_id: clientId,
         callback: (response) => handleGoogleCredential(response, activeGoogleContext),
         auto_select: Boolean(config.autoSelect),
         cancel_on_tap_outside: true,
@@ -621,12 +668,21 @@ function initGoogleAuth() {
       });
     })
     .catch((error) => {
-      slots.forEach(({ status }) => {
-        if (status)
-          status.textContent =
-            error?.message || "Google sign-in could not be initialised. Check your network connection.";
+      googleAuthInitialized = false;
+      renderGoogleStatus(slots, {
+        buttonText: "Google sign-in unavailable",
+        statusText:
+          error?.message || "Google sign-in could not be initialised. Check your network connection.",
       });
     });
+}
+
+function handleSecureEnvReady(event) {
+  markEnvReady(event?.detail || null);
+  renderDatabaseNotice();
+  if (!googleAuthInitialized) {
+    initGoogleAuth();
+  }
 }
 
 function renderDatabaseNotice() {
@@ -676,7 +732,10 @@ export function initAuth() {
   handleLogin();
   handleLogoutClicks();
   initGoogleAuth();
+  if (envReadyState.ready) {
+    handleSecureEnvReady({ detail: envReadyState.detail });
+  }
   document.addEventListener(AUTH_CHANGE_EVENT, renderAuthControls);
   document.addEventListener(AUTH_CHANGE_EVENT, renderDatabaseNotice);
-  document.addEventListener("secure-env-ready", renderDatabaseNotice);
+  document.addEventListener("secure-env-ready", handleSecureEnvReady);
 }
