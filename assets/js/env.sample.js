@@ -1,5 +1,7 @@
 // Copy this file to assets/js/env.local.js and update the values privately.
-window.ENV = Object.assign(window.ENV || {}, {
+// The runtime will load it automatically and merge it with server-provided
+// configuration via window.SECURE_ENV.
+window.SECURE_ENV = Object.assign(window.SECURE_ENV || {}, {
   contactEndpoint: "https://formsubmit.co/ajax/rans.rath@gmail.com",
   quoteEndpoint: "https://formsubmit.co/ajax/rans.rath@gmail.com",
   compareDefaultCategory: "starter",

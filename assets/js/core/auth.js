@@ -678,4 +678,5 @@ export function initAuth() {
   initGoogleAuth();
   document.addEventListener(AUTH_CHANGE_EVENT, renderAuthControls);
   document.addEventListener(AUTH_CHANGE_EVENT, renderDatabaseNotice);
+  document.addEventListener("secure-env-ready", renderDatabaseNotice);
 }
