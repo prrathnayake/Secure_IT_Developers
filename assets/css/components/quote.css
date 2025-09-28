@@ -2,12 +2,16 @@
 .quote-card-panel .quote-form select,
 .quote-card-panel .quote-form input[type="email"],
 .quote-card-panel .quote-form input[type="text"] {
-  background: color-mix(in srgb, var(--card) 90%, var(--bg) 10%);
-  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-  border-radius: 10px;
-  padding: 10px;
+  background: color-mix(in srgb, var(--card) 92%, var(--bg) 8%);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: 12px;
+  padding: 12px 14px;
   color: var(--text);
   transition: border 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  min-height: 48px;
+  font: inherit;
+  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.05);
 }
 
 .quote-card-panel .quote-form select:focus,
@@ -25,6 +29,18 @@
   flex-wrap: wrap;
   gap: 16px;
 }
+.quote-card-panel .quote-form .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.quote-card-panel .quote-form legend {
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--text) 88%, var(--muted) 12%);
+}
+
 .quote-card-panel .quote-radio label {
   font-weight: 500;
   gap: 6px;

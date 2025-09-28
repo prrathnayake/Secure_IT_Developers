@@ -68,6 +68,47 @@ export const pricingPage = {
       label: "Browse delivery approach",
       href: "about.html#aboutApproach",
     },
+    invoice: {
+      label: "Pro-forma invoice",
+      reference: "INV-2045-CUSTOM",
+      issued: "14 May 2024",
+      due: "Valid for 30 days",
+      turnaround: "12-week roadmap & optimisation runway",
+      paymentTerms: "50% deposit, balance on delivery",
+      billTo: {
+        company: "Your organisation",
+        contact: "Procurement lead",
+      },
+      currency: "USD",
+      lineItems: [
+        {
+          description: "Discovery & risk alignment sprint",
+          quantity: 1,
+          unit: "sprint",
+          rate: 4800,
+          total: 4800,
+        },
+        {
+          description: "Secure delivery squad (fortnightly cadence)",
+          quantity: 2,
+          unit: "months",
+          rate: 3600,
+          total: 7200,
+        },
+        {
+          description: "Compliance automation & reporting setup",
+          quantity: 1,
+          unit: "package",
+          rate: 2800,
+          total: 2800,
+        },
+      ],
+      subtotal: 14800,
+      tax: 740,
+      total: 15540,
+      note: "Figures reflect a blended senior squad. We'll refine the breakdown with your stakeholders before signature.",
+      downloadLabel: "Download invoice PDF",
+    },
     aside: {
       title: "What to expect",
       metrics: [

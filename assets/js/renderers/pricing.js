@@ -202,23 +202,36 @@ export function renderPricingPage(data) {
     const aside = byId("customEngagementAside");
     if (aside) {
       aside.innerHTML = "";
-      const metricItems = custom.aside?.metrics || [];
-      if (custom.aside?.title) {
-        const title = document.createElement("h3");
-        title.textContent = custom.aside.title;
-        aside.appendChild(title);
+      const metrics = custom.aside?.metrics || [];
+      const invoice = custom.invoice;
+      if (invoice) {
+        const invoiceCard = buildInvoiceCard(custom, invoice, metrics);
+        aside.appendChild(invoiceCard);
+        const downloadButton = invoiceCard.querySelector("#customInvoiceDownload");
+        if (downloadButton) {
+          downloadButton.addEventListener("click", () =>
+            downloadInvoicePdf(custom, invoice, metrics)
+          );
+        }
+      } else {
+        if (custom.aside?.title) {
+          const title = document.createElement("h3");
+          title.textContent = custom.aside.title;
+          aside.appendChild(title);
+        }
+        if (metrics.length) {
+          const metricsList = document.createElement("ul");
+          metricsList.className = "custom-metrics";
+          metrics.forEach((metric) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${metric.value}</strong><span>${metric.label}</span>`;
+            metricsList.appendChild(li);
+          });
+          aside.appendChild(metricsList);
+        }
       }
-      if (metricItems.length) {
-        const metrics = document.createElement("ul");
-        metrics.className = "custom-metrics";
-        metricItems.forEach((metric) => {
-          const li = document.createElement("li");
-          li.innerHTML = `<strong>${metric.value}</strong><span>${metric.label}</span>`;
-          metrics.appendChild(li);
-        });
-        aside.appendChild(metrics);
-      }
-      aside.toggleAttribute("hidden", !custom.aside?.title && !metricItems.length);
+      const hasContent = aside.innerHTML.trim().length > 0;
+      aside.toggleAttribute("hidden", !hasContent);
     }
     customSection.hidden = !custom.heading && !custom.copy;
   }
@@ -377,4 +390,340 @@ function findPlanDetails(data, compositeId) {
     currency: plan.currency,
     groupLabel: group.label,
   };
+}
+
+function buildInvoiceCard(custom, invoice, metrics) {
+  const card = document.createElement("article");
+  card.className = "custom-invoice";
+  const currency = invoice.currency || "USD";
+
+  const header = document.createElement("header");
+  header.className = "custom-invoice__header";
+  header.innerHTML = `
+    <div>
+      <p class="custom-invoice__eyebrow">${
+        invoice.label || "Pro-forma invoice"
+      }</p>
+      <h3>${invoice.reference || "Custom engagement estimate"}</h3>
+    </div>
+    <div class="custom-invoice__total">
+      <span>Total</span>
+      <strong>${formatAmount(invoice.total, currency) || "—"}</strong>
+    </div>
+  `;
+  card.appendChild(header);
+
+  const meta = document.createElement("dl");
+  meta.className = "custom-invoice__meta";
+  const metaEntries = [];
+  if (invoice.issued) metaEntries.push({ label: "Issued", value: invoice.issued });
+  if (invoice.due) metaEntries.push({ label: "Valid until", value: invoice.due });
+  if (invoice.billTo?.company) {
+    metaEntries.push({
+      label: "Prepared for",
+      value: invoice.billTo.company,
+      subtext: invoice.billTo.contact || "",
+    });
+  }
+  if (invoice.turnaround)
+    metaEntries.push({ label: "Engagement length", value: invoice.turnaround });
+  if (invoice.paymentTerms)
+    metaEntries.push({ label: "Payment terms", value: invoice.paymentTerms });
+
+  metaEntries.forEach((entry) => {
+    if (!entry.value) return;
+    const row = document.createElement("div");
+    const dt = document.createElement("dt");
+    dt.textContent = entry.label;
+    const dd = document.createElement("dd");
+    dd.textContent = entry.value;
+    if (entry.subtext) {
+      dd.appendChild(document.createElement("br"));
+      const span = document.createElement("span");
+      span.className = "custom-invoice__meta-subtext";
+      span.textContent = entry.subtext;
+      dd.appendChild(span);
+    }
+    row.appendChild(dt);
+    row.appendChild(dd);
+    meta.appendChild(row);
+  });
+  if (meta.childElementCount) {
+    card.appendChild(meta);
+  }
+
+  const items = Array.isArray(invoice.lineItems) ? invoice.lineItems : [];
+  const table = document.createElement("table");
+  table.className = "custom-invoice__table";
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th scope="col">Line item</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Rate</th>
+        <th scope="col">Amount</th>
+      </tr>
+    </thead>
+  `;
+  const tbody = document.createElement("tbody");
+  if (!items.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("th");
+    cell.scope = "row";
+    cell.textContent = "Scope to be finalised with your delivery team.";
+    row.appendChild(cell);
+    const placeholder = document.createElement("td");
+    placeholder.colSpan = 3;
+    placeholder.textContent = "—";
+    row.appendChild(placeholder);
+    tbody.appendChild(row);
+  } else {
+    items.forEach((item) => {
+      const row = document.createElement("tr");
+      const description = document.createElement("th");
+      description.scope = "row";
+      description.textContent = item.description || "Custom engagement component";
+      const quantity = document.createElement("td");
+      const qtyParts = [];
+      if (item.quantity !== undefined && item.quantity !== null) {
+        qtyParts.push(String(item.quantity));
+      }
+      if (item.unit) qtyParts.push(item.unit);
+      quantity.textContent = qtyParts.join(" ") || "—";
+      const rate = document.createElement("td");
+      rate.textContent = formatAmount(item.rate, currency) || "—";
+      const amount = document.createElement("td");
+      const fallbackAmount =
+        typeof item.rate === "number" && typeof item.quantity === "number"
+          ? item.rate * item.quantity
+          : item.rate;
+      amount.textContent =
+        formatAmount(item.total, currency) || formatAmount(fallbackAmount, currency) || "—";
+      row.appendChild(description);
+      row.appendChild(quantity);
+      row.appendChild(rate);
+      row.appendChild(amount);
+      tbody.appendChild(row);
+    });
+  }
+  table.appendChild(tbody);
+
+  const totals = [];
+  if (invoice.subtotal !== undefined && invoice.subtotal !== null)
+    totals.push({ label: "Subtotal", value: formatAmount(invoice.subtotal, currency) });
+  if (invoice.tax !== undefined && invoice.tax !== null)
+    totals.push({ label: "Tax", value: formatAmount(invoice.tax, currency) });
+  if (invoice.total !== undefined && invoice.total !== null)
+    totals.push({ label: "Total", value: formatAmount(invoice.total, currency), className: "custom-invoice__grand-total" });
+
+  if (totals.length) {
+    const tfoot = document.createElement("tfoot");
+    totals.forEach((entry) => {
+      const row = document.createElement("tr");
+      if (entry.className) row.className = entry.className;
+      const labelCell = document.createElement("td");
+      labelCell.colSpan = 3;
+      labelCell.textContent = entry.label;
+      const valueCell = document.createElement("td");
+      valueCell.textContent = entry.value || "—";
+      row.appendChild(labelCell);
+      row.appendChild(valueCell);
+      tfoot.appendChild(row);
+    });
+    table.appendChild(tfoot);
+  }
+
+  card.appendChild(table);
+
+  if (metrics.length) {
+    const insights = document.createElement("div");
+    insights.className = "custom-invoice__insights";
+    const heading = document.createElement("h4");
+    heading.textContent = custom.aside?.title || "Engagement indicators";
+    const list = document.createElement("ul");
+    list.className = "custom-invoice__metrics";
+    metrics.forEach((metric) => {
+      const li = document.createElement("li");
+      const value = document.createElement("strong");
+      value.textContent = metric.value;
+      const label = document.createElement("span");
+      label.textContent = metric.label;
+      li.appendChild(value);
+      li.appendChild(label);
+      list.appendChild(li);
+    });
+    insights.appendChild(heading);
+    insights.appendChild(list);
+    card.appendChild(insights);
+  }
+
+  if (invoice.note) {
+    const note = document.createElement("p");
+    note.className = "custom-invoice__note";
+    note.textContent = invoice.note;
+    card.appendChild(note);
+  }
+
+  const actions = document.createElement("div");
+  actions.className = "custom-invoice__actions";
+  const download = document.createElement("button");
+  download.id = "customInvoiceDownload";
+  download.type = "button";
+  download.className = "btn btn-ghost";
+  download.textContent = invoice.downloadLabel || "Download PDF summary";
+  actions.appendChild(download);
+  card.appendChild(actions);
+
+  return card;
+}
+
+function formatAmount(value, currency) {
+  if (typeof value === "number" && !Number.isNaN(value)) {
+    return formatCurrency(value, currency);
+  }
+  if (typeof value === "string") return value;
+  return "";
+}
+
+function downloadInvoicePdf(custom, invoice, metrics) {
+  try {
+    if (typeof window === "undefined" || typeof Blob === "undefined" || !window.URL) {
+      if (typeof window !== "undefined" && typeof window.print === "function") {
+        window.print();
+      }
+      return;
+    }
+    const lines = buildInvoiceLines(custom, invoice, metrics);
+    const pdfBlob = createSimplePdf(lines);
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(pdfBlob);
+    const safeName = (invoice.reference || "custom-engagement")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    link.download = safeName ? `${safeName}.pdf` : "custom-engagement.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 4000);
+  } catch (error) {
+    console.error("Unable to generate invoice PDF", error);
+  }
+}
+
+function buildInvoiceLines(custom, invoice, metrics) {
+  const currency = invoice.currency || "USD";
+  const lines = ["Secure IT Developers"];
+  if (custom?.heading) lines.push(custom.heading);
+  lines.push("");
+  lines.push(`Invoice #: ${invoice.reference || "Draft"}`);
+  if (invoice.issued) lines.push(`Issued: ${invoice.issued}`);
+  if (invoice.due) lines.push(`Valid until: ${invoice.due}`);
+  if (invoice.billTo?.company) {
+    const preparedFor = invoice.billTo.contact
+      ? `${invoice.billTo.company} (${invoice.billTo.contact})`
+      : invoice.billTo.company;
+    lines.push(`Prepared for: ${preparedFor}`);
+  }
+  if (invoice.turnaround) lines.push(`Engagement length: ${invoice.turnaround}`);
+  if (invoice.paymentTerms) lines.push(`Payment terms: ${invoice.paymentTerms}`);
+  lines.push("");
+  lines.push("Line items:");
+  const items = Array.isArray(invoice.lineItems) ? invoice.lineItems : [];
+  if (items.length) {
+    items.forEach((item) => {
+      const parts = [`• ${item.description || "Custom engagement component"}`];
+      if (item.quantity !== undefined && item.quantity !== null) {
+        const qty = item.unit ? `${item.quantity} ${item.unit}` : String(item.quantity);
+        parts.push(`Qty: ${qty}`);
+      } else if (item.unit) {
+        parts.push(`Qty: ${item.unit}`);
+      }
+      const rate = formatAmount(item.rate, currency);
+      if (rate) parts.push(`Rate: ${rate}`);
+      const fallbackAmount =
+        typeof item.rate === "number" && typeof item.quantity === "number"
+          ? item.rate * item.quantity
+          : item.rate;
+      const amount = formatAmount(item.total, currency) || formatAmount(fallbackAmount, currency);
+      if (amount) parts.push(`Amount: ${amount}`);
+      lines.push(parts.join(" | "));
+    });
+  } else {
+    lines.push("• Scope to be finalised with your delivery team.");
+  }
+  if (invoice.subtotal !== undefined && invoice.subtotal !== null)
+    lines.push(`Subtotal: ${formatAmount(invoice.subtotal, currency)}`);
+  if (invoice.tax !== undefined && invoice.tax !== null)
+    lines.push(`Tax: ${formatAmount(invoice.tax, currency)}`);
+  if (invoice.total !== undefined && invoice.total !== null)
+    lines.push(`Total due: ${formatAmount(invoice.total, currency)}`);
+  if (invoice.note) {
+    lines.push("");
+    lines.push(invoice.note);
+  }
+  if (metrics.length) {
+    lines.push("");
+    lines.push("Engagement indicators:");
+    metrics.forEach((metric) => {
+      if (!metric?.value || !metric?.label) return;
+      lines.push(`${metric.value} – ${metric.label}`);
+    });
+  }
+  return lines;
+}
+
+function createSimplePdf(lines) {
+  const encoder = new TextEncoder();
+  const sanitizedLines = lines.map((line) => escapePdfText(line || ""));
+  let stream = "BT\n/F1 12 Tf\n14 TL\n72 780 Td\n";
+  sanitizedLines.forEach((line, index) => {
+    const content = line || " ";
+    if (index === 0) {
+      stream += `(${content}) Tj\n`;
+    } else {
+      stream += `T* (${content}) Tj\n`;
+    }
+  });
+  stream += "ET";
+  const streamLength = encoder.encode(stream).length;
+  const objects = [
+    { id: 1, content: "<< /Type /Catalog /Pages 2 0 R >>" },
+    { id: 2, content: "<< /Type /Pages /Kids [3 0 R] /Count 1 >>" },
+    {
+      id: 3,
+      content:
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+    },
+    { id: 4, content: "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>" },
+    { id: 5, content: `<< /Length ${streamLength} >>\nstream\n${stream}\nendstream` },
+  ];
+  const header = "%PDF-1.4\n";
+  const pdfParts = [header];
+  const offsets = [0];
+  let position = encoder.encode(header).length;
+  objects.forEach((obj) => {
+    const objStr = `${obj.id} 0 obj\n${obj.content}\nendobj\n`;
+    offsets.push(position);
+    pdfParts.push(objStr);
+    position += encoder.encode(objStr).length;
+  });
+  const xrefStart = position;
+  let xref = `xref\n0 ${objects.length + 1}\n`;
+  xref += "0000000000 65535 f \n";
+  for (let i = 1; i < offsets.length; i += 1) {
+    xref += `${offsets[i].toString().padStart(10, "0")} 00000 n \n`;
+  }
+  pdfParts.push(xref);
+  const trailer = `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+  pdfParts.push(trailer);
+  const pdfString = pdfParts.join("");
+  return new Blob([encoder.encode(pdfString)], { type: "application/pdf" });
+}
+
+function escapePdfText(value) {
+  return String(value)
+    .replace(/[\\()]/g, (match) => `\\${match}`)
+    .replace(/[\r\n]+/g, " ")
+    .replace(/[\u2013\u2014]/g, "-");
 }
