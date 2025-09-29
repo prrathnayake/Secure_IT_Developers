@@ -1,8 +1,17 @@
 import { byId, formatCurrency } from "../core/utils.js";
 import { savePlanSelection, setSelectedServices } from "../core/storage.js";
 import { renderOtherServices } from "./shared.js";
+import { isEcommerceEnabled, renderEcommerceDisabled } from "../core/siteMode.js";
 
 export function renderPricingPage(data) {
+  if (!isEcommerceEnabled()) {
+    renderEcommerceDisabled({
+      title: "Packages unavailable",
+      description:
+        "The site is currently running in normal mode. Enable the e-commerce experience to compare plans and managed services.",
+    });
+    return;
+  }
   const page = data.pages?.pricing;
   if (!page) return;
   const intro = byId("pricingIntro");
@@ -279,6 +288,7 @@ export function renderPricingPage(data) {
 }
 
 export function renderCompareTable(data) {
+  if (!isEcommerceEnabled()) return;
   const compare = data.pages?.pricing?.compare;
   const nav = byId("compareNav");
   const table = byId("compareTable");

@@ -7,9 +7,18 @@ import {
 } from "../core/storage.js";
 import { renderOtherServices } from "./shared.js";
 import { requireAuth } from "../core/auth.js";
+import { isEcommerceEnabled, renderEcommerceDisabled } from "../core/siteMode.js";
 
 export function renderCheckoutPage(data) {
-  const customer = requireAuth("checkout.html");
+  if (!isEcommerceEnabled()) {
+    renderEcommerceDisabled({
+      title: "Checkout unavailable",
+      description:
+        "The checkout is hidden while the site is in normal mode. Enable e-commerce to manage quotes and secure payments.",
+    });
+    return;
+  }
+  const customer = requireAuth("checkout.html", ["basic", "loyalty", "admin", "staff"]);
   if (!customer) return;
   const plan = getSelectedPlan();
   const info = byId("messageInfo");

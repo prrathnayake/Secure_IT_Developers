@@ -236,6 +236,40 @@
   margin-top: 18px;
 }
 
+.spotlight-card .spotlight-socials .social {
+  display: flex;
+  gap: 10px;
+}
+
+.spotlight-card .spotlight-socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--border));
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.spotlight-card .spotlight-socials a:hover,
+.spotlight-card .spotlight-socials a:focus-visible {
+  outline: none;
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--brand) 18%, transparent);
+}
+
+.spotlight-card .spotlight-socials .icon {
+  font-size: 0.9rem;
+}
+
+.spotlight-card .spotlight-socials .icon svg {
+  width: 16px;
+  height: 16px;
+}
+
 .quote-card-panel {
   position: relative;
   background: color-mix(in srgb, var(--card) 92%, var(--bg) 8%);
