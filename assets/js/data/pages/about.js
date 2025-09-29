@@ -3,78 +3,78 @@ import { seoContent } from "../site/seo.js";
 export const aboutPage = {
   meta: seoContent.about,
   intro:
-    "We architect and build resilient digital products for founders that value security, performance, and transparent delivery.",
+    "Zyvrix is the pairing of a full-stack developer and a cybersecurity specialist who co-create products that are useful, fast, and protected.",
   mission:
-    "Our mission is to embed security and reliability into every product we ship while keeping collaboration transparent and outcomes data-driven.",
-  pillarsHeading: "Why founders partner with us",
+    "We exist to help founders ship web and mobile experiences with confidence—combining craftsmanship with the security insight usually reserved for larger teams.",
+  pillarsHeading: "What makes Zyvrix different",
   pillars: [
     {
-      title: "Security leadership on tap",
+      title: "Two founders on every project",
       detail:
-        "Access senior security engineers who join ceremonies, shape roadmaps, and document controls alongside your product team.",
+        "Your roadmap is handled by Pasan Rathnayake and Sunera Ranasooriya directly—no hand-offs, just transparent delivery.",
       highlights: [
-        "Security champions inside every squad",
-        "Runbooks and response playbooks documented",
-        "Audit support with evidence-ready artefacts",
+        "Direct Slack and stand-up access",
+        "Shared dashboards for progress and risks",
+        "Decisions documented in plain language",
       ],
     },
     {
-      title: "Product strategy meets delivery",
+      title: "Development plus cybersecurity",
       detail:
-        "Blend product strategy, design, and engineering so experiments land fast without sacrificing resilience.",
+        "We build the features you need and harden them along the way—threat models, secure coding, and compliance support included.",
       highlights: [
-        "Design sprints with measurable KPIs",
-        "Weekly growth and performance reviews",
-        "Accessibility baked into QA gates",
+        "Penetration testing and remediation guidance",
+        "Secure-by-default architecture decisions",
+        "Clear documentation for auditors and investors",
       ],
     },
     {
-      title: "Transparency from kickoff to launch",
+      title: "Startup-friendly collaboration",
       detail:
-        "Shared dashboards show burn, velocity, incidents, and ROI so stakeholders stay aligned.",
+        "Small teams need flexible partners. We adjust to your tools, work async across time zones, and keep delivery measurable.",
       highlights: [
-        "Single source of truth for delivery metrics",
-        "Daily async updates with loom recaps",
-        "Post-launch retros with documented wins",
+        "Notion, Linear, or Jira—your choice",
+        "Weekly demos with actionable next steps",
+        "Budget visibility with burn forecasts",
       ],
     },
   ],
   story: {
     copy:
-      "Cyberion began as Pasan's consultancy helping regulated startups ship faster without sacrificing compliance. Today we operate as an embedded product partner for founders that need security, design, and growth thinking in one squad.",
+      "Zyvrix started when Pasan and Sunera saw founders struggling to balance ambitious roadmaps with security obligations. After years working inside startups and regulated industries, we combined forces to offer the best of both disciplines under one roof.",
     milestones: [
       {
-        year: "2018",
+        year: "2019",
         detail:
-          "Pasan launched the studio after delivering a PCI-compliant commerce rebuild for an enterprise retailer.",
+          "Pasan and Sunera collaborated on a fintech launch, blending app development with security assessments.",
       },
       {
-        year: "2020",
+        year: "2021",
         detail:
-          "Introduced security design sprints, pairing UX prototyping with threat modelling for fintech teams.",
-      },
-      {
-        year: "2022",
-        detail:
-          "Scaled to support multi-region SaaS launches with infrastructure automation and 24/7 observability.",
+          "The duo began taking on joint contracts across healthcare, finance, and telecom teams across APAC.",
       },
       {
         year: "2023",
         detail:
-          "Expanded optimisation retainers covering CRO, SEO, and accessibility for commerce and B2B platforms.",
+          "Formalised Zyvrix with packaged services covering web, mobile, API, and continuous security support.",
+      },
+      {
+        year: "2024",
+        detail:
+          "Introduced long-term retainers for SEO optimisation, monitoring, and executive-ready security reporting.",
       },
     ],
     media: {
       img: "assets/img/placeholder-team.svg",
-      alt: "Cyberion team workshop",
-      caption: "Weekly roadmap and security review inside the Cyberion studio.",
+      alt: "Zyvrix team workshop",
+      caption: "Weekly roadmap and security review led by the Zyvrix founders.",
     },
   },
   approach: [
     {
-      title: "Discovery & threat modelling",
+      title: "Discovery & alignment",
       detail:
-        "Deep-dive workshops uncover user journeys, success metrics, and the attack surface so we can prioritise security early.",
+        "We gather requirements, success metrics, and constraints while mapping early risks so expectations stay realistic.",
     },
     {
       title: "Design & prototyping",
@@ -82,9 +82,9 @@ export const aboutPage = {
         "Rapid prototypes validate UX decisions, content strategy, and component accessibility before development.",
     },
     {
-      title: "Build & harden",
+      title: "Build & secure",
       detail:
-        "We deliver in sprints with automated testing, infrastructure as code, and continuous security reviews.",
+        "Code ships in iterative sprints with automated testing, infrastructure as code, and embedded security reviews.",
     },
     {
       title: "Launch & optimise",
@@ -96,23 +96,23 @@ export const aboutPage = {
     "TypeScript, Next.js, and Astro",
     "React Native & Flutter",
     "Node.js, Laravel, and Go microservices",
-    "MySQL, PlanetScale, DynamoDB",
-    "AWS, Azure, GCP, and Vercel",
+    "MySQL, PostgreSQL, PlanetScale, DynamoDB",
+    "AWS, Azure, GCP, Vercel, and Railway",
     "Terraform, Docker, and GitHub Actions",
   ],
   impact: [
     {
-      metric: "120+",
-      label: "Security audits shipped",
-      detail: "Covering fintech, health, and government workloads with measurable remediation plans.",
+      metric: "30+",
+      label: "Projects shipped together",
+      detail: "From early prototypes to production platforms with measurable security improvements.",
     },
     {
-      metric: "38%",
-      label: "Average conversion uplift",
-      detail: "Delivered across CRO and SEO retainers for commerce and subscription clients.",
+      metric: "4.9/5",
+      label: "Average client rating",
+      detail: "Feedback from founders who appreciated proactive communication and thorough documentation.",
     },
     {
-      metric: "2.4s",
+      metric: "<2.5s",
       label: "Median LCP after launch",
       detail: "We optimise for Core Web Vitals as part of every production deployment.",
     },
@@ -131,11 +131,11 @@ export const aboutPage = {
   leadership: {
     heading: "Leadership & governance",
     copy:
-      "Founder-led delivery keeps decision-makers close to the work. We pair a dedicated engagement lead with senior engineers, designers, and analysts so you always know who is accountable.",
+      "Working with Zyvrix means direct access to decision-makers. We handle delivery, quality, and security ourselves while looping in specialist partners only when needed.",
     details: [
-      "Every engagement includes a delivery lead, QA analyst, and security champion.",
-      "Fortnightly governance reviews cover scope, risk, and budget health.",
-      "Clients receive SOC2-aligned documentation packages at key milestones.",
+      "You work with Pasan and Sunera from kickoff to post-launch.",
+      "Weekly governance reviews cover scope, risk, and budget health.",
+      "Clients receive lightweight, audit-friendly documentation packs.",
     ],
   },
   assurance: {
@@ -152,24 +152,24 @@ export const aboutPage = {
   certifications: [
     "AWS Certified Solutions Architect – Professional",
     "Certified Information Systems Security Professional (CISSP)",
+    "Offensive Security Certified Professional (OSCP)",
     "Google Analytics 4 Certification",
-    "Scrum.org Professional Scrum Master",
   ],
   community: [
-    "Host monthly security clinics for early-stage founders",
-    "Publish threat-modelling templates and runbooks in our newsletter",
+    "Host community sessions for early-stage founders on security basics",
+    "Publish checklists for combining product delivery with compliance",
     "Mentor at local startup accelerators on secure product launches",
     "Speak at developer meetups about performance and accessibility",
   ],
   partners: [
     "Vercel & Netlify deployment partners",
     "AWS Activate and Microsoft for Startups programs",
-    "Shopify Experts collective",
+    "Firebase & Supabase startup programs",
     "Security tooling alliances with Snyk and Prisma Cloud",
   ],
   gallery: {
     copy:
-      "A peek into our hybrid workspace. Replace these visuals with your own culture and delivery moments straight from data.js.",
+      "Scenes from our remote-first studio where code reviews, security drills, and design jams happen side by side.",
     items: [
       {
         title: "Threat modelling wall",
@@ -192,5 +192,5 @@ export const aboutPage = {
     ],
   },
   teamIntro:
-    "Cyberion is founder-led, giving you direct access to senior engineering leadership on every engagement.",
+    "Zyvrix stays intentionally small so every client works directly with the founders who design, build, and secure each release.",
 };
