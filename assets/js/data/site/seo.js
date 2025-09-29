@@ -1,101 +1,101 @@
 export const seo = {
   defaultKeywords:
-    "secure web development, security-first developers, seo optimisation services, managed web maintenance, ecommerce security, australia web agency",
-  siteName: "Cyberion",
-  author: "Cyberion",
+    "full-stack developers, cybersecurity specialists, startup app builders, api development, mobile app security, seo optimization",
+  siteName: "Zyvrix",
+  author: "Zyvrix",
   robots: "index, follow",
-  twitterHandle: "@secureitdev",
-  twitterCreator: "@pasanbuilds",
-  themeColor: "#0b1d3a",
+  twitterHandle: "@zyvrix",
+  twitterCreator: "@zyvrix",
+  themeColor: "#0f172a",
   ogImage: "assets/img/placeholder-growth.svg",
 };
 
 export const seoContent = {
   home: {
-    title: "Cyberion — Security-first web & app engineering",
+    title: "Zyvrix — Full-stack builds with embedded security",
     description:
-      "Security-first websites, SaaS platforms, and eCommerce builds delivered with transparent pricing and measurable results.",
+      "Zyvrix is a two-person startup delivering secure web, mobile, and API platforms with ongoing SEO and protection services.",
     path: "index.html",
     keywords:
-      "secure web development, managed web maintenance, seo optimisation, ecommerce development australia, security focused agency",
+      "full-stack development duo, secure mobile app development, api hardening, seo optimisation, cybersecurity consultants",
     image: "assets/img/placeholder-growth.svg",
   },
   about: {
-    title: "About Cyberion",
+    title: "About Zyvrix",
     description:
-      "Inside the Melbourne studio led by Pasan Rathnayake, blending security engineering, product strategy, and design to ship dependable digital products.",
+      "Meet Zyvrix, the startup founded by Pasan Rathnayake and Sunera Ranasooriya to blend development craftsmanship with rigorous cybersecurity.",
     path: "about.html",
     keywords:
       "secure development team, security design sprints, australian dev studio, devops automation partner",
     image: "assets/img/placeholder-team.svg",
   },
   pricing: {
-    title: "Pricing — Transparent, security-focused plans",
+    title: "Pricing — Zyvrix service bundles",
     description:
-      "Compare Cyberion pricing for websites, commerce, and custom product builds. Every plan includes security hardening and support.",
+      "Review Zyvrix pricing guidance for web, mobile, API, and ongoing protection retainers backed by hands-on founders.",
     path: "pricing.html",
     keywords:
       "secure development pricing, ecommerce build cost, web maintenance retainer, seo optimisation retainers",
     image: "assets/img/placeholder-ops.svg",
   },
   contact: {
-    title: "Contact Cyberion",
+    title: "Contact Zyvrix",
     description:
-      "Reach out to Cyberion to discuss your goals, security requirements, and delivery timeline.",
+      "Start a conversation with Zyvrix to plan your next build, security audit, or optimisation retainer.",
     path: "contact.html",
     keywords:
       "contact secure it developers, request security quote, talk to security developer, schedule discovery call",
     image: "assets/img/placeholder-team.svg",
   },
   checkout: {
-    title: "Checkout — Review your Cyberion plan",
+    title: "Checkout — Review your Zyvrix plan",
     description:
-      "Review the plan you selected from Cyberion before proceeding to payment.",
+      "Review the services you selected from Zyvrix before proceeding to payment.",
     path: "checkout.html",
     keywords:
       "secure it developers checkout, confirm web development package, add services to quote, security focused engagement review",
     image: "assets/img/placeholder-ops.svg",
   },
   payment: {
-    title: "Payment — Secure billing with Cyberion",
+    title: "Payment — Secure billing with Zyvrix",
     description:
-      "Enter billing details to complete your Cyberion engagement.",
+      "Enter billing details to complete your engagement with Zyvrix.",
     path: "payment.html",
     keywords:
       "secure it developers payment, pay for cybersecurity project, secure billing portal, web app development invoice",
     image: "assets/img/placeholder-growth.svg",
   },
   success: {
-    title: "Payment successful — Welcome to Cyberion",
+    title: "Payment successful — Welcome to Zyvrix",
     description:
-      "Your Cyberion engagement is confirmed. We'll reach out with next steps.",
+      "Your Zyvrix engagement is confirmed. We'll reach out with next steps.",
     path: "success.html",
     keywords:
       "secure it developers payment success, project kickoff confirmation, cybersecurity engagement onboarding",
     image: "assets/img/placeholder-team.svg",
   },
   failed: {
-    title: "Payment issue — Cyberion",
+    title: "Payment issue — Zyvrix",
     description:
-      "Something went wrong while processing your payment with Cyberion.",
+      "Something went wrong while processing your payment with Zyvrix.",
     path: "failed.html",
     keywords:
       "secure it developers payment failed, retry secure payment, billing support cybersecurity agency",
     image: "assets/img/placeholder-ops.svg",
   },
   detail: {
-    title: "Engagement details — Cyberion",
+    title: "Engagement details — Zyvrix",
     description:
-      "Dive deeper into our engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
+      "Dive deeper into Zyvrix engagements and specialist services, including deliverables, pricing guidance, and recommended add-ons.",
     path: "detail.html",
     keywords:
       "secure it developers engagement details, security focused service breakdown, web app package inclusions, cybersecurity add ons",
     image: "assets/img/placeholder-team.svg",
   },
   legal: {
-    title: "Privacy & legal — Cyberion",
+    title: "Privacy & legal — Zyvrix",
     description:
-      "Review how Cyberion safeguards data, governs engagements, and upholds compliance commitments.",
+      "Review how Zyvrix safeguards data, governs engagements, and upholds compliance commitments.",
     path: "legal.html",
     keywords:
       "secure it developers privacy policy, legal terms, data protection statement, cybersecurity agency compliance",

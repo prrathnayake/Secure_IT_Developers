@@ -3,21 +3,21 @@ export const team = [
     id: "pasan-rathnayake",
     name: "Pasan Rathnayake",
     role: "Lead Developer",
-    location: "Melbourne, Australia",
+    location: "Colombo, Sri Lanka",
     bio:
-      "Pasan blends 9+ years of full-stack development with hands-on security consulting, partnering with founders to launch and scale products that are hardened from day one.",
+      "Pasan leads product architecture at Zyvrix, applying years of full-stack experience across web, mobile, and API builds while pairing every sprint with security best practices.",
     testimonial:
-      "“I love translating ambitious roadmaps into stable, secure experiences your customers can trust.”",
-    portfolio: "https://builtbypasan.com/",
+      "“I enjoy turning complex ideas into maintainable products that are fast, accessible, and safe to scale.”",
+    portfolio: "https://zyvrix.com/",
     focus: [
       "End-to-end SaaS and marketing platform builds",
       "React, Next.js, Flutter, and modern mobile stacks",
       "Node.js, Laravel, and API-first architecture",
-      "Security audits, DevOps automation, and observability",
+      "DevOps automation and performance tuning",
     ],
     links: [
       { label: "Portfolio", href: "Portfolio" },
-      { label: "Website", href: "https://builtbypasan.com/" },
+      { label: "Website", href: "https://zyvrix.com" },
       {
         label: "LinkedIn",
         href: "https://www.linkedin.com/in/pasan-rathnayake-b4a488240/",
@@ -30,12 +30,12 @@ export const team = [
     id: "sunera-ranasooriya",
     name: "Sunera Ranasooriya",
     role: "Cybersecurity Specialist & Advisor",
-    location: "Melbourne, Australia",
+    location: "Colombo, Sri Lanka",
     bio:
-      "Sunara leads threat modelling and incident readiness for regulated teams, drawing on 8+ years across telecom and fintech SOC leadership.",
+      "Sunera co-founded Zyvrix to embed cybersecurity thinking inside every project, advising on threat modelling, penetration testing, and governance for growing teams.",
     testimonial:
-      "“Security isn't a checkbox—it’s a culture. I love partnering with founders to build that muscle early.”",
-    portfolio: "https://secureitdevelopers.com/security",
+      "“Security isn't a checkbox—it’s a culture. I love helping teams adopt practices they can own.”",
+    portfolio: "https://zyvrix.com/security",
     focus: [
       "Threat modelling and purple-team simulations",
       "Zero Trust network and identity strategy delivery",

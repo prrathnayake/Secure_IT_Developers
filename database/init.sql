@@ -1,4 +1,4 @@
--- Cyberion initial database schema.
+-- Zyvrix initial database schema.
 -- Run this script against a MySQL database before deploying the customer portal.
 
 START TRANSACTION;

@@ -59,7 +59,7 @@ export function renderTeamSpotlight(config = {}, team = [], socials = []) {
         <a class="btn" href="${portfolio}" target="_blank" rel="noopener">View portfolio</a>
       </div>
       ${links ? `<ul class="spotlight-links">${links}</ul>` : ""}
-      <div class="spotlight-socials" aria-label="Follow Cyberion"></div>
+      <div class="spotlight-socials" aria-label="Follow Zyvrix"></div>
     `;
 
     const socialWrap = card.querySelector(".spotlight-socials");

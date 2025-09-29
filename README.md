@@ -1,6 +1,6 @@
-# Cyberion — Content & Styles Guide
+# Zyvrix — Content & Styles Guide
 
-This repository powers a static marketing and transactional experience for Cyberion. The project now separates content and presentation concerns into smaller, purposeful modules so contributors can update copy, data, or styles without combing through multi-thousand-line files.
+This repository powers a static marketing and transactional experience for Zyvrix. The project now separates content and presentation concerns into smaller, purposeful modules so contributors can update copy, data, or styles without combing through multi-thousand-line files.
 
 ## Project layout
 

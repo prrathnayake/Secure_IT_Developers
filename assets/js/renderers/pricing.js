@@ -686,7 +686,7 @@ function downloadInvoicePdf(custom, invoice, metrics, data) {
 function buildInvoiceLines(custom, invoice, metrics, data) {
   const currency = invoice.currency || "USD";
   const lines = [];
-  const orgName = data?.org?.name || "Cyberion";
+  const orgName = data?.org?.name || "Zyvrix";
   lines.push(orgName);
   if (custom?.heading) lines.push(custom.heading);
   if (custom?.copy) lines.push(custom.copy);
