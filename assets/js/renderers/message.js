@@ -1,9 +1,18 @@
 import { byId, formatCurrency } from "../core/utils.js";
 import { getLastOrder, getSelectedPlan } from "../core/storage.js";
+import { isEcommerceEnabled, renderEcommerceDisabled } from "../core/siteMode.js";
 
 export function renderMessagePage(pageKey, data) {
   const page = data.pages?.[pageKey];
   if (!page) return;
+  if (!isEcommerceEnabled()) {
+    renderEcommerceDisabled({
+      title: page.heading || "Commerce mode disabled",
+      description:
+        "Order updates are available only while e-commerce functionality is active. Ask an administrator to re-enable it to review purchase details.",
+    });
+    return;
+  }
   const heading = byId("messageHeading");
   if (heading) heading.textContent = page.heading || "";
   const body = byId("messageBody");

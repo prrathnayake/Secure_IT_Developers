@@ -124,6 +124,25 @@
               required
             />
           </div>
+          <div class="form-row">
+            <label for="signupRole">Customer type</label>
+            <select id="signupRole" name="role" required>
+              <option value="basic" selected>Basic customer</option>
+              <option value="loyalty">Loyalty customer</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="signupAccess">Access code (optional)</label>
+            <input
+              id="signupAccess"
+              name="accessCode"
+              type="text"
+              autocomplete="one-time-code"
+            />
+            <p class="field-hint muted">
+              Team members can enter their staff or admin access code to unlock the right permissions.
+            </p>
+          </div>
           <button class="btn" type="submit">Create account</button>
           <p
             id="signupStatus"

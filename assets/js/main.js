@@ -8,10 +8,12 @@ import { initMobileNav } from "./core/navigation.js";
 import { initAuth } from "./core/auth.js";
 import { initCart } from "./core/cart.js";
 import { initPerformance } from "./core/performance.js";
+import { initSiteMode } from "./core/siteMode.js";
 
 initThemeToggle();
 initCookieBanner();
 initPageLoader();
+initSiteMode();
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!window.DATA) return;

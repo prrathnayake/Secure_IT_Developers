@@ -14,9 +14,19 @@ window.SECURE_ENV = Object.assign(window.SECURE_ENV || {}, {
     user: "secure_app",
     passwordEnvVar: "SECURE_IT_DB_PASSWORD",
   },
+  site: {
+    // Choose "ecommerce" to enable all commerce flows or "basic" to show the brochure experience.
+    defaultMode: "ecommerce",
+  },
   auth: {
     storageNamespace: "secure_it",
     sessionTtlHours: 72,
+    defaultProviderRole: "basic",
+    roleCodes: {
+      admin: "replace-with-admin-code",
+      staff: "replace-with-staff-code",
+      loyalty: "replace-with-loyalty-code",
+    },
   },
   paymentGateway: {
     mode: "test",

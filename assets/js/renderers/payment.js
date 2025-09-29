@@ -15,10 +15,20 @@ import { logCustomerEvent } from "../core/audit.js";
 import { requireAuth } from "../core/auth.js";
 import { PaymentGateway } from "../core/gateway.js";
 import { enforceSecurePaymentContext } from "../core/security.js";
+import { isEcommerceEnabled, renderEcommerceDisabled } from "../core/siteMode.js";
 
 export function renderPaymentPage(data) {
   enforceSecurePaymentContext();
-  const customer = requireAuth("payment.html");
+  if (!isEcommerceEnabled()) {
+    renderEcommerceDisabled({
+      title: "Payments disabled",
+      description:
+        "Secure payments are available only in e-commerce mode. Ask an administrator to re-enable the commerce experience to continue.",
+      icon: "💳",
+    });
+    return;
+  }
+  const customer = requireAuth("payment.html", ["basic", "loyalty", "admin", "staff"]);
   if (!customer) return;
   const servicesCatalog = data?.serviceCatalog || [];
   const billing = data?.billing || {};

@@ -1,9 +1,11 @@
 import { byId } from "../core/utils.js";
 import { renderTeamSpotlight, renderFaqs } from "./shared.js";
+import { isEcommerceEnabled } from "../core/siteMode.js";
 
 export function renderHomePage(data) {
   const page = data.pages?.home;
   if (!page) return;
+  const ecommerceEnabled = isEcommerceEnabled();
   const hero = page.hero || {};
   const heroEyebrow = byId("heroEyebrow");
   const heroTitle = byId("heroTitle");
@@ -14,8 +16,10 @@ export function renderHomePage(data) {
   if (heroTitle) heroTitle.textContent = hero.title || "";
   if (heroSubtitle) heroSubtitle.textContent = hero.subtitle || "";
   if (heroPrimary) {
-    heroPrimary.textContent = hero.primaryCta?.label || "";
-    heroPrimary.href = hero.primaryCta?.href || "#";
+    const showPrimary = ecommerceEnabled && hero.primaryCta?.label;
+    heroPrimary.textContent = showPrimary ? hero.primaryCta.label : "";
+    heroPrimary.href = showPrimary ? hero.primaryCta.href : "#";
+    heroPrimary.toggleAttribute("hidden", !showPrimary);
   }
   if (heroSecondary) {
     heroSecondary.textContent = hero.secondaryCta?.label || "";
@@ -39,24 +43,28 @@ export function renderHomePage(data) {
   if (servicesHeading) servicesHeading.textContent = page.services?.heading || "";
   const servicesCards = byId("servicesCards");
   if (servicesCards) {
+    const servicesSection = servicesCards.closest(".services");
+    if (servicesSection) servicesSection.toggleAttribute("hidden", !ecommerceEnabled);
     servicesCards.innerHTML = "";
-    (page.services?.cards || []).forEach((card) => {
-      const article = document.createElement("article");
-      article.className = "service-card js-reveal";
-      const icon = card.icon ? `<span class="service-card__icon">${card.icon}</span>` : "";
-      const highlights = (card.highlights || [])
-        .map((item) => `<li>${item}</li>`)
-        .join("");
-      article.innerHTML = `
-        ${icon}
-        <div class="service-card__body">
-          <h3>${card.title}</h3>
-          <p>${card.description}</p>
-          ${highlights ? `<ul>${highlights}</ul>` : ""}
-        </div>
-      `;
-      servicesCards.appendChild(article);
-    });
+    if (ecommerceEnabled) {
+      (page.services?.cards || []).forEach((card) => {
+        const article = document.createElement("article");
+        article.className = "service-card js-reveal";
+        const icon = card.icon ? `<span class="service-card__icon">${card.icon}</span>` : "";
+        const highlights = (card.highlights || [])
+          .map((item) => `<li>${item}</li>`)
+          .join("");
+        article.innerHTML = `
+          ${icon}
+          <div class="service-card__body">
+            <h3>${card.title}</h3>
+            <p>${card.description}</p>
+            ${highlights ? `<ul>${highlights}</ul>` : ""}
+          </div>
+        `;
+        servicesCards.appendChild(article);
+      });
+    }
   }
 
   const addOns = page.addOns || {};
@@ -68,27 +76,31 @@ export function renderHomePage(data) {
   if (addOnsCopy) addOnsCopy.textContent = addOns.copy || "";
   const addOnsCards = byId("addOnsCards");
   if (addOnsCards) {
+    const addOnsSection = addOnsCards.closest(".add-ons");
+    if (addOnsSection) addOnsSection.toggleAttribute("hidden", !ecommerceEnabled);
     addOnsCards.innerHTML = "";
-    (addOns.cards || []).forEach((card) => {
-      const article = document.createElement("article");
-      article.className = "add-on-card js-reveal";
-      const highlights = (card.highlights || [])
-        .map((item) => `<li>${item}</li>`)
-        .join("");
-      const image = card.image
-        ? `<figure class="add-on-figure"><img src="${card.image}" alt="${card.title}" /></figure>`
-        : "";
-      article.innerHTML = `
-        ${image}
-        <div class="add-on-body">
-          <h3>${card.title}</h3>
-          <p class="price">${card.price || ""}</p>
-          <p>${card.description || ""}</p>
-          <ul>${highlights}</ul>
-        </div>
-      `;
-      addOnsCards.appendChild(article);
-    });
+    if (ecommerceEnabled) {
+      (addOns.cards || []).forEach((card) => {
+        const article = document.createElement("article");
+        article.className = "add-on-card js-reveal";
+        const highlights = (card.highlights || [])
+          .map((item) => `<li>${item}</li>`)
+          .join("");
+        const image = card.image
+          ? `<figure class="add-on-figure"><img src="${card.image}" alt="${card.title}" /></figure>`
+          : "";
+        article.innerHTML = `
+          ${image}
+          <div class="add-on-body">
+            <h3>${card.title}</h3>
+            <p class="price">${card.price || ""}</p>
+            <p>${card.description || ""}</p>
+            <ul>${highlights}</ul>
+          </div>
+        `;
+        addOnsCards.appendChild(article);
+      });
+    }
   }
 
   const highlightsHeading = byId("highlightsHeading");

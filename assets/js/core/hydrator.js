@@ -9,6 +9,7 @@ import { renderCheckoutPage } from "../renderers/checkout.js";
 import { renderPaymentPage } from "../renderers/payment.js";
 import { renderDetailPage } from "../renderers/detail.js";
 import { renderLegalPage } from "../renderers/legal.js";
+import { isEcommerceEnabled } from "./siteMode.js";
 
 export function hydrateSite(data) {
   const pageKey = document.body?.dataset?.page || "home";
@@ -48,20 +49,22 @@ function applyNavigation(data, pageKey) {
     mobileActions.setAttribute("data-mobile-actions", "");
     mobileNav.appendChild(mobileActions);
   }
-  (data.navigation || []).forEach((item) => {
-    const link = document.createElement("a");
-    link.href = item.href;
-    link.textContent = item.label;
-    const currentPath = pageKey === "home" ? "index.html" : `${pageKey}.html`;
-    if (item.href === currentPath) {
-      link.setAttribute("aria-current", "page");
-    }
-    nav.appendChild(link);
-    if (mobileNav) {
-      const mobileLink = link.cloneNode(true);
-      (mobileLinks || mobileNav).appendChild(mobileLink);
-    }
-  });
+  (data.navigation || [])
+    .filter((item) => isEcommerceEnabled() || !item.requiresEcommerce)
+    .forEach((item) => {
+      const link = document.createElement("a");
+      link.href = item.href;
+      link.textContent = item.label;
+      const currentPath = pageKey === "home" ? "index.html" : `${pageKey}.html`;
+      if (item.href === currentPath) {
+        link.setAttribute("aria-current", "page");
+      }
+      nav.appendChild(link);
+      if (mobileNav) {
+        const mobileLink = link.cloneNode(true);
+        (mobileLinks || mobileNav).appendChild(mobileLink);
+      }
+    });
 }
 
 function applyFooter(data) {

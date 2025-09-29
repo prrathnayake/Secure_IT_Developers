@@ -1,4 +1,5 @@
 import { byId } from "./utils.js";
+import { isEcommerceEnabled, setSiteMode, SITE_MODE_EVENT, SITE_MODES } from "./siteMode.js";
 
 const DEFAULT_NAMESPACE = "secure_it";
 const DEFAULT_SESSION_TTL_HOURS = 72;
@@ -11,6 +12,81 @@ const envReadyState = {
   ready: Boolean(window.__SECURE_ENV_READY__?.ready),
   detail: window.__SECURE_ENV_READY__?.detail || null,
 };
+
+const ROLE_LABELS = {
+  admin: "Admin",
+  staff: "Staff",
+  loyalty: "Loyalty customer",
+  basic: "Basic customer",
+};
+const DEFAULT_ROLE = "basic";
+
+function normalizeRole(role) {
+  const value = String(role || "").toLowerCase().trim();
+  if (value === "loyalty_customer" || value === "loyalty-customers") {
+    return "loyalty";
+  }
+  if (value === "customer" || value === "basic customer") {
+    return "basic";
+  }
+  if (ROLE_LABELS[value]) {
+    return value;
+  }
+  return DEFAULT_ROLE;
+}
+
+function getRoleLabel(role) {
+  return ROLE_LABELS[normalizeRole(role)] || ROLE_LABELS[DEFAULT_ROLE];
+}
+
+function getRoleCodes() {
+  const config = window.ENV?.auth?.roleCodes;
+  if (!config || typeof config !== "object") return {};
+  return Object.entries(config).reduce((map, [key, value]) => {
+    if (!value) return map;
+    map[normalizeRole(key)] = String(value).trim();
+    return map;
+  }, {});
+}
+
+function resolveRole(requestedRole, accessCode) {
+  const codes = getRoleCodes();
+  const trimmedCode = String(accessCode || "").trim();
+  if (trimmedCode) {
+    const match = Object.entries(codes).find(([, code]) =>
+      String(code || "").toLowerCase() === trimmedCode.toLowerCase()
+    );
+    if (match) {
+      return normalizeRole(match[0]);
+    }
+  }
+  const normalized = normalizeRole(requestedRole);
+  if ((normalized === "admin" || normalized === "staff") && !trimmedCode) {
+    return DEFAULT_ROLE;
+  }
+  return normalized;
+}
+
+function createRoleBadge(role) {
+  const label = getRoleLabel(role);
+  if (!label) return null;
+  const badge = document.createElement("span");
+  badge.className = "nav-user__role";
+  badge.textContent = label;
+  return badge;
+}
+
+function getDefaultRedirect(role, context = "login") {
+  const normalized = normalizeRole(role);
+  if (!isEcommerceEnabled()) return "index.html";
+  if (normalized === "admin" || normalized === "staff") {
+    return "index.html";
+  }
+  if (context === "signup") {
+    return "checkout.html";
+  }
+  return "pricing.html";
+}
 
 function getConfig() {
   return window.ENV?.auth || {};
@@ -118,7 +194,15 @@ function loadCustomers() {
   const { customers } = storageKeys();
   try {
     const raw = localStorage.getItem(customers);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((customer) => customer && customer.email)
+      .map((customer) => ({
+        ...customer,
+        role: normalizeRole(customer.role),
+      }));
   } catch (error) {
     console.warn("Unable to parse stored customers", error);
     return [];
@@ -127,7 +211,11 @@ function loadCustomers() {
 
 function saveCustomers(customers) {
   const { customers: key } = storageKeys();
-  localStorage.setItem(key, JSON.stringify(customers || []));
+  const payload = (customers || []).map((customer) => ({
+    ...customer,
+    role: normalizeRole(customer?.role),
+  }));
+  localStorage.setItem(key, JSON.stringify(payload));
 }
 
 function loadSession() {
@@ -172,6 +260,7 @@ function buildSession(customer) {
     id: `session_${customer.id}`,
     customerId: customer.id,
     createdAt: new Date().toISOString(),
+    role: normalizeRole(customer.role),
   };
 }
 
@@ -183,6 +272,7 @@ function startSession(customer) {
     id: customer.id,
     name: customer.name,
     email: customer.email,
+    role: normalizeRole(customer.role),
   });
 }
 
@@ -220,6 +310,7 @@ export function getCurrentCustomer() {
     id: customer.id,
     name: customer.name,
     email: customer.email,
+    role: normalizeRole(customer.role),
   };
 }
 
@@ -228,7 +319,7 @@ export function logoutCustomer() {
   notifyAuthChange(null);
 }
 
-function createCustomer({ name, email, password }) {
+function createCustomer({ name, email, password, role, accessCode }) {
   const trimmedEmail = email.trim();
   const existing = findCustomerByEmail(trimmedEmail);
   if (existing) {
@@ -241,12 +332,14 @@ function createCustomer({ name, email, password }) {
   const salt = saltSource.toString(16);
   const passwordHash = hashPassword(password, salt);
   const customers = loadCustomers();
+  const resolvedRole = resolveRole(role, accessCode);
   const stored = {
     id: `cust_${Date.now()}`,
     name: name.trim(),
     email: trimmedEmail,
     salt,
     passwordHash,
+    role: resolvedRole,
     createdAt: new Date().toISOString(),
   };
   customers.push(stored);
@@ -257,6 +350,7 @@ function createCustomer({ name, email, password }) {
       id: stored.id,
       name: stored.name,
       email: stored.email,
+      role: stored.role,
     },
   };
 }
@@ -276,6 +370,7 @@ function authenticate({ email, password }) {
       id: record.id,
       name: record.name,
       email: record.email,
+      role: record.role,
     },
   };
 }
@@ -292,6 +387,7 @@ function upsertProviderCustomer({ name, email, provider = "google" }) {
         id: existing.id,
         name: existing.name,
         email: existing.email,
+        role: existing.role,
       },
     };
   }
@@ -313,6 +409,7 @@ function upsertProviderCustomer({ name, email, provider = "google" }) {
     salt,
     passwordHash,
     provider,
+    role: normalizeRole(window.ENV?.auth?.defaultProviderRole || DEFAULT_ROLE),
     createdAt: new Date().toISOString(),
   };
   customers.push(stored);
@@ -323,6 +420,7 @@ function upsertProviderCustomer({ name, email, provider = "google" }) {
       id: stored.id,
       name: stored.name,
       email: stored.email,
+      role: stored.role,
     },
   };
 }
@@ -335,6 +433,13 @@ function ensureSlots() {
     actions = document.createElement("div");
     actions.className = "nav-actions";
     wrap.appendChild(actions);
+  }
+  let adminSlot = actions.querySelector("[data-admin-slot]");
+  if (!adminSlot) {
+    adminSlot = document.createElement("div");
+    adminSlot.className = "nav-actions__slot nav-actions__slot--admin";
+    adminSlot.setAttribute("data-admin-slot", "");
+    actions.prepend(adminSlot);
   }
   let cartSlot = actions.querySelector("[data-cart-slot]");
   if (!cartSlot) {
@@ -350,7 +455,7 @@ function ensureSlots() {
     authSlot.setAttribute("data-auth-slot", "");
     actions.appendChild(authSlot);
   }
-  return { actions, cartSlot, authSlot };
+  return { actions, adminSlot, cartSlot, authSlot };
 }
 
 function ensureMobileActionsContainer() {
@@ -377,7 +482,11 @@ function renderMobileAuth(customer) {
     const firstName = (customer.name || "Customer").split(" ")[0];
     const greeting = document.createElement("p");
     greeting.className = "mobile-auth__greeting nav-user";
-    greeting.textContent = `Hi, ${firstName}`;
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = `Hi, ${firstName}`;
+    greeting.appendChild(nameSpan);
+    const badge = createRoleBadge(customer.role);
+    if (badge) greeting.appendChild(badge);
     const logout = document.createElement("button");
     logout.type = "button";
     logout.className = "btn btn-ghost";
@@ -396,6 +505,87 @@ function renderMobileAuth(customer) {
     wrapper.append(login, signup);
   }
   actions.appendChild(wrapper);
+}
+
+function renderMobileAdminControls(customer) {
+  const actions = ensureMobileActionsContainer();
+  if (!actions) return;
+  actions.querySelectorAll("[data-admin-nav]").forEach((item) => item.remove());
+  if (!customer || normalizeRole(customer.role) !== "admin") return;
+  const block = document.createElement("div");
+  block.className = "mobile-admin";
+  block.setAttribute("data-admin-nav", "");
+  const label = document.createElement("p");
+  label.className = "mobile-admin__label";
+  label.textContent = isEcommerceEnabled() ? "Mode: E-commerce" : "Mode: Normal site";
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "btn btn-ghost";
+  toggle.setAttribute(
+    "data-site-mode-toggle",
+    isEcommerceEnabled() ? SITE_MODES.BASIC : SITE_MODES.ECOMMERCE
+  );
+  toggle.textContent = isEcommerceEnabled()
+    ? "Switch to normal site"
+    : "Enable e-commerce";
+  block.append(label, toggle);
+  actions.prepend(block);
+}
+
+function renderAdminControls(customer = getCurrentCustomer()) {
+  const { adminSlot } = ensureSlots();
+  if (!adminSlot) return;
+  adminSlot.innerHTML = "";
+  if (!customer || normalizeRole(customer.role) !== "admin") {
+    adminSlot.setAttribute("hidden", "hidden");
+    renderMobileAdminControls(null);
+    return;
+  }
+  adminSlot.removeAttribute("hidden");
+  const modeLabel = document.createElement("span");
+  modeLabel.className = "nav-mode";
+  modeLabel.textContent = isEcommerceEnabled()
+    ? "Mode: E-commerce"
+    : "Mode: Normal site";
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "btn btn-ghost";
+  toggle.setAttribute(
+    "data-site-mode-toggle",
+    isEcommerceEnabled() ? SITE_MODES.BASIC : SITE_MODES.ECOMMERCE
+  );
+  toggle.textContent = isEcommerceEnabled()
+    ? "Switch to normal site"
+    : "Enable e-commerce";
+  adminSlot.append(modeLabel, toggle);
+  renderMobileAdminControls(customer);
+}
+
+function handleModeToggle(event) {
+  const toggle = event.target.closest("[data-site-mode-toggle]");
+  if (!toggle) return;
+  const customer = getCurrentCustomer();
+  if (!customer || normalizeRole(customer.role) !== "admin") return;
+  event.preventDefault();
+  const requested = toggle.getAttribute("data-site-mode-toggle");
+  const targetMode = requested === SITE_MODES.BASIC ? SITE_MODES.BASIC : SITE_MODES.ECOMMERCE;
+  setSiteMode(targetMode);
+  showAuthStatus(
+    targetMode === SITE_MODES.BASIC
+      ? "Switched to the normal site experience."
+      : "E-commerce experience enabled."
+  );
+  const mobileNav = document.getElementById("mobileNav");
+  const mobileToggle = document.getElementById("mobileNavToggle");
+  if (mobileNav?.classList.contains("is-open")) {
+    mobileNav.classList.remove("is-open");
+    mobileNav.setAttribute("hidden", "hidden");
+    document.body.classList.remove("nav-open");
+    if (mobileToggle) mobileToggle.setAttribute("aria-expanded", "false");
+  }
+  setTimeout(() => {
+    window.location.reload();
+  }, 220);
 }
 
 function ensureAuthStatus() {
@@ -428,10 +618,15 @@ function renderAuthControls() {
   authSlot.innerHTML = "";
   if (customer) {
     const firstName = (customer.name || "Customer").split(" ")[0];
+    const info = document.createElement("div");
+    info.className = "nav-user__wrap";
     const greeting = document.createElement("span");
     greeting.className = "nav-user";
     greeting.textContent = `Hi, ${firstName}`;
-    authSlot.appendChild(greeting);
+    info.appendChild(greeting);
+    const badge = createRoleBadge(customer.role);
+    if (badge) info.appendChild(badge);
+    authSlot.appendChild(info);
     const logout = document.createElement("button");
     logout.type = "button";
     logout.className = "btn btn-ghost";
@@ -450,6 +645,7 @@ function renderAuthControls() {
     signup.textContent = "Create account";
     authSlot.appendChild(signup);
   }
+  renderAdminControls(customer);
   renderMobileAuth(customer);
 }
 
@@ -482,6 +678,8 @@ function handleSignup() {
     const email = form.email?.value.trim();
     const password = form.password?.value || "";
     const confirm = form.confirm?.value || "";
+    const roleSelection = form.role?.value || DEFAULT_ROLE;
+    const accessCode = form.accessCode?.value || "";
     if (!name) {
       if (status) status.textContent = "Please provide your full name.";
       return;
@@ -498,14 +696,23 @@ function handleSignup() {
       if (status) status.textContent = "Passwords do not match.";
       return;
     }
-    const result = createCustomer({ name, email, password });
+    const result = createCustomer({
+      name,
+      email,
+      password,
+      role: roleSelection,
+      accessCode,
+    });
     if (!result.ok) {
       if (status) status.textContent = result.error;
       return;
     }
     startSession(result.customer);
-    if (status) status.textContent = "Account created! Redirecting…";
-    const redirect = getRedirectParam() || "checkout.html";
+    if (status)
+      status.textContent = `Account created! Signed in as ${getRoleLabel(
+        result.customer.role
+      )}. Redirecting…`;
+    const redirect = getRedirectParam() || getDefaultRedirect(result.customer.role, "signup");
     setTimeout(() => {
       window.location.href = redirect;
     }, 800);
@@ -529,8 +736,11 @@ function handleLogin() {
       return;
     }
     startSession(result.customer);
-    if (status) status.textContent = "Login successful! Redirecting…";
-    const redirect = getRedirectParam() || "pricing.html";
+    if (status)
+      status.textContent = `Welcome back, ${getRoleLabel(
+        result.customer.role
+      )}! Redirecting…`;
+    const redirect = getRedirectParam() || getDefaultRedirect(result.customer.role);
     setTimeout(() => {
       window.location.href = redirect;
     }, 600);
@@ -591,11 +801,12 @@ function handleGoogleCredential(response, context = "login") {
     return;
   }
   startSession(result.customer);
-  if (status) status.textContent = "Signed in with Google. Redirecting…";
+  if (status)
+    status.textContent = `Signed in with Google as ${getRoleLabel(
+      result.customer.role
+    )}. Redirecting…`;
   const redirect =
-    context === "signup"
-      ? getRedirectParam() || "checkout.html"
-      : getRedirectParam() || "pricing.html";
+    getRedirectParam() || getDefaultRedirect(result.customer.role, context === "signup" ? "signup" : "login");
   setTimeout(() => {
     window.location.href = redirect;
   }, 600);
@@ -714,14 +925,26 @@ function renderDatabaseNotice() {
   }
 }
 
-export function requireAuth(redirectTo) {
+export function requireAuth(redirectTo, allowedRoles = []) {
   const customer = getCurrentCustomer();
-  if (customer) return customer;
-  const target = safeRedirect(redirectTo) || "checkout.html";
-  const url = new URL("login.html", window.location.origin);
-  url.searchParams.set("redirect", target);
-  window.location.href = `${url.pathname}${url.search}`;
-  return null;
+  if (!customer) {
+    const fallback = safeRedirect(redirectTo) || getDefaultRedirect(DEFAULT_ROLE, "signup");
+    const url = new URL("login.html", window.location.origin);
+    url.searchParams.set("redirect", fallback);
+    window.location.href = `${url.pathname}${url.search}`;
+    return null;
+  }
+  const permitted = Array.isArray(allowedRoles)
+    ? allowedRoles.map((role) => normalizeRole(role)).filter(Boolean)
+    : [];
+  if (permitted.length && !permitted.includes(normalizeRole(customer.role))) {
+    showAuthStatus("You do not have permission to view that page.");
+    setTimeout(() => {
+      window.location.href = getDefaultRedirect(customer.role);
+    }, 640);
+    return null;
+  }
+  return customer;
 }
 
 export function initAuth() {
@@ -738,4 +961,6 @@ export function initAuth() {
   document.addEventListener(AUTH_CHANGE_EVENT, renderAuthControls);
   document.addEventListener(AUTH_CHANGE_EVENT, renderDatabaseNotice);
   document.addEventListener("secure-env-ready", handleSecureEnvReady);
+  document.addEventListener("click", handleModeToggle);
+  document.addEventListener(SITE_MODE_EVENT, () => renderAdminControls());
 }

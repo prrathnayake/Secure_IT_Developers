@@ -1,9 +1,18 @@
 import { byId, formatCurrency } from "../core/utils.js";
 import { savePlanSelection, setSelectedServices } from "../core/storage.js";
+import { isEcommerceEnabled, renderEcommerceDisabled } from "../core/siteMode.js";
 
 export function renderDetailPage(data) {
   const container = byId("detailContent");
   if (!container) return;
+  if (!isEcommerceEnabled()) {
+    renderEcommerceDisabled({
+      title: "Commerce catalog hidden",
+      description:
+        "Plan and service details are visible only when the e-commerce experience is active. Switch modes to review the catalog.",
+    });
+    return;
+  }
 
   const params = new URLSearchParams(window.location.search);
   const type = params.get("type");

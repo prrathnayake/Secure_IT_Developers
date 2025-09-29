@@ -1,5 +1,6 @@
 import { byId, formatCurrency } from "./utils.js";
 import { getSelectedServices, setSelectedServices } from "./storage.js";
+import { isEcommerceEnabled } from "./siteMode.js";
 
 const CART_DRAWER_ID = "cartDrawer";
 const CART_COUNT_ID = "cartCount";
@@ -328,6 +329,14 @@ function handleCartRemove(event) {
 }
 
 export function initCart(data) {
+  const cartSlot = document.querySelector("[data-cart-slot]");
+  if (!isEcommerceEnabled()) {
+    if (cartSlot) cartSlot.setAttribute("hidden", "hidden");
+    const mobileCart = document.querySelector("[data-cart-nav]");
+    if (mobileCart) mobileCart.remove();
+    return;
+  }
+  if (cartSlot) cartSlot.removeAttribute("hidden");
   serviceIndex = new Map(
     (data?.serviceCatalog || []).map((service) => [service.id, service])
   );
