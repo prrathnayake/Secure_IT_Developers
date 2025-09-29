@@ -185,37 +185,8 @@ function decodeJwt(token) {
 function storageKeys() {
   const ns = getNamespace();
   return {
-    customers: `${ns}_customers`,
     session: `${ns}_session`,
   };
-}
-
-function loadCustomers() {
-  const { customers } = storageKeys();
-  try {
-    const raw = localStorage.getItem(customers);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter((customer) => customer && customer.email)
-      .map((customer) => ({
-        ...customer,
-        role: normalizeRole(customer.role),
-      }));
-  } catch (error) {
-    console.warn("Unable to parse stored customers", error);
-    return [];
-  }
-}
-
-function saveCustomers(customers) {
-  const { customers: key } = storageKeys();
-  const payload = (customers || []).map((customer) => ({
-    ...customer,
-    role: normalizeRole(customer?.role),
-  }));
-  localStorage.setItem(key, JSON.stringify(payload));
 }
 
 function loadSession() {
@@ -239,49 +210,171 @@ function clearSession() {
   localStorage.removeItem(session);
 }
 
-function hashPassword(password, salt) {
-  const data = `${password}::${salt}`;
-  let hash = 0;
-  for (let i = 0; i < data.length; i += 1) {
-    hash = (hash << 5) - hash + data.charCodeAt(i);
-    hash |= 0;
+function sessionExpired(session) {
+  if (!session?.customer) return true;
+  if (session.expiresAt) {
+    const expires = new Date(session.expiresAt).getTime();
+    if (!Number.isNaN(expires)) {
+      return Date.now() > expires;
+    }
   }
-  return btoa(String(hash));
+  if (session.createdAt) {
+    const created = new Date(session.createdAt).getTime();
+    if (!Number.isNaN(created)) {
+      return Date.now() > created + getSessionTtlMs();
+    }
+  }
+  return true;
 }
 
-function findCustomerByEmail(email) {
-  return loadCustomers().find(
-    (customer) => customer.email.toLowerCase() === email.toLowerCase().trim()
-  );
-}
-
-function buildSession(customer) {
+function normalizeCustomer(customer) {
+  if (!customer) return null;
   return {
-    id: `session_${customer.id}`,
-    customerId: customer.id,
-    createdAt: new Date().toISOString(),
-    role: normalizeRole(customer.role),
-  };
-}
-
-function startSession(customer) {
-  if (!customer?.id) return;
-  const session = buildSession(customer);
-  saveSession(session);
-  notifyAuthChange({
     id: customer.id,
     name: customer.name,
     email: customer.email,
     role: normalizeRole(customer.role),
-  });
+  };
 }
 
-function sessionExpired(session) {
-  if (!session?.createdAt) return true;
-  const created = new Date(session.createdAt).getTime();
-  if (Number.isNaN(created)) return true;
-  const expiresAt = created + getSessionTtlMs();
-  return Date.now() > expiresAt;
+function startSession(payload) {
+  if (!payload) return;
+  const baseSession = payload.customer ? payload : { customer: payload };
+  const customer = normalizeCustomer(baseSession.customer);
+  if (!customer?.id) return;
+  const createdDate = (() => {
+    try {
+      return baseSession.createdAt ? new Date(baseSession.createdAt) : new Date();
+    } catch (error) {
+      return new Date();
+    }
+  })();
+  const createdAt = Number.isNaN(createdDate.getTime())
+    ? new Date()
+    : createdDate;
+  const expiresAt = (() => {
+    if (baseSession.expiresAt) {
+      const parsed = new Date(baseSession.expiresAt);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed;
+      }
+    }
+    return new Date(createdAt.getTime() + getSessionTtlMs());
+  })();
+  const session = {
+    token: baseSession.token || null,
+    provider: baseSession.provider || null,
+    customer,
+    createdAt: createdAt.toISOString(),
+    expiresAt: expiresAt.toISOString(),
+  };
+  saveSession(session);
+  notifyAuthChange(customer);
+}
+
+function getAuthEndpoint(path = "") {
+  const base = (getConfig().endpoint || "/api/auth").trim();
+  try {
+    const url = new URL(base, window.location.origin);
+    const normalizedPath = path.replace(/^\/+/, "");
+    if (normalizedPath) {
+      url.pathname = `${url.pathname.replace(/\/$/, "")}/${normalizedPath}`;
+    }
+    return url.toString();
+  } catch (error) {
+    const normalizedBase = base.replace(/\/$/, "");
+    const normalizedPath = path.replace(/^\/+/, "");
+    return normalizedPath ? `${normalizedBase}/${normalizedPath}` : normalizedBase;
+  }
+}
+
+async function postAuth(path, payload) {
+  const endpoint = getAuthEndpoint(path);
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(payload || {}),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok === false) {
+      const error = data.error || `Request failed with status ${response.status}`;
+      return { ok: false, status: response.status, error };
+    }
+    return { ok: true, data };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error?.message || "Unable to reach the authentication service.",
+    };
+  }
+}
+
+async function createCustomer({ name, email, password, role, accessCode }) {
+  const result = await postAuth("signup", {
+    name,
+    email,
+    password,
+    role,
+    accessCode,
+  });
+  if (!result.ok) {
+    return {
+      ok: false,
+      error: result.error || "Unable to create your account. Please try again.",
+    };
+  }
+  const payload = result.data || {};
+  const session = payload.session || null;
+  const customer = normalizeCustomer(payload.customer || session?.customer);
+  if (!customer) {
+    return {
+      ok: false,
+      error: "Account created but response was missing customer details.",
+    };
+  }
+  return { ok: true, customer, session };
+}
+
+async function authenticate({ email, password }) {
+  const result = await postAuth("login", { email, password });
+  if (!result.ok) {
+    return {
+      ok: false,
+      error: result.error || "Unable to log in with those credentials.",
+    };
+  }
+  const payload = result.data || {};
+  const session = payload.session || null;
+  const customer = normalizeCustomer(payload.customer || session?.customer);
+  if (!customer) {
+    return {
+      ok: false,
+      error: "Login response did not include customer details.",
+    };
+  }
+  return { ok: true, customer, session };
+}
+
+async function upsertProviderCustomer({ name, email, provider = "google" }) {
+  const result = await postAuth("provider", { name, email, provider });
+  if (!result.ok) {
+    return {
+      ok: false,
+      error: result.error || "Unable to sign in with your provider.",
+    };
+  }
+  const payload = result.data || {};
+  const session = payload.session || null;
+  const customer = normalizeCustomer(payload.customer || session?.customer);
+  if (!customer) {
+    return {
+      ok: false,
+      error: "Provider sign-in response was missing customer information.",
+    };
+  }
+  return { ok: true, customer, session };
 }
 
 function notifyAuthChange(customer) {
@@ -300,129 +393,16 @@ export function getCurrentCustomer() {
     notifyAuthChange(null);
     return null;
   }
-  const customer = loadCustomers().find((item) => item.id === session.customerId);
-  if (!customer) {
-    clearSession();
-    notifyAuthChange(null);
-    return null;
-  }
-  return {
-    id: customer.id,
-    name: customer.name,
-    email: customer.email,
-    role: normalizeRole(customer.role),
-  };
+  return normalizeCustomer(session.customer);
 }
 
-export function logoutCustomer() {
+export async function logoutCustomer() {
+  const session = loadSession();
   clearSession();
   notifyAuthChange(null);
-}
-
-function createCustomer({ name, email, password, role, accessCode }) {
-  const trimmedEmail = email.trim();
-  const existing = findCustomerByEmail(trimmedEmail);
-  if (existing) {
-    return { ok: false, error: "An account with that email already exists." };
+  if (session?.token) {
+    await postAuth("logout", { token: session.token });
   }
-  const saltSource =
-    typeof crypto !== "undefined" && crypto.getRandomValues
-      ? crypto.getRandomValues(new Uint32Array(1))[0]
-      : Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-  const salt = saltSource.toString(16);
-  const passwordHash = hashPassword(password, salt);
-  const customers = loadCustomers();
-  const resolvedRole = resolveRole(role, accessCode);
-  const stored = {
-    id: `cust_${Date.now()}`,
-    name: name.trim(),
-    email: trimmedEmail,
-    salt,
-    passwordHash,
-    role: resolvedRole,
-    createdAt: new Date().toISOString(),
-  };
-  customers.push(stored);
-  saveCustomers(customers);
-  return {
-    ok: true,
-    customer: {
-      id: stored.id,
-      name: stored.name,
-      email: stored.email,
-      role: stored.role,
-    },
-  };
-}
-
-function authenticate({ email, password }) {
-  const record = findCustomerByEmail(email);
-  if (!record) {
-    return { ok: false, error: "No account found for that email." };
-  }
-  const passwordHash = hashPassword(password, record.salt);
-  if (passwordHash !== record.passwordHash) {
-    return { ok: false, error: "Incorrect password. Please try again." };
-  }
-  return {
-    ok: true,
-    customer: {
-      id: record.id,
-      name: record.name,
-      email: record.email,
-      role: record.role,
-    },
-  };
-}
-
-function upsertProviderCustomer({ name, email, provider = "google" }) {
-  if (!email) {
-    return { ok: false, error: "Google sign-in did not return an email address." };
-  }
-  const existing = findCustomerByEmail(email);
-  if (existing) {
-    return {
-      ok: true,
-      customer: {
-        id: existing.id,
-        name: existing.name,
-        email: existing.email,
-        role: existing.role,
-      },
-    };
-  }
-  const saltSource =
-    typeof crypto !== "undefined" && crypto.getRandomValues
-      ? crypto.getRandomValues(new Uint32Array(1))[0]
-      : Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-  const salt = saltSource.toString(16);
-  const randomPassword =
-    typeof crypto !== "undefined" && crypto.randomUUID
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random()}`;
-  const passwordHash = hashPassword(randomPassword, salt);
-  const customers = loadCustomers();
-  const stored = {
-    id: `cust_${Date.now()}`,
-    name: (name || email).trim(),
-    email: email.trim(),
-    salt,
-    passwordHash,
-    provider,
-    role: normalizeRole(window.ENV?.auth?.defaultProviderRole || DEFAULT_ROLE),
-    createdAt: new Date().toISOString(),
-  };
-  customers.push(stored);
-  saveCustomers(customers);
-  return {
-    ok: true,
-    customer: {
-      id: stored.id,
-      name: stored.name,
-      email: stored.email,
-      role: stored.role,
-    },
-  };
 }
 
 function ensureSlots() {
@@ -669,7 +649,7 @@ function handleSignup() {
   const form = byId("signupForm");
   if (!form) return;
   const status = byId("signupStatus");
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (typeof form.reportValidity === "function" && !form.reportValidity()) {
       return;
@@ -696,7 +676,8 @@ function handleSignup() {
       if (status) status.textContent = "Passwords do not match.";
       return;
     }
-    const result = createCustomer({
+    if (status) status.textContent = "Creating your account…";
+    const result = await createCustomer({
       name,
       email,
       password,
@@ -707,7 +688,7 @@ function handleSignup() {
       if (status) status.textContent = result.error;
       return;
     }
-    startSession(result.customer);
+    startSession(result.session || result.customer);
     if (status)
       status.textContent = `Account created! Signed in as ${getRoleLabel(
         result.customer.role
@@ -723,19 +704,20 @@ function handleLogin() {
   const form = byId("loginForm");
   if (!form) return;
   const status = byId("loginStatus");
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (typeof form.reportValidity === "function" && !form.reportValidity()) {
       return;
     }
     const email = form.email?.value.trim();
     const password = form.password?.value || "";
-    const result = authenticate({ email, password });
+    if (status) status.textContent = "Signing you in…";
+    const result = await authenticate({ email, password });
     if (!result.ok) {
       if (status) status.textContent = result.error;
       return;
     }
-    startSession(result.customer);
+    startSession(result.session || result.customer);
     if (status)
       status.textContent = `Welcome back, ${getRoleLabel(
         result.customer.role
@@ -748,11 +730,11 @@ function handleLogin() {
 }
 
 function handleLogoutClicks() {
-  document.addEventListener("click", (event) => {
+  document.addEventListener("click", async (event) => {
     const trigger = event.target.closest("[data-auth-action='logout']");
     if (!trigger) return;
     event.preventDefault();
-    logoutCustomer();
+    await logoutCustomer();
     const mobileNav = document.getElementById("mobileNav");
     const mobileToggle = document.getElementById("mobileNavToggle");
     if (mobileNav?.classList.contains("is-open")) {
@@ -770,7 +752,7 @@ function handleLogoutClicks() {
   });
 }
 
-function handleGoogleCredential(response, context = "login") {
+async function handleGoogleCredential(response, context = "login") {
   const loginStatus = byId("googleLoginStatus");
   const signupStatus = byId("googleSignupStatus");
   const status = context === "signup" ? signupStatus : loginStatus;
@@ -791,7 +773,8 @@ function handleGoogleCredential(response, context = "login") {
   }
   const fullName =
     profile.name || `${profile.given_name || ""} ${profile.family_name || ""}`.trim() || profile.email;
-  const result = upsertProviderCustomer({
+  if (status) status.textContent = "Signing in with Google…";
+  const result = await upsertProviderCustomer({
     name: fullName,
     email: profile.email,
     provider: "google",
@@ -800,7 +783,7 @@ function handleGoogleCredential(response, context = "login") {
     if (status) status.textContent = result.error || "Unable to sign in with Google.";
     return;
   }
-  startSession(result.customer);
+  startSession(result.session || result.customer);
   if (status)
     status.textContent = `Signed in with Google as ${getRoleLabel(
       result.customer.role

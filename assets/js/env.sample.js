@@ -19,6 +19,7 @@ window.SECURE_ENV = Object.assign(window.SECURE_ENV || {}, {
     defaultMode: "ecommerce",
   },
   auth: {
+    endpoint: "/api/auth",
     storageNamespace: "secure_it",
     sessionTtlHours: 72,
     defaultProviderRole: "basic",
