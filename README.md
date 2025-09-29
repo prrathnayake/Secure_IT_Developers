@@ -63,6 +63,14 @@ Edit the partial that matches the template you are working on; `assets/css/style
 - `assets/js/env.js` automatically loads `env.local.js` when present and merges any server-provided `window.SECURE_ENV` values. It emits a `secure-env-ready` event once variables are available, which allows runtime features (like the authentication flow) to react when credentials are injected.
 - Static HTML files reference `assets/js/data/index.js` with `<script type="module">`, so modern browsers will load the modular data without bundling.
 
+### Authentication API
+
+The front-end no longer stores customer accounts in `localStorage`. A lightweight Express API in `server/` persists customers to MySQL using the schema in `database/init.sql`. Passwords are hashed with bcrypt and never sent back to the browser.
+
+1. Install dependencies with `npm install`.
+2. Copy your environment secrets into a `.env` file (see `server/config.js` for the variable names).
+3. Start the API with `npm run start` (defaults to port `4000`). The front-end will call `/api/auth/*` endpoints.
+
 ## Local development tips
 
 - Open any HTML page directly in a browser for quick previews—the assets are all relative paths.
